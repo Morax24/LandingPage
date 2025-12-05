@@ -11,6 +11,11 @@ use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Admin\DashboardController;
 
 // ============================================
+// VISITOR TRACKING - TAMBAHKAN INI DI ATAS
+// ============================================
+Route::get('/track-visitor', [DashboardController::class, 'trackVisitor'])->name('track.visitor');
+
+// ============================================
 // SERVE MEDIA FILES FROM PUBLIC FOLDER
 // ============================================
 Route::get('/media/{filename}', function ($filename) {
@@ -82,20 +87,19 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/contacts/bulk-delete', [AdminContactController::class, 'bulkDelete'])->name('contacts.bulk-delete');
 
     // Media Management
-    // Media Management
-Route::prefix('media')->name('media.')->group(function () {
-    Route::get('/', [MediaController::class, 'index'])->name('index');
-    Route::get('/create', [MediaController::class, 'create'])->name('create');
-    Route::post('/', [MediaController::class, 'store'])->name('store');
-    Route::get('/{id}/edit', [MediaController::class, 'edit'])->name('edit');
-    Route::put('/{id}', [MediaController::class, 'update'])->name('update');
-    Route::delete('/{id}', [MediaController::class, 'destroy'])->name('destroy');
-    Route::post('/{id}/toggle-active', [MediaController::class, 'toggleActive'])->name('toggle-active');
+    Route::prefix('media')->name('media.')->group(function () {
+        Route::get('/', [MediaController::class, 'index'])->name('index');
+        Route::get('/create', [MediaController::class, 'create'])->name('create');
+        Route::post('/', [MediaController::class, 'store'])->name('store');
+        Route::get('/{id}/edit', [MediaController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [MediaController::class, 'update'])->name('update');
+        Route::delete('/{id}', [MediaController::class, 'destroy'])->name('destroy');
+        Route::post('/{id}/toggle-active', [MediaController::class, 'toggleActive'])->name('toggle-active');
 
-    // Bulk Actions - TAMBAHKAN PARAMETER OPSIONAL
-    Route::post('/bulk-delete', [MediaController::class, 'bulkDelete'])->name('bulk-delete');
-    Route::post('/bulk-toggle-active', [MediaController::class, 'bulkToggleActive'])->name('bulk-toggle-active');
-});
+        // Bulk Actions
+        Route::post('/bulk-delete', [MediaController::class, 'bulkDelete'])->name('bulk-delete');
+        Route::post('/bulk-toggle-active', [MediaController::class, 'bulkToggleActive'])->name('bulk-toggle-active');
+    });
 
     // Forum Replies
     Route::get('/forum-replies', [AdminForumReplyController::class, 'index'])->name('forum-replies.index');
@@ -104,4 +108,6 @@ Route::prefix('media')->name('media.')->group(function () {
     Route::delete('/forum-replies/{id}', [AdminForumReplyController::class, 'destroy'])->name('forum-replies.destroy');
     Route::post('/forum-replies/bulk-approve', [AdminForumReplyController::class, 'bulkApprove'])->name('forum-replies.bulk-approve');
     Route::post('/forum-replies/bulk-delete', [AdminForumReplyController::class, 'bulkDelete'])->name('forum-replies.bulk-delete');
+
+
 });

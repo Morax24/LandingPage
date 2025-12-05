@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Contact;
 use App\Models\Media;
 use App\Models\ForumReply;
+use App\Models\VisitorCounter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -30,6 +31,13 @@ class DashboardController extends Controller
         // Statistik Balasan Forum
         $pendingReplies = ForumReply::where('status', 'pending')->count();
 
+        // ==================== TAMBAHAN BARU ====================
+        // Statistik Pengunjung
+        $visitorCount = VisitorCounter::sum('count') ?? 0;
+        $todayVisitors = VisitorCounter::whereDate('date', today())->value('count') ?? 0;
+        $yesterdayVisitors = VisitorCounter::whereDate('date', today()->subDay())->value('count') ?? 0;
+        // ======================================================
+
         // Aktivitas Terbaru
         $recentActivities = $this->getRecentActivities();
 
@@ -49,6 +57,11 @@ class DashboardController extends Controller
             'active_media' => $activeMedia,
             'inactive_media' => $inactiveMedia,
             'pending_replies' => $pendingReplies,
+            // ==================== TAMBAHAN BARU ====================
+            'visitor_count' => $visitorCount,
+            'today_visitors' => $todayVisitors,
+            'yesterday_visitors' => $yesterdayVisitors,
+            // ======================================================
         ];
 
         return view('admin.dashboard', compact('stats', 'recentActivities', 'recentContacts', 'recentMedia'));
@@ -205,5 +218,19 @@ class DashboardController extends Controller
         }
 
         return response()->json($debugData);
+    }
+
+    /**
+     * Endpoint untuk tracking pengunjung (dipanggil via JavaScript)
+     */
+    public function trackVisitor(Request $request)
+    {
+        // Update counter untuk hari ini
+        VisitorCounter::updateOrCreate(
+            ['date' => today()],
+            ['count' => DB::raw('count + 1')]
+        );
+
+        return response()->json(['success' => true, 'message' => 'Visitor tracked']);
     }
 }

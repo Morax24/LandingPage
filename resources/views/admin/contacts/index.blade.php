@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Kelola Pesan Contact</title>
     <style>
+        /* ===== RESET & BASE STYLES ===== */
         * {
             margin: 0;
             padding: 0;
@@ -15,15 +16,16 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #E8F4F8;
             color: #333;
+            line-height: 1.5;
         }
 
-        /* Layout */
+        /* ===== LAYOUT ===== */
         .admin-layout {
             display: flex;
             min-height: 100vh;
         }
 
-        /* Sidebar */
+        /* ===== SIDEBAR ===== */
         .sidebar {
             width: 280px;
             background: #5FB574;
@@ -57,7 +59,6 @@
             height: 30px;
             background: #fff;
             display: inline-block;
-            vertical-align: middle;
         }
 
         .sidebar-header p {
@@ -82,7 +83,8 @@
             font-size: 1rem;
         }
 
-        .menu-item:hover {
+        .menu-item:hover,
+        .menu-item.active {
             background: rgba(255,255,255,0.15);
             border-left-color: #F9D56E;
             color: #fff;
@@ -90,8 +92,6 @@
 
         .menu-item.active {
             background: rgba(255,255,255,0.2);
-            border-left-color: #F9D56E;
-            color: #fff;
             font-weight: 600;
         }
 
@@ -141,7 +141,7 @@
             color: rgba(255,255,255,0.8);
         }
 
-        /* Main Content */
+        /* ===== MAIN CONTENT ===== */
         .main-content {
             margin-left: 280px;
             flex: 1;
@@ -150,7 +150,7 @@
             transition: margin-left 0.3s ease;
         }
 
-        /* Header */
+        /* ===== HEADER ===== */
         .page-header {
             background: #fff;
             padding: 1.5rem 2rem;
@@ -167,6 +167,9 @@
         .page-header h1 {
             font-size: 1.8rem;
             color: #333;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .header-actions {
@@ -176,6 +179,7 @@
             flex-wrap: wrap;
         }
 
+        /* ===== BUTTONS ===== */
         .btn {
             padding: 0.7rem 1.5rem;
             border: none;
@@ -186,68 +190,22 @@
             display: inline-block;
             transition: all 0.3s;
             text-align: center;
+            font-size: 0.95rem;
         }
 
-        .btn-primary {
-            background: #5FB574;
-            color: #fff;
-        }
+        .btn-primary { background: #5FB574; color: #fff; }
+        .btn-success { background: #5FB574; color: #fff; }
+        .btn-danger  { background: #FF8A5B; color: #fff; }
+        .btn-warning { background: #F9D56E; color: #333; }
+        .btn-secondary { background: #95a5a6; color: #fff; }
+        .btn-info { background: #3498db; color: #fff; }
 
-        .btn-primary:hover {
-            background: #4FA564;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(95,181,116,0.4);
-        }
-
-        .btn-success {
-            background: #5FB574;
-            color: #fff;
-        }
-
-        .btn-success:hover {
-            background: #4FA564;
-            transform: translateY(-2px);
-        }
-
-        .btn-danger {
-            background: #FF8A5B;
-            color: #fff;
-        }
-
-        .btn-danger:hover {
-            background: #E67A4B;
-            transform: translateY(-2px);
-        }
-
-        .btn-warning {
-            background: #F9D56E;
-            color: #333;
-        }
-
-        .btn-warning:hover {
-            background: #E9C55E;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: #95a5a6;
-            color: #fff;
-        }
-
-        .btn-secondary:hover {
-            background: #7f8c8d;
-            transform: translateY(-2px);
-        }
-
-        .btn-info {
-            background: #3498db;
-            color: #fff;
-        }
-
-        .btn-info:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-        }
+        .btn-primary:hover { background: #4FA564; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(95,181,116,0.4); }
+        .btn-success:hover { background: #4FA564; transform: translateY(-2px); }
+        .btn-danger:hover  { background: #E67A4B; transform: translateY(-2px); }
+        .btn-warning:hover { background: #E9C55E; transform: translateY(-2px); }
+        .btn-secondary:hover { background: #7f8c8d; transform: translateY(-2px); }
+        .btn-info:hover { background: #2980b9; transform: translateY(-2px); }
 
         .btn-sm {
             padding: 0.5rem 1rem;
@@ -266,6 +224,7 @@
             font-weight: 600;
             font-size: 0.95rem;
             transition: all 0.3s;
+            width: 100%;
         }
 
         .btn-logout:hover {
@@ -273,12 +232,18 @@
             box-shadow: 0 4px 12px rgba(255,138,91,0.4);
         }
 
-        /* Stats Cards */
+        /* ===== STATS CARDS ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 1.5rem;
             margin-bottom: 2rem;
+        }
+
+        .stat-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
         }
 
         .stat-card {
@@ -304,8 +269,8 @@
             font-weight: 700;
         }
 
-        .stat-card.total h3 { color: #5FB574; }
-        .stat-card.pending h3 { color: #F9D56E; }
+        .stat-card.total h3    { color: #5FB574; }
+        .stat-card.pending h3  { color: #F9D56E; }
         .stat-card.approved h3 { color: #5FB574; }
         .stat-card.rejected h3 { color: #FF8A5B; }
 
@@ -315,19 +280,7 @@
             font-weight: 500;
         }
 
-        /* Tambahan style untuk stat card yang bisa diklik */
-        .stat-link {
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .stat-link:hover {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .stat-card .click-hint {
+        .click-hint {
             position: absolute;
             bottom: 10px;
             right: 15px;
@@ -341,7 +294,7 @@
             opacity: 1;
         }
 
-        /* Filters */
+        /* ===== FILTERS ===== */
         .filters {
             background: #fff;
             padding: 1.5rem;
@@ -378,7 +331,7 @@
             min-width: 200px;
         }
 
-        /* Bulk Actions */
+        /* ===== BULK ACTIONS ===== */
         .bulk-actions {
             background: #fff;
             padding: 1rem 1.5rem;
@@ -401,7 +354,7 @@
             margin-right: 1rem;
         }
 
-        /* Table - PERBAIKAN BAGIAN INI */
+        /* ===== TABLE ===== */
         .table-container {
             background: #fff;
             border-radius: 15px;
@@ -433,12 +386,11 @@
             transition: all 0.3s ease;
         }
 
-        /* PERBAIKAN: Efek hover yang aman - tidak membuat teks hilang */
         tr:hover td {
             background: #F7FCF9;
-            color: #333;
         }
 
+        /* ===== BADGES ===== */
         .badge {
             padding: 0.4rem 1rem;
             border-radius: 20px;
@@ -465,13 +417,18 @@
             border: 1px solid #FFD1C4;
         }
 
+        /* ===== ACTION BUTTONS ===== */
         .action-buttons {
             display: flex;
             gap: 0.5rem;
             flex-wrap: wrap;
         }
 
-        /* Alert Messages */
+        .action-form {
+            display: inline;
+        }
+
+        /* ===== ALERT MESSAGES ===== */
         .alert {
             padding: 1rem 1.5rem;
             border-radius: 12px;
@@ -491,7 +448,7 @@
             border: 2px solid #3498db;
         }
 
-        /* Mobile Menu Toggle */
+        /* ===== MOBILE MENU ===== */
         .mobile-menu-toggle {
             display: none;
             position: fixed;
@@ -508,7 +465,6 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
-        /* Overlay for mobile */
         .overlay {
             display: none;
             position: fixed;
@@ -520,7 +476,59 @@
             z-index: 999;
         }
 
-        /* Responsive Design */
+        .overlay.active {
+            display: block;
+        }
+
+        /* ===== PAGINATION ===== */
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 1.5rem;
+            background: #fff;
+            border-top: 1px solid #f0f0f0;
+            gap: 1.5rem;
+        }
+
+        .pagination .results-info {
+            font-size: 0.9rem;
+            color: #666;
+            margin-right: auto;
+        }
+
+        .pagination .btn-prev,
+        .pagination .btn-next {
+            padding: 0.6rem 1.2rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: #fff;
+        }
+
+        .pagination .btn-prev:hover:not(.disabled),
+        .pagination .btn-next:hover:not(.disabled) {
+            background: #5FB574;
+            color: white;
+            border-color: #5FB574;
+            transform: translateY(-2px);
+        }
+
+        .pagination .btn-prev.disabled,
+        .pagination .btn-next.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+            background: #f5f5f5;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 1200px) {
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -561,6 +569,24 @@
                 width: 100%;
                 min-width: auto;
             }
+
+            .pagination {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .pagination .results-info {
+                order: 1;
+                width: 100%;
+                text-align: center;
+                margin: 0 0 1rem 0;
+            }
+
+            .pagination .btn-prev,
+            .pagination .btn-next {
+                order: 2;
+            }
         }
 
         @media (max-width: 768px) {
@@ -599,6 +625,12 @@
             .action-buttons {
                 flex-direction: column;
             }
+
+            .pagination .btn-prev,
+            .pagination .btn-next {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -630,36 +662,24 @@
             .stat-card h3 {
                 font-size: 1.8rem;
             }
-        }
 
-        /* Pagination Styles */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            padding: 1.5rem;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
+            .pagination {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.8rem;
+            }
 
-        .pagination a, .pagination span {
-            padding: 0.5rem 1rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            text-decoration: none;
-            color: #333;
-            transition: all 0.3s;
-        }
+            .pagination .results-info {
+                order: 1;
+                margin-bottom: 0.5rem;
+            }
 
-        .pagination a:hover {
-            background: #5FB574;
-            color: white;
-            border-color: #5FB574;
-        }
-
-        .pagination .current {
-            background: #5FB574;
-            color: white;
-            border-color: #5FB574;
+            .pagination .btn-prev,
+            .pagination .btn-next {
+                order: 2;
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -677,7 +697,6 @@
             </div>
 
             <nav class="sidebar-menu">
-                <!-- TAMBAHKAN LINK KE DASHBOARD -->
                 <a href="{{ route('admin.dashboard') }}" class="menu-item">
                     <span class="menu-icon">📊</span>
                     <span>Dashboard</span>
@@ -702,7 +721,7 @@
                 </div>
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="btn-logout" style="width: 100%;">Logout</button>
+                    <button type="submit" class="btn-logout">Logout</button>
                 </form>
             </div>
         </aside>
@@ -718,20 +737,15 @@
 
             <!-- Alert Messages -->
             @if(session('success'))
-            <div class="alert alert-success">
-                ✓ {{ session('success') }}
-            </div>
+                <div class="alert alert-success">✓ {{ session('success') }}</div>
             @endif
 
             @if(session('info'))
-            <div class="alert alert-info">
-                ℹ {{ session('info') }}
-            </div>
+                <div class="alert alert-info">ℹ {{ session('info') }}</div>
             @endif
 
-            <!-- Stats Cards dengan LINK -->
+            <!-- Stats Cards -->
             <div class="stats-grid">
-                <!-- Total Pesan -->
                 <a href="{{ route('admin.contacts.index') }}" class="stat-link">
                     <div class="stat-card total">
                         <h3>{{ $stats['total'] }}</h3>
@@ -740,7 +754,6 @@
                     </div>
                 </a>
 
-                <!-- Menunggu Review -->
                 <a href="{{ route('admin.contacts.index', ['status' => 'pending']) }}" class="stat-link">
                     <div class="stat-card pending">
                         <h3>{{ $stats['pending'] }}</h3>
@@ -749,7 +762,6 @@
                     </div>
                 </a>
 
-                <!-- Disetujui -->
                 <a href="{{ route('admin.contacts.index', ['status' => 'approved']) }}" class="stat-link">
                     <div class="stat-card approved">
                         <h3>{{ $stats['approved'] }}</h3>
@@ -758,7 +770,6 @@
                     </div>
                 </a>
 
-                <!-- Ditolak -->
                 <a href="{{ route('admin.contacts.index', ['status' => 'rejected']) }}" class="stat-link">
                     <div class="stat-card rejected">
                         <h3>{{ $stats['rejected'] }}</h3>
@@ -827,22 +838,20 @@
                                     <a href="{{ route('admin.contacts.show', $contact->id) }}" class="btn btn-primary btn-sm">Detail</a>
 
                                     @if($contact->isPending())
-                                    <form action="{{ route('admin.contacts.approve', $contact->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        <button type="submit" class="btn btn-success btn-sm">Setujui</button>
-                                    </form>
-                                    <!-- TAMBAHKAN TOMBOL TOLAK DI SINI -->
-                                    <form action="{{ route('admin.contacts.reject', $contact->id) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('Yakin ingin menolak pesan ini?')">Tolak</button>
-                                    </form>
+                                        <form action="{{ route('admin.contacts.approve', $contact->id) }}" method="POST" class="action-form">
+                                            @csrf
+                                            <button type="submit" class="btn btn-success btn-sm">Setujui</button>
+                                        </form>
+                                        <form action="{{ route('admin.contacts.reject', $contact->id) }}" method="POST" class="action-form">
+                                            @csrf
+                                            <button type="submit" class="btn btn-warning btn-sm">Tolak</button>
+                                        </form>
                                     @endif
 
-                                    <!-- Tombol Hapus untuk semua status -->
-                                    <form action="{{ route('admin.contacts.destroy', $contact->id) }}" method="POST" style="display:inline;">
+                                    <form action="{{ route('admin.contacts.destroy', $contact->id) }}" method="POST" class="action-form">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus pesan ini?')">Hapus</button>
+                                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
                                     </form>
                                 </div>
                             </td>
@@ -857,16 +866,35 @@
                     </tbody>
                 </table>
 
-                <!-- Pagination -->
+                <!-- Pagination yang sesuai dengan contoh -->
                 <div class="pagination">
-                    {{ $contacts->links() }}
+                    @php
+                        $start = ($contacts->currentPage() - 1) * $contacts->perPage() + 1;
+                        $end = min($contacts->currentPage() * $contacts->perPage(), $contacts->total());
+                    @endphp
+
+                    <span class="results-info">
+                        {{ $start }} to {{ $end }} of {{ $contacts->total() }} results
+                    </span>
+
+                    @if(!$contacts->onFirstPage())
+                        <a href="{{ $contacts->previousPageUrl() }}" class="btn-prev">← Previous</a>
+                    @else
+                        <span class="btn-prev disabled">← Previous</span>
+                    @endif
+
+                    @if($contacts->hasMorePages())
+                        <a href="{{ $contacts->nextPageUrl() }}" class="btn-next">Next →</a>
+                    @else
+                        <span class="btn-next disabled">Next →</span>
+                    @endif
                 </div>
             </div>
         </main>
     </div>
 
     <script>
-        // Mobile menu functionality
+        // ===== MOBILE MENU FUNCTIONALITY =====
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
@@ -874,24 +902,33 @@
         function toggleMobileMenu() {
             sidebar.classList.toggle('mobile-open');
             overlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('mobile-open') ? 'hidden' : '';
         }
 
         mobileMenuToggle.addEventListener('click', toggleMobileMenu);
         overlay.addEventListener('click', toggleMobileMenu);
 
-        // Select All Checkbox
+        // ===== CHECKBOX FUNCTIONALITY =====
         document.getElementById('selectAll').addEventListener('change', function() {
             const checkboxes = document.querySelectorAll('.contact-checkbox');
             checkboxes.forEach(cb => cb.checked = this.checked);
             updateBulkActions();
         });
 
-        // Individual Checkbox
         document.querySelectorAll('.contact-checkbox').forEach(checkbox => {
-            checkbox.addEventListener('change', updateBulkActions);
+            checkbox.addEventListener('change', function() {
+                updateBulkActions();
+
+                // Update selectAll checkbox status
+                const allCheckboxes = document.querySelectorAll('.contact-checkbox');
+                const selectAll = document.getElementById('selectAll');
+                const checkedCount = document.querySelectorAll('.contact-checkbox:checked').length;
+
+                selectAll.checked = checkedCount === allCheckboxes.length;
+                selectAll.indeterminate = checkedCount > 0 && checkedCount < allCheckboxes.length;
+            });
         });
 
-        // Update Bulk Actions Display
         function updateBulkActions() {
             const checked = document.querySelectorAll('.contact-checkbox:checked');
             const bulkActions = document.getElementById('bulkActions');
@@ -899,13 +936,13 @@
 
             if (checked.length > 0) {
                 bulkActions.classList.add('active');
-                selectedCount.textContent = checked.length + ' dipilih';
+                selectedCount.textContent = `${checked.length} dipilih`;
             } else {
                 bulkActions.classList.remove('active');
             }
         }
 
-        // Bulk Actions
+        // ===== BULK ACTIONS =====
         function bulkAction(action) {
             const checked = Array.from(document.querySelectorAll('.contact-checkbox:checked'));
             const ids = checked.map(cb => cb.value);
@@ -915,20 +952,31 @@
                 return;
             }
 
-            if (!confirm(`Yakin ingin ${action} ${ids.length} pesan?`)) {
+            const actionTexts = {
+                'approve': 'menyetujui',
+                'reject': 'menolak',
+                'delete': 'menghapus'
+            };
+
+            const confirmMessage = `Yakin ingin ${actionTexts[action]} ${ids.length} pesan terpilih?`;
+
+            if (!confirm(confirmMessage)) {
                 return;
             }
 
+            // Create form for bulk action
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = `{{ url('admin/contacts/bulk-') }}${action}`;
 
+            // Add CSRF token
             const csrfToken = document.createElement('input');
             csrfToken.type = 'hidden';
             csrfToken.name = '_token';
             csrfToken.value = '{{ csrf_token() }}';
             form.appendChild(csrfToken);
 
+            // Add selected IDs
             ids.forEach(id => {
                 const input = document.createElement('input');
                 input.type = 'hidden';
@@ -937,24 +985,15 @@
                 form.appendChild(input);
             });
 
+            // Submit form
             document.body.appendChild(form);
             form.submit();
         }
 
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 992) {
-                sidebar.classList.remove('mobile-open');
-                overlay.classList.remove('active');
-            }
-        });
-
-        // Konfirmasi untuk aksi Setujui dan Tolak
+        // ===== FORM CONFIRMATIONS =====
         document.addEventListener('DOMContentLoaded', function() {
-            const approveForms = document.querySelectorAll('form[action*="approve"]');
-            const rejectForms = document.querySelectorAll('form[action*="reject"]');
-
-            approveForms.forEach(form => {
+            // Approve forms
+            document.querySelectorAll('form[action*="approve"]').forEach(form => {
                 form.addEventListener('submit', function(e) {
                     if (!confirm('Yakin ingin menyetujui pesan ini?')) {
                         e.preventDefault();
@@ -962,13 +1001,49 @@
                 });
             });
 
-            rejectForms.forEach(form => {
+            // Reject forms
+            document.querySelectorAll('form[action*="reject"]').forEach(form => {
                 form.addEventListener('submit', function(e) {
                     if (!confirm('Yakin ingin menolak pesan ini?')) {
                         e.preventDefault();
                     }
                 });
             });
+
+            // Delete forms
+            document.querySelectorAll('form[action*="destroy"]').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    if (!confirm('Yakin ingin menghapus pesan ini?')) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        });
+
+        // ===== RESPONSIVE HANDLING =====
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 992) {
+                sidebar.classList.remove('mobile-open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth <= 992 &&
+                !sidebar.contains(event.target) &&
+                !mobileMenuToggle.contains(event.target) &&
+                sidebar.classList.contains('mobile-open')) {
+                toggleMobileMenu();
+            }
+        });
+
+        // Keyboard shortcut for closing mobile menu (ESC key)
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && sidebar.classList.contains('mobile-open')) {
+                toggleMobileMenu();
+            }
         });
     </script>
 </body>

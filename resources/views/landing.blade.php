@@ -283,8 +283,8 @@
             display: grid;
             grid-template-columns: 1fr 2fr;
             gap: 3rem;
-            align-items: center;
-            margin-bottom: 3rem;
+            align-items: start;
+            margin-bottom: 5rem;
         }
 
         .story-image {
@@ -2288,5 +2288,21 @@
             }
         });
     </script>
+    <!-- ... semua kode landing page yang sudah ada ... -->
+
+<!-- VISITOR TRACKING - TAMBAHKAN INI -->
+<script>
+// Tracking pengunjung otomatis saat page load
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/track-visitor')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Visitor tracked successfully');
+        })
+        .catch(error => {
+            console.log('Visitor tracking failed:', error);
+        });
+});
+</script>
 </body>
 </html>

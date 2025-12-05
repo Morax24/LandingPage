@@ -403,6 +403,31 @@
             color: #EF6C00;
         }
 
+        /* Warna untuk card pengunjung */
+        .stat-card.visitors {
+            background: linear-gradient(135deg, #E8F4F8, #3498db);
+            border-left: 4px solid #2980b9;
+        }
+        .stat-card.visitors h3 {
+            color: #1a5276;
+        }
+
+        .stat-card.today-visitors {
+            background: linear-gradient(135deg, #FFF3E0, #FFB74D);
+            border-left: 4px solid #FFA726;
+        }
+        .stat-card.today-visitors h3 {
+            color: #F57C00;
+        }
+
+        .stat-card.yesterday-visitors {
+            background: linear-gradient(135deg, #F1F8E9, #8BC34A);
+            border-left: 4px solid #7CB342;
+        }
+        .stat-card.yesterday-visitors h3 {
+            color: #558B2F;
+        }
+
         /* Link stat card */
         .stat-link {
             text-decoration: none;
@@ -1000,6 +1025,25 @@
                         <p>Media Nonaktif</p>
                     </div>
                 </a>
+
+                <!-- Baris 3 - Visitor Stats -->
+                <div class="stat-card visitors">
+                    <span class="stat-icon">👥</span>
+                    <h3>{{ $stats['visitor_count'] ?? 0 }}</h3>
+                    <p>Total Pengunjung</p>
+                </div>
+
+                <div class="stat-card today-visitors">
+                    <span class="stat-icon">📅</span>
+                    <h3>{{ $stats['today_visitors'] ?? 0 }}</h3>
+                    <p>Hari Ini</p>
+                </div>
+
+                <div class="stat-card yesterday-visitors">
+                    <span class="stat-icon">📊</span>
+                    <h3>{{ $stats['yesterday_visitors'] ?? 0 }}</h3>
+                    <p>Kemarin</p>
+                </div>
             </div>
 
             <!-- Dashboard Content -->
@@ -1166,9 +1210,21 @@
         mobileMenuToggle.addEventListener('click', toggleMobileMenu);
         overlay.addEventListener('click', toggleMobileMenu);
 
-        // Data untuk chart
+        // Data untuk chart TANPA Balasan Pending
         const chartData = {
-            labels: ['Total Size Media', 'Total Pesan', 'Pesan Pending', 'Pesan Disetujui', 'Pesan Ditolak', 'Total Media', 'Media Aktif', 'Media Nonaktif'],
+            labels: [
+                'Total Size Media',
+                'Total Pesan',
+                'Pesan Pending',
+                'Pesan Disetujui',
+                'Pesan Ditolak',
+                'Total Media',
+                'Media Aktif',
+                'Media Nonaktif',
+                'Total Pengunjung',
+                'Pengunjung Hari Ini',
+                'Pengunjung Kemarin'
+            ],
             datasets: [{
                 label: 'Statistik Dashboard',
                 data: [
@@ -1179,27 +1235,36 @@
                     {{ $stats['rejected_contacts'] ?? 0 }},
                     {{ $stats['total_media'] ?? 0 }},
                     {{ $stats['active_media'] ?? 0 }},
-                    {{ $stats['inactive_media'] ?? 0 }}
+                    {{ $stats['inactive_media'] ?? 0 }},
+                    {{ $stats['visitor_count'] ?? 0 }},
+                    {{ $stats['today_visitors'] ?? 0 }},
+                    {{ $stats['yesterday_visitors'] ?? 0 }}
                 ],
                 backgroundColor: [
-                    '#4CAF50', // Total Size Media
-                    '#2196F3', // Total Pesan
-                    '#FFC107', // Pesan Pending
-                    '#4CAF50', // Pesan Disetujui
-                    '#F44336', // Pesan Ditolak
-                    '#9C27B0', // Total Media
-                    '#4CAF50', // Media Aktif
-                    '#FF9800'  // Media Nonaktif
+                    '#4CAF50',  // Total Size Media
+                    '#2196F3',  // Total Pesan
+                    '#FFC107',  // Pesan Pending
+                    '#4CAF50',  // Pesan Disetujui
+                    '#F44336',  // Pesan Ditolak
+                    '#9C27B0',  // Total Media
+                    '#4CAF50',  // Media Aktif
+                    '#FF9800',  // Media Nonaktif
+                    '#3498db',  // Total Pengunjung
+                    '#FFA726',  // Pengunjung Hari Ini
+                    '#8BC34A'   // Pengunjung Kemarin
                 ],
                 borderColor: [
-                    '#2E7D32', // Total Size Media
-                    '#1565C0', // Total Pesan
-                    '#FF8F00', // Pesan Pending
-                    '#2E7D32', // Pesan Disetujui
-                    '#C62828', // Pesan Ditolak
-                    '#7B1FA2', // Total Media
-                    '#2E7D32', // Media Aktif
-                    '#EF6C00'  // Media Nonaktif
+                    '#2E7D32',  // Total Size Media
+                    '#1565C0',  // Total Pesan
+                    '#FF8F00',  // Pesan Pending
+                    '#2E7D32',  // Pesan Disetujui
+                    '#C62828',  // Pesan Ditolak
+                    '#7B1FA2',  // Total Media
+                    '#2E7D32',  // Media Aktif
+                    '#EF6C00',  // Media Nonaktif
+                    '#1a5276',  // Total Pengunjung
+                    '#F57C00',  // Pengunjung Hari Ini
+                    '#558B2F'   // Pengunjung Kemarin
                 ],
                 borderWidth: 2
             }]
