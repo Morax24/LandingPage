@@ -1,4 +1,5 @@
 <?php
+// app/Http\Controllers\Admin\MediaController.php
 
 namespace App\Http\Controllers\Admin;
 
@@ -103,7 +104,7 @@ class MediaController extends Controller
             // Set permission
             chmod($uploadPath . '/' . $filename, 0644);
 
-            // Create media record
+            // Create media record - TAMBAHKAN PRICE
             Media::create([
                 'title' => $request->title,
                 'description' => $request->description,
@@ -113,6 +114,7 @@ class MediaController extends Controller
                 'mime_type' => $file->getClientMimeType(),
                 'file_size' => $file->getSize(),
                 'section' => $request->section,
+                'price' => $request->price ?? 0, // TAMBAHKAN INI
                 'order' => $request->order ?? 0,
                 'uploaded_by' => Auth::id(),
             ]);
@@ -125,7 +127,7 @@ class MediaController extends Controller
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', 'Gagal upload: ' . $e->getMessage());
+                ->with('error', 'Gagal upload: ' . $se->getMessage());
         }
     }
 
@@ -143,6 +145,7 @@ class MediaController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'section' => 'required|in:features,aktivitas,hero,story,other,whylearn,products',
+            'price' => 'nullable|numeric|min:0', // TAMBAHKAN INI
             'order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
         ]);
@@ -153,6 +156,7 @@ class MediaController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'section' => $request->section,
+            'price' => $request->price ?? 0, // TAMBAHKAN INI
             'order' => $request->order ?? 0,
             'is_active' => $request->has('is_active') ? true : false,
         ];

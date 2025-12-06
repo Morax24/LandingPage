@@ -710,18 +710,31 @@
                     <div class="form-group">
                         <label for="section">Section *</label>
                         <select name="section" id="section" required onchange="updateSectionInfo()">
-                        <option value="">-- Pilih Section --</option>
-                        <option value="hero" {{ old('section') == 'hero' ? 'selected' : '' }}>Intro</option>
-                        <option value="story" {{ old('section') == 'story' ? 'selected' : '' }}>Background</option>
-                        <option value="whylearn" {{ old('section') == 'whylearn' ? 'selected' : '' }}>Fitur 3</option>
-                        <option value="features" {{ old('section') == 'features' ? 'selected' : '' }}>Fitur Unggulan</option>
-                        <option value="aktivitas" {{ old('section') == 'aktivitas' ? 'selected' : '' }}>Aktivitas & Tutorial</option>
-                        <option value="products" {{ old('section') == 'products' ? 'selected' : '' }}>Products</option> <!-- TAMBAHKAN INI -->
-                    </select>
+                            <option value="">-- Pilih Section --</option>
+                            <option value="hero" {{ old('section') == 'hero' ? 'selected' : '' }}>Intro</option>
+                            <option value="story" {{ old('section') == 'story' ? 'selected' : '' }}>Background</option>
+                            <option value="whylearn" {{ old('section') == 'whylearn' ? 'selected' : '' }}>Fitur 3</option>
+                            <option value="features" {{ old('section') == 'features' ? 'selected' : '' }}>Fitur Unggulan</option>
+                            <option value="aktivitas" {{ old('section') == 'aktivitas' ? 'selected' : '' }}>Aktivitas & Tutorial</option>
+                            <option value="products" {{ old('section') == 'products' ? 'selected' : '' }}>Products</option>
+                        </select>
                         @error('section')
                             <span class="error-text">{{ $message }}</span>
                         @enderror
                         <small class="form-help" id="sectionHelp">Pilih di section mana media ini akan ditampilkan</small>
+                    </div>
+
+                    <!-- Price Field (Hanya untuk section products) -->
+                    <div class="form-group" id="priceField" style="display: none;">
+                        <label for="price">Harga Produk (Rp) *</label>
+                        <input type="number" name="price" id="price"
+                               value="{{ old('price', 0) }}"
+                               min="0" step="1000"
+                               placeholder="Contoh: 300000">
+                        @error('price')
+                            <span class="error-text">{{ $message }}</span>
+                        @enderror
+                        <small class="form-help">Hanya untuk section Products</small>
                     </div>
 
                     <!-- Form Actions -->
@@ -864,34 +877,54 @@
             }
         });
 
+        // Toggle price field based on section
+        function togglePriceField() {
+            const section = document.getElementById('section').value;
+            const priceField = document.getElementById('priceField');
+            const priceInput = document.getElementById('price');
+
+            if (section === 'products') {
+                priceField.style.display = 'block';
+                priceInput.required = true;
+            } else {
+                priceField.style.display = 'none';
+                priceInput.required = false;
+                priceInput.value = 0;
+            }
+        }
+
         function updateSectionInfo() {
-    const section = document.getElementById('section').value;
-    const sectionHelp = document.getElementById('sectionHelp');
+            const section = document.getElementById('section').value;
+            const sectionHelp = document.getElementById('sectionHelp');
 
-    const descriptions = {
-        'hero': '🎯 Hero section - gambar board game utama. Hanya 1 media aktif yang ditampilkan.',
-        'story': '📖 Story section - gambar box di samping cerita. Hanya 1 media aktif yang ditampilkan.',
-        'features': '⭐ Features section. Maksimal 4 slot yang ditampilkan.',
-        'whylearn': '💡 WhyLearn section. Maksimal 2 slot yang ditampilkan.',
-        'aktivitas': '🎮 Aktivitas & Tutorial section. Maksimal 6 slot yang ditampilkan.',
-        'products': '📦 Product Images - gambar untuk bagian produk/pricing. Maksimal 2 slot yang ditampilkan.', // TAMBAHKAN INI
-        'other': '📁 Media lain yang tidak ditampilkan di landing page.'
-    };
+            const descriptions = {
+                'hero': '🎯 Hero section - gambar board game utama. Hanya 1 media aktif yang ditampilkan.',
+                'story': '📖 Story section - gambar box di samping cerita. Hanya 1 media aktif yang ditampilkan.',
+                'features': '⭐ Features section. Maksimal 4 slot yang ditampilkan.',
+                'whylearn': '💡 WhyLearn section. Maksimal 2 slot yang ditampilkan.',
+                'aktivitas': '🎮 Aktivitas & Tutorial section. Maksimal 6 slot yang ditampilkan.',
+                'products': '📦 Product Images - gambar untuk bagian produk/pricing. Maksimal 2 slot yang ditampilkan. HARUS DIISI HARGA!',
+                'other': '📁 Media lain yang tidak ditampilkan di landing page.'
+            };
 
-    if (section && descriptions[section]) {
-        sectionHelp.textContent = descriptions[section];
-        sectionHelp.style.color = '#5FB574';
-        sectionHelp.style.fontWeight = '500';
-    } else {
-        sectionHelp.textContent = 'Pilih di section mana media ini akan ditampilkan';
-        sectionHelp.style.color = '#666';
-        sectionHelp.style.fontWeight = 'normal';
-    }
-}
+            if (section && descriptions[section]) {
+                sectionHelp.textContent = descriptions[section];
+                sectionHelp.style.color = '#5FB574';
+                sectionHelp.style.fontWeight = '500';
+            } else {
+                sectionHelp.textContent = 'Pilih di section mana media ini akan ditampilkan';
+                sectionHelp.style.color = '#666';
+                sectionHelp.style.fontWeight = 'normal';
+            }
+
+            // Update price field visibility
+            togglePriceField();
+        }
 
         // Auto-call saat halaman load
         document.addEventListener('DOMContentLoaded', function() {
             updateSectionInfo();
+            updateFileInfo();
         });
     </script>
 </body>

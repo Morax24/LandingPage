@@ -1,4 +1,5 @@
 <?php
+// app/Http/Requests/StoreMediaRequest.php
 
 namespace App\Http\Requests;
 
@@ -19,6 +20,7 @@ class StoreMediaRequest extends FormRequest
             'type' => 'required|in:image,video',
             'file' => 'required|file',
             'section' => 'required|in:hero,story,features,whylearn,aktivitas,products,other',
+            'price' => 'nullable|numeric|min:0', // TAMBAHKAN INI
             'order' => 'nullable|integer|min:0',
         ];
     }
@@ -30,18 +32,28 @@ class StoreMediaRequest extends FormRequest
             'file.file' => 'File tidak valid',
             'type.in' => 'Tipe harus image atau video',
             'section.in' => 'Section tidak valid',
+            'price.numeric' => 'Harga harus berupa angka',
+            'price.min' => 'Harga tidak boleh kurang dari 0',
         ];
     }
 
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
+            $section = $this->input('section');
+            $price = $this->input('price');
+
+            // Harga wajib jika section adalah products
+            if ($section === 'products' && (empty($price) || $price <= 0)) {
+                $validator->errors()->add('price', 'Harga wajib diisi untuk produk.');
+            }
+
+            // File validation
             if ($this->hasFile('file')) {
                 $file = $this->file('file');
                 $type = $this->input('type');
                 $extension = strtolower($file->getClientOriginalExtension());
 
-                // Validasi berdasarkan tipe
                 if ($type == 'image') {
                     $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'];
                     $maxSize = 10 * 1024 * 1024; // 10MB

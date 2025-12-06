@@ -20,7 +20,7 @@
             line-height: 1.6;
             color: #333;
             overflow-x: hidden;
-            background-color: #f8f9fa; /* Warna abu-abu terang konsisten */
+            background-color: #f8f9fa;
         }
 
         /* PERBAIKAN UNTUK GAMBAR - UKURAN ASLI */
@@ -161,7 +161,7 @@
 
         /* HERO SECTION - BACKGROUND ABU-ABU */
         .hero {
-            background: #f8f9fa; /* Warna abu-abu konsisten */
+            background: #f8f9fa;
             padding: 4rem 5% 8rem;
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -171,7 +171,6 @@
             overflow: hidden;
         }
 
-        /* Hapus pseudo-element yang memberi warna berbeda */
         .hero::after,
         .hero::before {
             display: none;
@@ -220,7 +219,7 @@
 
         .board-placeholder {
             width: 100%;
-            background: #e9ecef; /* Abu-abu sedikit lebih gelap untuk kontras */
+            background: #e9ecef;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             overflow: hidden;
@@ -232,7 +231,7 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 2rem;
             padding: 3rem 5%;
-            background: #f8f9fa; /* Warna abu-abu konsisten */
+            background: #f8f9fa;
         }
 
         .stat-card {
@@ -266,7 +265,7 @@
         /* STORY SECTION - BACKGROUND ABU-ABU */
         .story-section {
             padding: 4rem 5%;
-            background: #f8f9fa; /* Warna abu-abu konsisten */
+            background: #f8f9fa;
         }
 
         .story-badge {
@@ -288,7 +287,7 @@
         }
 
         .story-image {
-            background: #e9ecef; /* Abu-abu sedikit lebih gelap untuk kontras */
+            background: #e9ecef;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             overflow: hidden;
@@ -363,7 +362,7 @@
         /* WHY LEARN SECTIONS - BACKGROUND ABU-ABU */
         .why-learn-section {
             padding: 4rem 5%;
-            background: #f8f9fa; /* Warna abu-abu konsisten */
+            background: #f8f9fa;
         }
 
         .why-learn-grid {
@@ -374,7 +373,7 @@
         }
 
         .why-learn-media {
-            background: #e9ecef; /* Abu-abu sedikit lebih gelap untuk kontras */
+            background: #e9ecef;
             border-radius: 10px;
             overflow: hidden;
             display: flex;
@@ -421,7 +420,7 @@
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 2rem;
             padding: 4rem 5%;
-            background: #f8f9fa; /* Warna abu-abu konsisten */
+            background: #f8f9fa;
         }
 
         .skill-card {
@@ -460,7 +459,7 @@
         .placeholder {
             width: 100%;
             height: 100%;
-            background: #e9ecef; /* Abu-abu sedikit lebih gelap untuk kontras */
+            background: #e9ecef;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -485,7 +484,7 @@
         }
 
         .feature-media-box {
-            background: #e9ecef; /* Abu-abu sedikit lebih gelap untuk kontras */
+            background: #e9ecef;
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
@@ -544,7 +543,7 @@
         }
 
         .item {
-            background-color: #e9ecef; /* Abu-abu sedikit lebih gelap untuk kontras */
+            background-color: #e9ecef;
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
@@ -597,10 +596,10 @@
             grid-row: 5 / span 2;
         }
 
-        /* PRICING SECTION - BACKGROUND ABU-ABU */
+        /* PRICING SECTION - BACKGROUND ABU-ABU - DIPERBAIKI */
         .pricing-section {
             padding: 4rem 5%;
-            background: #f8f9fa; /* Warna abu-abu konsisten */
+            background: #f8f9fa;
         }
 
         .pricing-badge {
@@ -628,14 +627,15 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
-        .pricing-card:first-child {
+        .product-basic {
             background: linear-gradient(135deg, #7cb342 0%, #689f38 100%);
             color: #fff;
         }
 
-        .pricing-card:last-child {
+        .product-premium {
             background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
             color: #333;
             border: 2px solid #dee2e6;
@@ -658,8 +658,10 @@
             color: inherit;
         }
 
-        .pricing-card p {
+        .pricing-card > p {
             font-size: clamp(0.9rem, 2vw, 1rem);
+            margin-bottom: 1.5rem;
+            min-height: 60px;
         }
 
         .pricing-card ul {
@@ -675,7 +677,7 @@
             padding-left: 1.5rem;
         }
 
-        .pricing-card:first-child ul li::before {
+        .product-basic ul li::before {
             content: "✓ ";
             position: absolute;
             left: 0;
@@ -683,7 +685,7 @@
             font-weight: bold;
         }
 
-        .pricing-card:last-child ul li::before {
+        .product-premium ul li::before {
             content: "✓ ";
             position: absolute;
             left: 0;
@@ -696,7 +698,7 @@
             position: relative;
             border-radius: 10px;
             overflow: hidden;
-            background: #e9ecef; /* Abu-abu sedikit lebih gelap untuk kontras */
+            background: #e9ecef;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -707,7 +709,7 @@
         /* TESTIMONIAL SECTION - BACKGROUND ABU-ABU */
         .testimonial-section {
             padding: 4rem 5%;
-            background: #f8f9fa; /* Warna abu-abu konsisten */
+            background: #f8f9fa;
         }
 
         .testimonial-grid {
@@ -762,7 +764,7 @@
         /* FAQ SECTION - BACKGROUND ABU-ABU */
         .faq-contact-section {
             padding: 4rem 5%;
-            background: #f8f9fa; /* Warna abu-abu konsisten */
+            background: #f8f9fa;
         }
 
         .faq-contact-grid {
@@ -883,7 +885,7 @@
         /* FORUM SECTION - BACKGROUND ABU-ABU */
         .forum-section {
             padding: 4rem 5%;
-            background: #f8f9fa; /* Warna abu-abu konsisten */
+            background: #f8f9fa;
         }
 
         .forum-grid {
@@ -948,7 +950,7 @@
 
         /* FOOTER - BACKGROUND ABU-ABU SEDIKIT LEBIH GELAP */
         footer {
-            background: #d4f1f4; /* Abu-abu sedikit lebih gelap untuk kontras */
+            background: #d4f1f4;
             color: #333;
             padding: 3rem 5%;
         }
@@ -1171,7 +1173,7 @@
                 top: 100%;
                 left: 0;
                 width: 100%;
-                background: #d4f1f4; /* Tetap warna header */
+                background: #d4f1f4;
                 flex-direction: column;
                 gap: 0;
                 max-height: 0;
@@ -1683,76 +1685,122 @@
         </div>
     </section>
 
+    <!-- BAGIAN PRICING SECTION YANG DIPERBAIKI -->
     <section id="pricing" class="pricing-section">
         <span class="pricing-badge">Product</span>
         <h2 class="section-title">Main Sekaligus Belajar, Semua Dimulai dari Sini!</h2>
         <p class="section-subtitle">Tingkatkan pemahaman kewirausahaan lewat board game yang seru dan interaktif</p>
 
         <div class="pricing-grid">
-            <!-- Product Card 1 -->
-            <div class="pricing-card">
-                <div class="product-image-container">
-                    @if($productsMedia && $productsMedia->count() > 0)
-                        <img src="{{ $productsMedia[0]->getMediaUrl() }}"
-                             alt="{{ $productsMedia[0]->title }}"
-                             class="product-image-original"
-                             onerror="this.src='https://via.placeholder.com/600x400/7cb342/ffffff?text={{ urlencode($productsMedia[0]->title) }}'">
-                    @else
+            @if($productsMedia && $productsMedia->count() > 0)
+                @foreach($productsMedia as $index => $product)
+                    <div class="pricing-card {{ $index == 0 ? 'product-basic' : 'product-premium' }}">
+                        <!-- Gambar Produk -->
+                        <div class="product-image-container">
+                            @if($product->isImage())
+                                <img src="{{ $product->getMediaUrl() }}"
+                                     alt="{{ $product->title }}"
+                                     class="product-image-original"
+                                     onerror="this.src='https://via.placeholder.com/600x400/{{ $index == 0 ? '7cb342' : 'f7e92b' }}/{{ $index == 0 ? 'ffffff' : '333333' }}?text={{ urlencode($product->title) }}'">
+                            @else
+                                <div style="width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; color: #{{ $index == 0 ? '999' : '666' }};">
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 3rem; margin-bottom: 0.5rem;">{{ $index == 0 ? '🎲' : '⭐' }}</div>
+                                        <p>{{ $product->title }}</p>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- JUDUL DARI DATABASE -->
+                        <h3>{{ $product->title }}</h3>
+
+                        <!-- HARGA DARI DATABASE -->
+                        <div class="price">{{ $product->formatted_price }}</div>
+
+                        <!-- FITUR PRODUK -->
+                        <ul>
+                            <!-- Gunakan deskripsi dari database jika ada, jika tidak gunakan default -->
+                            @if($product->description && strpos($product->description, "\n") !== false)
+                                <!-- Jika ada deskripsi panjang di database, pecah menjadi list -->
+                                @php
+                                    $features = explode("\n", $product->description);
+                                    foreach($features as $feature) {
+                                        if(trim($feature)) {
+                                            echo '<li>' . trim($feature) . '</li>';
+                                        }
+                                    }
+                                @endphp
+                            @else
+                                <!-- Default features -->
+                                @if($index == 0)
+                                @else
+                                @endif
+                            @endif
+                        </ul>
+
+                        <!-- Tombol Aksi -->
+                        <a href="https://wa.me/628986908167?text=Halo%20saya%20tertarik%20dengan%20produk%20{{ urlencode($product->title) }}%20(Rp%20{{ number_format($product->price, 0, ',', '.') }})"
+                           class="btn-primary"
+                           style="display: block; text-align: center; margin-top: 1.5rem;{{ $index > 0 ? ' background: linear-gradient(135deg, #f7e92b 0%, #ffc107 100%); color: #333;' : '' }}"
+                           target="_blank">
+                            {{ $index > 0 ? '📦 Pre-Order Sekarang' : '🛒 Dapatkan Sekarang' }}
+                        </a>
+                    </div>
+                @endforeach
+            @else
+                <!-- Fallback jika tidak ada produk di database -->
+                <!-- Produk Basic -->
+                <div class="pricing-card product-basic">
+                    <div class="product-image-container">
                         <div style="width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; color: #999;">
                             <div style="text-align: center;">
                                 <div style="font-size: 3rem; margin-bottom: 0.5rem;">🎲</div>
-                                <p>Waluya Land</p>
+                                <p>Waluya Land Basic</p>
                             </div>
                         </div>
-                    @endif
+                    </div>
+                    <h3>Waluya Land Basic</h3>
+                    <div class="price">Rp 300.000</div>
+                    <p style="margin-bottom: 1.5rem;">Paket lengkap untuk mulai belajar kewirausahaan</p>
+                    <ul>
+                        <li>1 set board game lengkap</li>
+                        <li>Kartu permainan dan token</li>
+                        <li>Buku panduan bermain</li>
+                        <li>Akses tutorial online</li>
+                    </ul>
+                    <a href="https://wa.me/628986908167?text=Halo%20saya%20tertarik%20dengan%20produk%20Waluya%20Land%20Basic!"
+                       class="btn-primary"
+                       style="display: block; text-align: center; margin-top: 1.5rem;"
+                       target="_blank">🛒 Dapatkan Sekarang</a>
                 </div>
-                <h3>Waluya Land</h3>
-                <div class="price">Rp 300.000</div>
-                <p style="margin-bottom: 1rem;">Produk yang kamu dapatkan berisi:</p>
-                <ul>
-                    <li>1 set produk waluya land lengkap</li>
-                    <li>1 kupon potongan harga</li>
-                    <li>Buku panduan bermain</li>
-                    <li>Akses tutorial online</li>
-                </ul>
-                <a href="https://wa.me/628986908167?text=Halo%20saya%20tertarik%20dengan%20produk%20Waluya%20Land!"
-                   class="btn-primary"
-                   style="display: block; text-align: center; margin-top: 1.5rem;"
-                   target="_blank">Dapatkan Sekarang</a>
-            </div>
 
-            <!-- Product Card 2 -->
-            <div class="pricing-card">
-                <div class="product-image-container">
-                    @if($productsMedia && $productsMedia->count() > 1)
-                        <img src="{{ $productsMedia[1]->getMediaUrl() }}"
-                             alt="{{ $productsMedia[1]->title }}"
-                             class="product-image-original"
-                             onerror="this.src='https://via.placeholder.com/600x400/f7e92b/333333?text={{ urlencode($productsMedia[1]->title) }}'">
-                    @else
+                <!-- Produk Premium -->
+                <div class="pricing-card product-premium">
+                    <div class="product-image-container">
                         <div style="width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; color: #666;">
                             <div style="text-align: center;">
                                 <div style="font-size: 3rem; margin-bottom: 0.5rem;">⭐</div>
-                                <p>Coming Soon</p>
+                                <p>Waluya Land Premium</p>
                             </div>
                         </div>
-                    @endif
+                    </div>
+                    <h3>Waluya Land Premium</h3>
+                    <div class="price">Rp 450.000</div>
+                    <p style="margin-bottom: 1.5rem;">Paket premium dengan fitur tambahan eksklusif</p>
+                    <ul>
+                        <li>Semua fitur paket basic</li>
+                        <li>Kupon diskon 15% untuk pembelian berikutnya</li>
+                        <li>Buku panduan advanced edition</li>
+                        <li>Akses workshop online eksklusif</li>
+                        <li>Sesi konsultasi gratis 1x</li>
+                    </ul>
+                    <a href="https://wa.me/628986908167?text=Halo%20saya%20tertarik%20dengan%20produk%20Waluya%20Land%20Premium!"
+                       class="btn-primary"
+                       style="display: block; text-align: center; margin-top: 1.5rem; background: linear-gradient(135deg, #f7e92b 0%, #ffc107 100%); color: #333;"
+                       target="_blank">📦 Pre-Order Sekarang</a>
                 </div>
-                <h3>Waluya Land </h3>
-                <div class="price">Rp 450.000</div>
-                <p style="margin-bottom: 1rem;">Produk premium dengan fitur tambahan:</p>
-                <ul>
-                    <li>1 set produk waluya land premium</li>
-                    <li>Kupon potongan harga 15%</li>
-                    <li>Buku panduan lengkap</li>
-                    <li>Akses workshop online</li>
-                    <li>Konsultasi gratis</li>
-                </ul>
-                <a href="https://wa.me/628986908167?text=Halo%20saya%20tertarik%20dengan%20produk%20Waluya%20Land%20Premium!"
-                   class="btn-primary"
-                   style="display: block; text-align: center; margin-top: 1.5rem; background: #666;"
-                   target="_blank">Pre-Order Sekarang</a>
-            </div>
+            @endif
         </div>
     </section>
 
@@ -1872,35 +1920,35 @@
             </div>
 
             <div class="faq-contact-form-mobile">
-        <p style="margin-bottom: 1.5rem; color: #666; text-align: center;">Punya pertanyaan lain? silahkan cantumkan disini</p>
-        <form action="{{ route('contact.store') }}" method="POST" id="contactFormMobile">
-            @csrf
+                <p style="margin-bottom: 1.5rem; color: #666; text-align: center;">Punya pertanyaan lain? silahkan cantumkan disini</p>
+                <form action="{{ route('contact.store') }}" method="POST" id="contactFormMobile">
+                    @csrf
 
-            <!-- TAMBAHKAN INPUT EMAIL DI SINI -->
-            <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
-            @error('email')
-                <span class="error-text">{{ $message }}</span>
-            @enderror
+                    <!-- TAMBAHKAN INPUT EMAIL DI SINI -->
+                    <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
+                    @error('email')
+                        <span class="error-text">{{ $message }}</span>
+                    @enderror
 
-            <input type="text" name="name" placeholder="Nama Lengkap" value="{{ old('name') }}" required>
-            @error('name')
-                <span class="error-text">{{ $message }}</span>
-            @enderror
+                    <input type="text" name="name" placeholder="Nama Lengkap" value="{{ old('name') }}" required>
+                    @error('name')
+                        <span class="error-text">{{ $message }}</span>
+                    @enderror
 
-            <input type="text" name="institution" placeholder="Instansi" value="{{ old('institution') }}">
-            @error('institution')
-                <span class="error-text">{{ $message }}</span>
-            @enderror
+                    <input type="text" name="institution" placeholder="Instansi" value="{{ old('institution') }}">
+                    @error('institution')
+                        <span class="error-text">{{ $message }}</span>
+                    @enderror
 
-            <textarea name="message" placeholder="Pesan/Pertanyaan" required>{{ old('message') }}</textarea>
-            @error('message')
-                <span class="error-text">{{ $message }}</span>
-            @enderror
+                    <textarea name="message" placeholder="Pesan/Pertanyaan" required>{{ old('message') }}</textarea>
+                    @error('message')
+                        <span class="error-text">{{ $message }}</span>
+                    @enderror
 
-            <button type="submit" class="btn-submit-faq">Kirim</button>
-        </form>
-    </div>
-</div>
+                    <button type="submit" class="btn-submit-faq">Kirim</button>
+                </form>
+            </div>
+        </div>
 
         <!-- Desktop Layout (2 kolom - tetap seperti sebelumnya) -->
         <div class="faq-contact-desktop">
@@ -2105,19 +2153,6 @@
         </div>
     </div>
 
-    @if(app()->environment('local'))
-    <script>
-        console.log('=== DEBUG MEDIA DATA ===');
-        console.log('Hero Media:', @json($heroMedia));
-        console.log('Story Media:', @json($storyMedia));
-        console.log('WhyLearn Media:', @json($whyLearnMedia));
-        console.log('Features Count:', {{ $featuresMedia ? $featuresMedia->count() : 0 }});
-        console.log('Aktivitas Count:', {{ $aktivitasMedia ? $aktivitasMedia->count() : 0 }});
-        console.log('Products Count:', {{ $productsMedia ? $productsMedia->count() : 0 }});
-        console.log('Testimonials Count:', {{ $testimonials ? $testimonials->count() : 0 }});
-    </script>
-    @endif
-
     <script>
         const hamburger = document.getElementById('hamburger');
         const navMenu = document.getElementById('navMenu');
@@ -2269,7 +2304,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 showSuccessModal();
-            }, 500); // Small delay to ensure page is loaded
+            }, 500);
         });
         @endif
 
@@ -2288,21 +2323,5 @@
             }
         });
     </script>
-    <!-- ... semua kode landing page yang sudah ada ... -->
-
-<!-- VISITOR TRACKING - TAMBAHKAN INI -->
-<script>
-// Tracking pengunjung otomatis saat page load
-document.addEventListener('DOMContentLoaded', function() {
-    fetch('/track-visitor')
-        .then(response => response.json())
-        .then(data => {
-            console.log('Visitor tracked successfully');
-        })
-        .catch(error => {
-            console.log('Visitor tracking failed:', error);
-        });
-});
-</script>
 </body>
 </html>

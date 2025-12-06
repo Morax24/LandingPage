@@ -1,4 +1,5 @@
 <?php
+// app/Models/Media.php
 
 namespace App\Models;
 
@@ -19,6 +20,7 @@ class Media extends Model
         'mime_type',
         'file_size',
         'section',
+        'price', // TAMBAHKAN INI
         'order',
         'is_active',
         'uploaded_by',
@@ -28,40 +30,41 @@ class Media extends Model
         'is_active' => 'boolean',
         'file_size' => 'integer',
         'order' => 'integer',
+        'price' => 'decimal:2', // TAMBAHKAN INI
     ];
 
-    protected $appends = ['full_url', 'file_size_formatted'];
+    protected $appends = ['full_url', 'file_size_formatted', 'formatted_price']; // TAMBAHKAN formatted_price
 
     // ==================== ATTRIBUTES ====================
 
     public function getFullUrlAttribute()
-{
-    // Langsung gunakan path dari database
-    $path = $this->file_path;
+    {
+        // Langsung gunakan path dari database
+        $path = $this->file_path;
 
-    // Jika path dimulai dengan 'media/', akses langsung
-    if (str_starts_with($path, 'media/')) {
-        return asset($path);
-    }
+        // Jika path dimulai dengan 'media/', akses langsung
+        if (str_starts_with($path, 'media/')) {
+            return asset($path);
+        }
 
-    // Jika tidak ada prefix, tambahkan 'media/'
-    if (!str_contains($path, '/')) {
-        return asset('media/' . $path);
-    }
+        // Jika tidak ada prefix, tambahkan 'media/'
+        if (!str_contains($path, '/')) {
+            return asset('media/' . $path);
+        }
 
-    // Fallback: coba dari public folder
-    $publicPath = public_path($path);
-    if (file_exists($publicPath)) {
-        return asset($path);
-    }
+        // Fallback: coba dari public folder
+        $publicPath = public_path($path);
+        if (file_exists($publicPath)) {
+            return asset($path);
+        }
 
-    // Fallback: placeholder
-    if ($this->isImage()) {
-        return 'https://via.placeholder.com/800x600/7cb342/ffffff?text=' . urlencode($this->title);
-    } else {
-        return 'https://via.placeholder.com/800x600/d4f1f4/333333?text=Video+Placeholder';
+        // Fallback: placeholder
+        if ($this->isImage()) {
+            return 'https://via.placeholder.com/800x600/7cb342/ffffff?text=' . urlencode($this->title);
+        } else {
+            return 'https://via.placeholder.com/800x600/d4f1f4/333333?text=Video+Placeholder';
+        }
     }
-}
 
     public function getMediaUrl()
     {
@@ -82,6 +85,15 @@ class Media extends Model
         }
 
         return round($bytes, 2) . ' ' . $units[$i];
+    }
+
+    // TAMBAHKAN ACCESSOR UNTUK FORMAT HARGA
+    public function getFormattedPriceAttribute()
+    {
+        if (!$this->price || $this->price == 0) {
+            return 'Rp 0';
+        }
+        return 'Rp ' . number_format($this->price, 0, ',', '.');
     }
 
     // ==================== METHODS ====================
@@ -140,7 +152,7 @@ class Media extends Model
             'features' => 'Features Section (4 items)',
             'whylearn' => 'Why Learn Section (1 item)',
             'aktivitas' => 'Aktivitas Section (6 items)',
-            'products' => 'Products Section (2 items)',
+            'products' => 'Products Section (2 items + price)', // UPDATE DESKRIPSI
             'other' => 'Other',
         ];
     }

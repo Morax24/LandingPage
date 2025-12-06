@@ -655,6 +655,7 @@
                     <p><strong>Tipe:</strong> {{ strtoupper($media->type) }}</p>
                     <p><strong>Nama File:</strong> {{ $media->file_name }}</p>
                     <p><strong>Ukuran:</strong> {{ $media->file_size_formatted }}</p>
+                    <p><strong>Harga:</strong> {{ $media->formatted_price }}</p> <!-- TAMBAHKAN INI -->
                     <p><strong>Diupload:</strong> {{ $media->created_at->format('d M Y H:i') }}</p>
                     <p><strong>Diupload oleh:</strong> {{ $media->uploader->name ?? 'Unknown' }}</p>
                     <p><strong>Path:</strong> <code>{{ $media->file_path }}</code></p>
@@ -687,18 +688,31 @@
                     <div class="form-group">
                         <label for="section">Section *</label>
                         <select name="section" id="section" required onchange="updateSectionInfo()">
-                        <option value="">-- Pilih Section --</option>
-                        <option value="hero" {{ old('section', $media->section) == 'hero' ? 'selected' : '' }}>Intro</option>
-                        <option value="story" {{ old('section', $media->section) == 'story' ? 'selected' : '' }}>Background</option>
-                        <option value="features" {{ old('section', $media->section) == 'features' ? 'selected' : '' }}>Fitur Unggulan</option>
-                        <option value="whylearn" {{ old('section', $media->section) == 'whylearn' ? 'selected' : '' }}>Fitur 3</option>
-                        <option value="aktivitas" {{ old('section', $media->section) == 'aktivitas' ? 'selected' : '' }}>Aktivitas & Tutorial (6 slots)</option>
-                        <option value="products" {{ old('section', $media->section) == 'products' ? 'selected' : '' }}>Products</option> <!-- TAMBAHKAN INI -->
-                    </select>
+                            <option value="">-- Pilih Section --</option>
+                            <option value="hero" {{ old('section', $media->section) == 'hero' ? 'selected' : '' }}>Intro</option>
+                            <option value="story" {{ old('section', $media->section) == 'story' ? 'selected' : '' }}>Background</option>
+                            <option value="features" {{ old('section', $media->section) == 'features' ? 'selected' : '' }}>Fitur Unggulan</option>
+                            <option value="whylearn" {{ old('section', $media->section) == 'whylearn' ? 'selected' : '' }}>Fitur 3</option>
+                            <option value="aktivitas" {{ old('section', $media->section) == 'aktivitas' ? 'selected' : '' }}>Aktivitas & Tutorial (6 slots)</option>
+                            <option value="products" {{ old('section', $media->section) == 'products' ? 'selected' : '' }}>Products</option>
+                        </select>
                         @error('section')
                             <span class="error-text">{{ $message }}</span>
                         @enderror
                         <small class="form-help" id="sectionHelp">Pilih di section mana media ini akan ditampilkan</small>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="form-group">
+                        <label for="price">Harga Produk (Rp)</label>
+                        <input type="number" name="price" id="price"
+                               value="{{ old('price', $media->price ?? 0) }}"
+                               min="0" step="1000"
+                               placeholder="Contoh: 300000">
+                        @error('price')
+                            <span class="error-text">{{ $message }}</span>
+                        @enderror
+                        <small class="form-help">Hanya untuk section Products</small>
                     </div>
 
                     <!-- Active Status -->
@@ -752,29 +766,38 @@
         });
 
         function updateSectionInfo() {
-    const section = document.getElementById('section').value;
-    const sectionHelp = document.getElementById('sectionHelp');
+            const section = document.getElementById('section').value;
+            const sectionHelp = document.getElementById('sectionHelp');
+            const priceInput = document.getElementById('price');
 
-    const descriptions = {
-        'hero': '🎯 Hero section - gambar board game utama. Hanya 1 media aktif yang ditampilkan.',
-        'story': '📖 Story section - gambar box di samping cerita. Hanya 1 media aktif yang ditampilkan.',
-        'features': '⭐ Features section. Maksimal 4 slot yang ditampilkan.',
-        'whylearn': '💡 WhyLearn section. Maksimal 2 slot yang ditampilkan.',
-        'aktivitas': '🎮 Aktivitas & Tutorial section. Maksimal 6 slot yang ditampilkan.',
-        'products': '📦 Product Images - gambar untuk bagian produk/pricing. Maksimal 2 slot yang ditampilkan.', // TAMBAHKAN INI
-        'other': '📁 Media lain yang tidak ditampilkan di landing page.'
-    };
+            const descriptions = {
+                'hero': '🎯 Hero section - gambar board game utama. Hanya 1 media aktif yang ditampilkan.',
+                'story': '📖 Story section - gambar box di samping cerita. Hanya 1 media aktif yang ditampilkan.',
+                'features': '⭐ Features section. Maksimal 4 slot yang ditampilkan.',
+                'whylearn': '💡 WhyLearn section. Maksimal 2 slot yang ditampilkan.',
+                'aktivitas': '🎮 Aktivitas & Tutorial section. Maksimal 6 slot yang ditampilkan.',
+                'products': '📦 Product Images - gambar untuk bagian produk/pricing. Maksimal 2 slot yang ditampilkan. HARUS DIISI HARGA!',
+                'other': '📁 Media lain yang tidak ditampilkan di landing page.'
+            };
 
-    if (section && descriptions[section]) {
-        sectionHelp.textContent = descriptions[section];
-        sectionHelp.style.color = '#5FB574';
-        sectionHelp.style.fontWeight = '500';
-    } else {
-        sectionHelp.textContent = 'Pilih di section mana media ini akan ditampilkan';
-        sectionHelp.style.color = '#666';
-        sectionHelp.style.fontWeight = 'normal';
-    }
-}
+            if (section && descriptions[section]) {
+                sectionHelp.textContent = descriptions[section];
+                sectionHelp.style.color = '#5FB574';
+                sectionHelp.style.fontWeight = '500';
+
+                // Set required untuk price jika section products
+                if (section === 'products') {
+                    priceInput.required = true;
+                } else {
+                    priceInput.required = false;
+                }
+            } else {
+                sectionHelp.textContent = 'Pilih di section mana media ini akan ditampilkan';
+                sectionHelp.style.color = '#666';
+                sectionHelp.style.fontWeight = 'normal';
+                priceInput.required = false;
+            }
+        }
 
         // Check if image loads successfully
         function checkImageLoad() {
