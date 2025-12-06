@@ -2323,5 +2323,19 @@
             }
         });
     </script>
+    <!-- VISITOR TRACKING - TAMBAHKAN INI -->
+<script>
+// Tracking pengunjung otomatis saat page load
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/track-visitor')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Visitor tracked successfully');
+        })
+        .catch(error => {
+            console.log('Visitor tracking failed:', error);
+        });
+});
+</script>
 </body>
 </html>

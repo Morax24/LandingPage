@@ -178,7 +178,7 @@
             transition: margin-left 0.3s ease;
         }
 
-        /* Header */
+        /* Header dengan tombol Kemarin */
         .page-header {
             background: #fff;
             padding: 1.5rem 2rem;
@@ -225,6 +225,31 @@
             background: #4FA564;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(95,181,116,0.4);
+        }
+
+        .btn-yesterday {
+            background: #3498db;
+            color: #fff;
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-yesterday:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-yesterday::before {
+            content: "📅";
+            font-size: 1.2rem;
         }
 
         .btn-success {
@@ -301,9 +326,9 @@
             position: relative;
             overflow: hidden;
             cursor: pointer;
-            text-decoration: none;
             color: inherit;
             display: block;
+            text-decoration: none;
         }
 
         .stat-card:hover {
@@ -428,6 +453,37 @@
             color: #558B2F;
         }
 
+        /* Warna untuk card Histori Pengunjung */
+        .stat-card.history {
+            background: linear-gradient(135deg, #F3E5F5, #E1BEE7);
+            border-left: 4px solid #9C27B0;
+        }
+        .stat-card.history h3 {
+            color: #7B1FA2;
+        }
+
+        /* Tombol Histori */
+        .btn-history {
+            background: #9b59b6;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.8rem;
+            display: inline-block;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .btn-history:hover {
+            background: #8e44ad;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(155, 89, 182, 0.4);
+        }
+
         /* Link stat card */
         .stat-link {
             text-decoration: none;
@@ -462,31 +518,39 @@
             width: 100%;
         }
 
+        /* Chart Tabs - HANYA 3 TAB */
         .chart-tabs {
             display: flex;
             gap: 1rem;
             margin-bottom: 1.5rem;
             border-bottom: 2px solid #f0f0f0;
             padding-bottom: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .chart-tab {
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 1.5rem;
             background: #f8f9fa;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 500;
             transition: all 0.3s;
+            font-size: 0.95rem;
+            min-width: 120px;
+            text-align: center;
         }
 
         .chart-tab.active {
             background: #5FB574;
             color: white;
+            box-shadow: 0 2px 8px rgba(95,181,116,0.3);
         }
 
         .chart-tab:hover:not(.active) {
             background: #e9ecef;
+            transform: translateY(-2px);
         }
 
         .activity-list {
@@ -728,6 +792,166 @@
             display: block;
         }
 
+        /* MODAL POPUP untuk Histori Pengunjung */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+            animation: slideUp 0.4s ease;
+            transform-origin: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        /* Tabel Histori Pengunjung */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .history-table th {
+            background: #5FB574;
+            color: white;
+            padding: 0.8rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .history-table td {
+            padding: 0.8rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .history-table tr:hover {
+            background: #F7FCF9;
+        }
+
+        .history-table .date-cell {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .history-table .count-cell {
+            text-align: center;
+            font-weight: 600;
+            color: #3498db;
+        }
+
+        .history-table .day-cell {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Highlight untuk hari dengan pengunjung terbanyak */
+        .history-table .highlight {
+            background: #FFF3E0;
+            border-left: 4px solid #FFA726;
+        }
+
+        .history-table .highlight .count-cell {
+            color: #F57C00;
+            font-weight: 700;
+        }
+
+        /* Statistik ringkasan */
+        .history-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .history-stat {
+            text-align: center;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .history-stat h4 {
+            font-size: 1.8rem;
+            color: #5FB574;
+            margin-bottom: 0.3rem;
+        }
+
+        .history-stat p {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
         /* Image fallback handling */
         .image-fallback {
             display: none;
@@ -789,7 +1013,7 @@
         /* Responsive */
         @media (max-width: 1200px) {
             .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(3, 1fr);
             }
             .dashboard-grid {
                 grid-template-columns: 1fr;
@@ -817,6 +1041,9 @@
             .page-header {
                 padding: 1rem;
                 margin-top: 3rem;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
@@ -874,6 +1101,16 @@
             .chart-tabs {
                 flex-wrap: wrap;
             }
+
+            .history-stats {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-history {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+                min-width: 100px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -890,6 +1127,18 @@
             .chart-wrapper {
                 height: 200px;
             }
+
+            .chart-tab {
+                padding: 0.5rem 1rem;
+                min-width: 100px;
+                font-size: 0.85rem;
+            }
+
+            .btn-history {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.75rem;
+                min-width: 90px;
+            }
         }
     </style>
 </head>
@@ -897,6 +1146,60 @@
     <!-- Mobile Menu Toggle -->
     <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
     <div class="overlay" id="overlay"></div>
+
+    <!-- Modal Popup untuk Histori Pengunjung -->
+    <div class="modal-overlay" id="historyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📊 Histori Pengunjung</h2>
+                <button class="modal-close" id="closeModal">✕</button>
+            </div>
+
+            <!-- Statistik Ringkasan -->
+            <div class="history-stats">
+                <div class="history-stat">
+                    <h4 id="totalVisitors">0</h4>
+                    <p>Total Pengunjung</p>
+                </div>
+                <div class="history-stat">
+                    <h4 id="averageVisitors">0</h4>
+                    <p>Rata-rata per Hari</p>
+                </div>
+                <div class="history-stat">
+                    <h4 id="peakDay">-</h4>
+                    <p>Hari Terbanyak</p>
+                </div>
+            </div>
+
+            <!-- Tabel Histori -->
+            <div style="overflow-x: auto;">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Hari</th>
+                            <th>Jumlah Pengunjung</th>
+                            <th>Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                        <!-- Data akan diisi oleh JavaScript -->
+                        <tr>
+                            <td colspan="4" style="text-align: center; padding: 2rem; color: #666;">
+                                Memuat data histori pengunjung...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Catatan -->
+            <div style="margin-top: 1.5rem; padding: 1rem; background: #f8f9fa; border-radius: 10px; font-size: 0.85rem; color: #666;">
+                <strong>Catatan:</strong> Data diambil dari tabel <code>visitor_counter</code> di database.
+                Saat ini hanya ada data untuk 2 hari terakhir. Data akan bertambah seiring waktu.
+            </div>
+        </div>
+    </div>
 
     <div class="admin-layout">
         <!-- Sidebar -->
@@ -948,7 +1251,7 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Header -->
+            <!-- Header dengan tombol Kemarin -->
             <div class="page-header">
                 <h1>📊 Dashboard</h1>
                 <span>Halo, <strong>{{ Auth::user()->name ?? 'Admin' }}</strong></span>
@@ -973,31 +1276,39 @@
             <!-- Stats dengan Icon yang Bagus -->
             <div class="stats-grid">
                 <!-- Baris 1 -->
-                <div class="stat-card size">
-                    <span class="stat-icon">💾</span>
-                    <h3>{{ number_format(($stats['total_media_size'] ?? 0) / 1024 / 1024, 2) }} MB</h3>
-                    <p>Total Size Media</p>
-                </div>
+                <a href="{{ route('admin.media.index') }}" class="stat-link">
+                    <div class="stat-card size">
+                        <span class="stat-icon">💾</span>
+                        <h3>{{ number_format(($stats['total_media_size'] ?? 0) / 1024 / 1024, 2) }} MB</h3>
+                        <p>Total Size Media</p>
+                    </div>
+                </a>
 
-                <div class="stat-card contacts">
-                    <span class="stat-icon">📨</span>
-                    <h3>{{ $stats['total_contacts'] ?? 0 }}</h3>
-                    <p>Total Pesan</p>
-                </div>
+                <a href="{{ route('admin.contacts.index') }}" class="stat-link">
+                    <div class="stat-card contacts">
+                        <span class="stat-icon">📨</span>
+                        <h3>{{ $stats['total_contacts'] ?? 0 }}</h3>
+                        <p>Total Pesan</p>
+                    </div>
+                </a>
 
-                <div class="stat-card pending">
-                    <span class="stat-icon">⏳</span>
-                    <h3>{{ $stats['pending_contacts'] ?? 0 }}</h3>
-                    <p>Pesan Pending</p>
-                </div>
-
-                <div class="stat-card approved">
-                    <span class="stat-icon">✅</span>
-                    <h3>{{ $stats['approved_contacts'] ?? 0 }}</h3>
-                    <p>Pesan Disetujui</p>
-                </div>
+                <a href="{{ route('admin.contacts.index', ['status' => 'pending']) }}" class="stat-link">
+                    <div class="stat-card pending">
+                        <span class="stat-icon">⏳</span>
+                        <h3>{{ $stats['pending_contacts'] ?? 0 }}</h3>
+                        <p>Pesan Pending</p>
+                    </div>
+                </a>
 
                 <!-- Baris 2 -->
+                <a href="{{ route('admin.contacts.index', ['status' => 'approved']) }}" class="stat-link">
+                    <div class="stat-card approved">
+                        <span class="stat-icon">✅</span>
+                        <h3>{{ $stats['approved_contacts'] ?? 0 }}</h3>
+                        <p>Pesan Disetujui</p>
+                    </div>
+                </a>
+
                 <a href="{{ route('admin.contacts.index', ['status' => 'rejected']) }}" class="stat-link">
                     <div class="stat-card rejected">
                         <span class="stat-icon">❌</span>
@@ -1006,17 +1317,22 @@
                     </div>
                 </a>
 
-                <div class="stat-card media">
-                    <span class="stat-icon">🖼️</span>
-                    <h3>{{ $stats['total_media'] ?? 0 }}</h3>
-                    <p>Total Media</p>
-                </div>
+                <a href="{{ route('admin.media.index') }}" class="stat-link">
+                    <div class="stat-card media">
+                        <span class="stat-icon">🖼️</span>
+                        <h3>{{ $stats['total_media'] ?? 0 }}</h3>
+                        <p>Total Media</p>
+                    </div>
+                </a>
 
-                <div class="stat-card active">
-                    <span class="stat-icon">🟢</span>
-                    <h3>{{ $stats['active_media'] ?? 0 }}</h3>
-                    <p>Media Aktif</p>
-                </div>
+                <!-- Baris 3 -->
+                <a href="{{ route('admin.media.index', ['status' => 'active']) }}" class="stat-link">
+                    <div class="stat-card active">
+                        <span class="stat-icon">🟢</span>
+                        <h3>{{ $stats['active_media'] ?? 0 }}</h3>
+                        <p>Media Aktif</p>
+                    </div>
+                </a>
 
                 <a href="{{ route('admin.media.index', ['status' => 'inactive']) }}" class="stat-link">
                     <div class="stat-card inactive">
@@ -1026,23 +1342,31 @@
                     </div>
                 </a>
 
-                <!-- Baris 3 - Visitor Stats -->
-                <div class="stat-card visitors">
+                <!-- Baris 4 - Visitor Stats -->
+                <div class="stat-card visitors" id="visitorCard">
                     <span class="stat-icon">👥</span>
                     <h3>{{ $stats['visitor_count'] ?? 0 }}</h3>
                     <p>Total Pengunjung</p>
                 </div>
 
-                <div class="stat-card today-visitors">
+                <div class="stat-card today-visitors" id="todayVisitorCard">
                     <span class="stat-icon">📅</span>
                     <h3>{{ $stats['today_visitors'] ?? 0 }}</h3>
                     <p>Hari Ini</p>
                 </div>
 
-                <div class="stat-card yesterday-visitors">
+                <div class="stat-card yesterday-visitors" id="yesterdayVisitorCard">
                     <span class="stat-icon">📊</span>
                     <h3>{{ $stats['yesterday_visitors'] ?? 0 }}</h3>
                     <p>Kemarin</p>
+                </div>
+
+                <!-- Histori Pengunjung -->
+                <div class="stat-card history" id="historyCard">
+                    <span class="stat-icon">📈</span>
+                    <h3>{{ $stats['yesterday_visitors'] ?? 0 }}</h3>
+                    <p>Histori Pengunjung</p>
+                    <button class="btn-history" id="showHistoryBtn">Lihat Histori</button>
                 </div>
             </div>
 
@@ -1052,11 +1376,10 @@
                 <div class="chart-container">
                     <h2 style="margin-bottom: 1.5rem; color: #333;">📈 Statistik Dashboard</h2>
 
-                    <!-- Chart Tabs -->
+                    <!-- Chart Tabs - HANYA 3 TAB -->
                     <div class="chart-tabs">
                         <button class="chart-tab active" data-chart="bar">Diagram Batang</button>
                         <button class="chart-tab" data-chart="horizontal">Diagram Horizontal</button>
-                        <button class="chart-tab" data-chart="pie">Diagram Pie</button>
                         <button class="chart-tab" data-chart="doughnut">Diagram Donat</button>
                     </div>
 
@@ -1197,7 +1520,9 @@
     </div>
 
     <script>
-        // Mobile menu functionality
+        // ======================
+        // MOBILE MENU FUNCTIONALITY
+        // ======================
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
@@ -1210,7 +1535,9 @@
         mobileMenuToggle.addEventListener('click', toggleMobileMenu);
         overlay.addEventListener('click', toggleMobileMenu);
 
-        // Data untuk chart TANPA Balasan Pending
+        // ======================
+        // CHART.JS IMPLEMENTATION (3 DIAGRAM)
+        // ======================
         const chartData = {
             labels: [
                 'Total Size Media',
@@ -1223,7 +1550,8 @@
                 'Media Nonaktif',
                 'Total Pengunjung',
                 'Pengunjung Hari Ini',
-                'Pengunjung Kemarin'
+                'Pengunjung Kemarin',
+                'Histori Pengunjung'
             ],
             datasets: [{
                 label: 'Statistik Dashboard',
@@ -1238,43 +1566,25 @@
                     {{ $stats['inactive_media'] ?? 0 }},
                     {{ $stats['visitor_count'] ?? 0 }},
                     {{ $stats['today_visitors'] ?? 0 }},
+                    {{ $stats['yesterday_visitors'] ?? 0 }},
                     {{ $stats['yesterday_visitors'] ?? 0 }}
                 ],
                 backgroundColor: [
-                    '#4CAF50',  // Total Size Media
-                    '#2196F3',  // Total Pesan
-                    '#FFC107',  // Pesan Pending
-                    '#4CAF50',  // Pesan Disetujui
-                    '#F44336',  // Pesan Ditolak
-                    '#9C27B0',  // Total Media
-                    '#4CAF50',  // Media Aktif
-                    '#FF9800',  // Media Nonaktif
-                    '#3498db',  // Total Pengunjung
-                    '#FFA726',  // Pengunjung Hari Ini
-                    '#8BC34A'   // Pengunjung Kemarin
+                    '#4CAF50', '#2196F3', '#FFC107', '#4CAF50', '#F44336',
+                    '#9C27B0', '#4CAF50', '#FF9800', '#3498db', '#FFA726', '#8BC34A', '#9b59b6'
                 ],
                 borderColor: [
-                    '#2E7D32',  // Total Size Media
-                    '#1565C0',  // Total Pesan
-                    '#FF8F00',  // Pesan Pending
-                    '#2E7D32',  // Pesan Disetujui
-                    '#C62828',  // Pesan Ditolak
-                    '#7B1FA2',  // Total Media
-                    '#2E7D32',  // Media Aktif
-                    '#EF6C00',  // Media Nonaktif
-                    '#1a5276',  // Total Pengunjung
-                    '#F57C00',  // Pengunjung Hari Ini
-                    '#558B2F'   // Pengunjung Kemarin
+                    '#2E7D32', '#1565C0', '#FF8F00', '#2E7D32', '#C62828',
+                    '#7B1FA2', '#2E7D32', '#EF6C00', '#1a5276', '#F57C00', '#558B2F', '#8e44ad'
                 ],
                 borderWidth: 2
             }]
         };
 
-        // Chart.js Implementation - Multiple Chart Types
         const ctx = document.getElementById('dashboardChart').getContext('2d');
         let currentChart = null;
 
-        // Fungsi untuk membuat chart
+        // Fungsi untuk membuat chart (3 jenis)
         function createChart(type) {
             if (currentChart) {
                 currentChart.destroy();
@@ -1306,14 +1616,11 @@
                                     if (label) {
                                         label += ': ';
                                     }
-                                    if (context.parsed.y !== null || context.parsed !== undefined) {
-                                        // Format khusus untuk Total Size Media
+                                    if (context.parsed.y !== null) {
                                         if (context.dataIndex === 0) {
-                                            const value = type === 'bar' || type === 'horizontalBar' ? context.parsed.y : context.parsed;
-                                            label += value + ' MB';
+                                            label += context.parsed.y + ' MB';
                                         } else {
-                                            const value = type === 'bar' || type === 'horizontalBar' ? context.parsed.y : context.parsed;
-                                            label += value;
+                                            label += context.parsed.y;
                                         }
                                     }
                                     return label;
@@ -1334,17 +1641,11 @@
                     config.options.scales = {
                         y: {
                             beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.1)'
-                            },
-                            ticks: {
-                                font: { size: 12 }
-                            }
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                            ticks: { font: { size: 12 } }
                         },
                         x: {
-                            grid: {
-                                display: false
-                            },
+                            grid: { display: false },
                             ticks: {
                                 font: { size: 11 },
                                 maxRotation: 45,
@@ -1360,27 +1661,14 @@
                     config.options.scales = {
                         x: {
                             beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.1)'
-                            },
-                            ticks: {
-                                font: { size: 12 }
-                            }
+                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
+                            ticks: { font: { size: 12 } }
                         },
                         y: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                font: { size: 11 }
-                            }
+                            grid: { display: false },
+                            ticks: { font: { size: 11 } }
                         }
                     };
-                    break;
-
-                case 'pie':
-                    config.type = 'pie';
-                    config.options.plugins.legend.position = 'right';
                     break;
 
                 case 'doughnut':
@@ -1393,28 +1681,214 @@
             currentChart = new Chart(ctx, config);
         }
 
-        // Inisialisasi chart pertama kali
+        // Inisialisasi chart pertama kali (Diagram Batang)
         createChart('bar');
 
         // Tab functionality
         const chartTabs = document.querySelectorAll('.chart-tab');
         chartTabs.forEach(tab => {
             tab.addEventListener('click', function() {
-                // Remove active class from all tabs
                 chartTabs.forEach(t => t.classList.remove('active'));
-                // Add active class to clicked tab
                 this.classList.add('active');
-                // Create new chart
                 createChart(this.dataset.chart);
             });
         });
 
-        // Enhanced image handling dengan loading state
+        // ======================
+        // MODAL HISTORY FUNCTIONALITY
+        // ======================
+        const showHistoryBtn = document.getElementById('showHistoryBtn');
+        const historyModal = document.getElementById('historyModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const historyTableBody = document.getElementById('historyTableBody');
+        const totalVisitorsElem = document.getElementById('totalVisitors');
+        const averageVisitorsElem = document.getElementById('averageVisitors');
+        const peakDayElem = document.getElementById('peakDay');
+
+        // Data dari database (dummy data untuk contoh)
+        // Dalam implementasi nyata, ini akan diambil dari endpoint API
+        const visitorHistory = [
+            { date: '2025-12-05', count: {{ $stats['today_visitors'] ?? 0 }}, day: 'Jumat' },
+            { date: '2025-12-04', count: {{ $stats['yesterday_visitors'] ?? 0 }}, day: 'Kamis' },
+            // Data dummy untuk demo (akan diganti dengan data real)
+            { date: '2025-12-03', count: 15, day: 'Rabu' },
+            { date: '2025-12-02', count: 18, day: 'Selasa' },
+            { date: '2025-12-01', count: 22, day: 'Senin' },
+            { date: '2025-11-30', count: 20, day: 'Minggu' },
+            { date: '2025-11-29', count: 25, day: 'Sabtu' },
+            { date: '2025-11-28', count: 19, day: 'Jumat' },
+            { date: '2025-11-27', count: 21, day: 'Kamis' },
+            { date: '2025-11-26', count: 17, day: 'Rabu' }
+        ];
+
+        // Fungsi untuk memformat tanggal
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        // Fungsi untuk menghitung statistik
+        function calculateStats(data) {
+            let total = 0;
+            let maxCount = 0;
+            let peakDate = '';
+
+            data.forEach(item => {
+                total += item.count;
+                if (item.count > maxCount) {
+                    maxCount = item.count;
+                    peakDate = `${item.day}, ${formatDate(item.date)}`;
+                }
+            });
+
+            const average = data.length > 0 ? Math.round(total / data.length) : 0;
+
+            return {
+                total: total,
+                average: average,
+                peak: maxCount > 0 ? peakDate : '-'
+            };
+        }
+
+        // Fungsi untuk mengisi tabel history
+        function populateHistoryTable() {
+            historyTableBody.innerHTML = '';
+
+            if (visitorHistory.length === 0) {
+                historyTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 2rem; color: #666;">
+                            Belum ada data histori pengunjung.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            // Hitung statistik
+            const stats = calculateStats(visitorHistory);
+
+            // Update statistik ringkasan
+            totalVisitorsElem.textContent = stats.total;
+            averageVisitorsElem.textContent = stats.average;
+            peakDayElem.textContent = stats.peak;
+
+            // Urutkan dari tanggal terbaru
+            const sortedHistory = [...visitorHistory].sort((a, b) =>
+                new Date(b.date) - new Date(a.date)
+            );
+
+            // Temukan jumlah maksimum untuk highlight
+            const maxCount = Math.max(...sortedHistory.map(item => item.count));
+
+            // Isi tabel
+            sortedHistory.forEach((item, index) => {
+                const isHighlight = item.count === maxCount && maxCount > 0;
+                const rowClass = isHighlight ? 'highlight' : '';
+
+                const row = document.createElement('tr');
+                row.className = rowClass;
+
+                // Warna untuk jumlah pengunjung
+                let countColor = '#3498db';
+                let keterangan = 'Normal';
+
+                if (item.count === 0) {
+                    countColor = '#95a5a6';
+                    keterangan = 'Tidak ada pengunjung';
+                } else if (item.count > 20) {
+                    countColor = '#e74c3c';
+                    keterangan = 'Sangat Ramai';
+                } else if (item.count > 15) {
+                    countColor = '#f39c12';
+                    keterangan = 'Ramai';
+                } else if (item.count > 10) {
+                    keterangan = 'Lumayan';
+                }
+
+                row.innerHTML = `
+                    <td class="date-cell">${formatDate(item.date)}</td>
+                    <td class="day-cell">${item.day}</td>
+                    <td class="count-cell" style="color: ${countColor}">
+                        ${item.count} pengunjung
+                    </td>
+                    <td>${keterangan}</td>
+                `;
+
+                historyTableBody.appendChild(row);
+            });
+        }
+
+        // ======================
+        // CLICK FUNCTIONALITY FOR STAT CARDS
+        // ======================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle clicks on visitor cards
+            const visitorCards = document.querySelectorAll('#visitorCard, #todayVisitorCard, #yesterdayVisitorCard');
+            visitorCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Cegah event bubbling jika mengklik tombol di dalam card
+                    if (!e.target.classList.contains('btn-history')) {
+                        populateHistoryTable();
+                        historyModal.classList.add('show');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+            });
+
+            // Handle click on history card (seluruh card)
+            const historyCard = document.getElementById('historyCard');
+            if (historyCard) {
+                historyCard.addEventListener('click', function(e) {
+                    // Hanya trigger jika tidak mengklik tombol
+                    if (!e.target.classList.contains('btn-history')) {
+                        populateHistoryTable();
+                        historyModal.classList.add('show');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+            }
+
+            // Event Listeners untuk Modal (tombol)
+            showHistoryBtn.addEventListener('click', function(e) {
+                e.stopPropagation(); // Cegah event bubbling
+                populateHistoryTable();
+                historyModal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            });
+
+            closeModalBtn.addEventListener('click', function() {
+                historyModal.classList.remove('show');
+                document.body.style.overflow = 'auto';
+            });
+
+            // Tutup modal saat klik di luar konten
+            historyModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    historyModal.classList.remove('show');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+
+            // Tutup modal dengan tombol ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && historyModal.classList.contains('show')) {
+                    historyModal.classList.remove('show');
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        });
+
+        // ======================
+        // IMAGE HANDLING
+        // ======================
         document.addEventListener('DOMContentLoaded', function() {
             const images = document.querySelectorAll('img');
 
             images.forEach(img => {
-                // Tambah loading state
                 img.style.opacity = '0';
                 img.style.transition = 'opacity 0.3s ease';
 
@@ -1433,29 +1907,18 @@
                     }
                 });
             });
-
-            // Preload images untuk smooth experience
-            function preloadImages() {
-                const imageUrls = [];
-                document.querySelectorAll('img').forEach(img => {
-                    if (img.src) imageUrls.push(img.src);
-                });
-
-                imageUrls.forEach(url => {
-                    const img = new Image();
-                    img.src = url;
-                });
-            }
-
-            preloadImages();
         });
 
-        // Auto-refresh every 5 minutes
+        // ======================
+        // AUTO-REFRESH
+        // ======================
         setTimeout(() => {
             window.location.reload();
-        }, 300000);
+        }, 300000); // 5 menit
 
-        // Handle window resize
+        // ======================
+        // WINDOW RESIZE HANDLING
+        // ======================
         window.addEventListener('resize', function() {
             if (currentChart) {
                 currentChart.resize();
