@@ -1798,7 +1798,7 @@
                     <a href="https://wa.me/628986908167?text=Halo%20saya%20tertarik%20dengan%20produk%20Waluya%20Land%20Premium!"
                        class="btn-primary"
                        style="display: block; text-align: center; margin-top: 1.5rem; background: linear-gradient(135deg, #f7e92b 0%, #ffc107 100%); color: #333;"
-                       target="_blank">📦 Pre-Order Sekarang</a>
+                       target="_blank">🛒 Dapatkan Sekarang</a>
                 </div>
             @endif
         </div>

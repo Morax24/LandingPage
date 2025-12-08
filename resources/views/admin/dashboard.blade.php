@@ -1364,7 +1364,6 @@
                 <!-- Histori Pengunjung -->
                 <div class="stat-card history" id="historyCard">
                     <span class="stat-icon">📈</span>
-                    <h3>{{ $stats['yesterday_visitors'] ?? 0 }}</h3>
                     <p>Histori Pengunjung</p>
                     <button class="btn-history" id="showHistoryBtn">Lihat Histori</button>
                 </div>
