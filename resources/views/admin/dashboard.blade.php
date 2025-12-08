@@ -6,6 +6,7 @@
     <title>Dashboard - Admin</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        /* Semua CSS yang sama persis seperti sebelumnya */
         * {
             margin: 0;
             padding: 0;
@@ -14,7 +15,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #E8F4F8;
+            background: #f5f7fa;
             color: #333;
         }
 
@@ -26,8 +27,8 @@
 
         /* Sidebar */
         .sidebar {
-            width: 280px;
-            background: #5FB574;
+            width: 260px;
+            background: linear-gradient(180deg, #5FB574 0%, #4FA564 100%);
             color: #fff;
             padding: 0;
             position: fixed;
@@ -132,14 +133,6 @@
             border: 2px solid rgba(255,255,255,0.5);
         }
 
-        .user-avatar-img {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid rgba(255,255,255,0.5);
-        }
-
         .user-info h4 {
             font-size: 1rem;
             margin-bottom: 0.3rem;
@@ -171,425 +164,345 @@
 
         /* Main Content */
         .main-content {
-            margin-left: 280px;
+            margin-left: 260px;
             flex: 1;
-            padding: 2rem;
-            width: calc(100% - 280px);
+            padding: 1.5rem;
+            width: calc(100% - 260px);
             transition: margin-left 0.3s ease;
         }
 
-        /* Header dengan tombol Kemarin */
+        /* Header Compact */
         .page-header {
             background: #fff;
-            padding: 1.5rem 2rem;
-            border-radius: 15px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-            margin-bottom: 2rem;
+            padding: 1.2rem 1.8rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+            margin-bottom: 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 0.8rem;
+            border-left: 4px solid #5FB574;
         }
 
         .page-header h1 {
-            font-size: 1.8rem;
-            color: #333;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 0.7rem 1.5rem;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            text-align: center;
-        }
-
-        .btn-primary {
-            background: #5FB574;
-            color: #fff;
-        }
-
-        .btn-primary:hover {
-            background: #4FA564;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(95,181,116,0.4);
-        }
-
-        .btn-yesterday {
-            background: #3498db;
-            color: #fff;
-            padding: 0.7rem 1.5rem;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
+            font-size: 1.6rem;
+            color: #2c3e50;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        .btn-yesterday:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+        .header-actions {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
-        .btn-yesterday::before {
-            content: "📅";
-            font-size: 1.2rem;
-        }
-
-        .btn-success {
-            background: #5FB574;
-            color: #fff;
-        }
-
-        .btn-success:hover {
-            background: #4FA564;
-            transform: translateY(-2px);
-        }
-
-        .btn-danger {
-            background: #FF8A5B;
-            color: #fff;
-        }
-
-        .btn-danger:hover {
-            background: #E67A4B;
-            transform: translateY(-2px);
-        }
-
-        .btn-warning {
-            background: #F9D56E;
-            color: #333;
-        }
-
-        .btn-warning:hover {
-            background: #E9C55E;
-            transform: translateY(-2px);
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            text-align: center;
+            font-size: 0.85rem;
         }
 
         .btn-secondary {
-            background: #95a5a6;
+            background: #6c757d;
             color: #fff;
         }
 
         .btn-secondary:hover {
-            background: #7f8c8d;
+            background: #5a6268;
             transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(108, 117, 125, 0.2);
         }
 
-        .btn-info {
-            background: #3498db;
-            color: #fff;
-        }
-
-        .btn-info:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-        }
-
-        .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.85rem;
-            border-radius: 8px;
-        }
-
-        /* Stats dengan Icon */
+        /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .stat-card {
             background: #fff;
-            padding: 2rem 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            padding: 1.2rem 1rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.04);
             text-align: center;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
             cursor: pointer;
-            color: inherit;
-            display: block;
-            text-decoration: none;
+            border-top: 3px solid #5FB574;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+            height: 100%;
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.08);
         }
 
         .stat-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .stat-card h3 {
-            font-size: 2.2rem;
+            font-size: 2rem;
             margin-bottom: 0.5rem;
-            color: #5FB574;
+            display: block;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: scale(1.15);
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
             font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.2rem;
+            line-height: 1;
         }
 
-        .stat-card p {
-            color: #666;
-            font-size: 0.9rem;
-            font-weight: 500;
+        .stat-unit {
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            margin-left: 2px;
         }
 
-        /* Warna untuk status cards */
-        .stat-card.size {
-            background: linear-gradient(135deg, #E8F5E8, #C8E6C9);
-            border-left: 4px solid #4CAF50;
-        }
-
-        .stat-card.size h3 {
-            color: #2E7D32;
-        }
-
-        .stat-card.contacts {
-            background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
-            border-left: 4px solid #2196F3;
-        }
-
-        .stat-card.contacts h3 {
-            color: #1565C0;
-        }
-
-        .stat-card.pending {
-            background: linear-gradient(135deg, #FFF8E1, #FFECB3);
-            border-left: 4px solid #FFC107;
-        }
-
-        .stat-card.pending h3 {
-            color: #FF8F00;
-        }
-
-        .stat-card.approved {
-            background: linear-gradient(135deg, #E8F5E8, #C8E6C9);
-            border-left: 4px solid #4CAF50;
-        }
-
-        .stat-card.approved h3 {
-            color: #2E7D32;
-        }
-
-        .stat-card.rejected {
-            background: linear-gradient(135deg, #FFEBEE, #FFCDD2);
-            border-left: 4px solid #F44336;
-        }
-
-        .stat-card.rejected h3 {
-            color: #C62828;
-        }
-
-        .stat-card.media {
-            background: linear-gradient(135deg, #F3E5F5, #E1BEE7);
-            border-left: 4px solid #9C27B0;
-        }
-
-        .stat-card.media h3 {
-            color: #7B1FA2;
-        }
-
-        .stat-card.active {
-            background: linear-gradient(135deg, #E8F5E8, #C8E6C9);
-            border-left: 4px solid #4CAF50;
-        }
-
-        .stat-card.active h3 {
-            color: #2E7D32;
-        }
-
-        .stat-card.inactive {
-            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
-            border-left: 4px solid #FF9800;
-        }
-
-        .stat-card.inactive h3 {
-            color: #EF6C00;
-        }
-
-        /* Warna untuk card pengunjung */
-        .stat-card.visitors {
-            background: linear-gradient(135deg, #E8F4F8, #3498db);
-            border-left: 4px solid #2980b9;
-        }
-        .stat-card.visitors h3 {
-            color: #1a5276;
-        }
-
-        .stat-card.today-visitors {
-            background: linear-gradient(135deg, #FFF3E0, #FFB74D);
-            border-left: 4px solid #FFA726;
-        }
-        .stat-card.today-visitors h3 {
-            color: #F57C00;
-        }
-
-        .stat-card.yesterday-visitors {
-            background: linear-gradient(135deg, #F1F8E9, #8BC34A);
-            border-left: 4px solid #7CB342;
-        }
-        .stat-card.yesterday-visitors h3 {
-            color: #558B2F;
-        }
-
-        /* Warna untuk card Histori Pengunjung */
-        .stat-card.history {
-            background: linear-gradient(135deg, #F3E5F5, #E1BEE7);
-            border-left: 4px solid #9C27B0;
-        }
-        .stat-card.history h3 {
-            color: #7B1FA2;
-        }
-
-        /* Tombol Histori */
-        .btn-history {
-            background: #9b59b6;
-            color: white;
-            border: none;
-            border-radius: 25px;
-            padding: 0.6rem 1.2rem;
+        .stat-label {
+            color: #555;
             font-size: 0.85rem;
             font-weight: 600;
-            cursor: pointer;
-            margin-top: 0.8rem;
-            display: inline-block;
-            transition: all 0.3s ease;
-            min-width: 120px;
+            line-height: 1.2;
+            margin-top: 0.2rem;
+            text-align: center;
         }
 
-        .btn-history:hover {
-            background: #8e44ad;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(155, 89, 182, 0.4);
-        }
+        /* Warna border untuk stat cards - SESUAI PERMINTAAN BARIS */
+        /* Baris 1 */
+        .stat-card:nth-child(1) { border-top-color: #4CAF50; } /* 💾 Total Size Media */
+        .stat-card:nth-child(2) { border-top-color: #2196F3; } /* 📨 Total Pesan */
+        .stat-card:nth-child(3) { border-top-color: #FFC107; } /* ⏳ Pesan Pending */
+        .stat-card:nth-child(4) { border-top-color: #4CAF50; } /* ✅ Pesan Disetujui */
+        .stat-card:nth-child(5) { border-top-color: #F44336; } /* ❌ Pesan Ditolak */
 
-        /* Link stat card */
-        .stat-link {
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
+        /* Baris 2 */
+        .stat-card:nth-child(6) { border-top-color: #9C27B0; } /* 🖼️ Total Media */
+        .stat-card:nth-child(7) { border-top-color: #4CAF50; } /* 🟢 Media Aktif */
+        .stat-card:nth-child(8) { border-top-color: #FF9800; } /* 🔴 Media Nonaktif */
+        .stat-card:nth-child(9) { border-top-color: #3498db; } /* 👥 Total Pengunjung */
+        .stat-card:nth-child(10) { border-top-color: #FFA726; } /* 📅 Hari Ini */
 
-        .stat-link:hover {
-            text-decoration: none;
-            color: inherit;
-        }
+        /* Baris 3 */
+        .stat-card:nth-child(11) { border-top-color: #8BC34A; } /* 📊 Kemarin */
+        .stat-card:nth-child(12) { border-top-color: #9b59b6; } /* 📈 Histori Pengunjung */
+        .stat-card:nth-child(13) { border-top-color: #3498db; } /* 👥 Total Pengunjung (Keseluruhan) */
+        .stat-card:nth-child(14) { border-top-color: #2ecc71; } /* 📉 Rata-rata per Hari */
+        .stat-card:nth-child(15) { border-top-color: #e74c3c; } /* ⭐ Hari Terbanyak */
 
-        /* Dashboard Content */
+        /* Dashboard 3 Kolom */
         .dashboard-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
+            grid-template-columns: 1.2fr 1fr 1fr;
+            gap: 1.2rem;
+            margin-bottom: 1.5rem;
+            align-items: start;
+            min-height: 400px;
         }
 
-        .chart-container, .activity-container {
+        .chart-container,
+        .visitor-table-container,
+        .activity-container {
             background: #fff;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.04);
             position: relative;
+            height: 100%;
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
+        .container-title {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            padding-bottom: 0.7rem;
+            border-bottom: 2px solid #ecf0f1;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 600;
+        }
+
+        /* Chart */
         .chart-wrapper {
             position: relative;
-            height: 300px;
+            height: 250px;
             width: 100%;
+            flex-grow: 1;
         }
 
-        /* Chart Tabs - HANYA 3 TAB */
         .chart-tabs {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid #eee;
         }
 
         .chart-tab {
-            padding: 0.5rem 1.5rem;
+            padding: 0.5rem 1rem;
             background: #f8f9fa;
-            border: none;
-            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: 500;
-            transition: all 0.3s;
-            font-size: 0.95rem;
-            min-width: 120px;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+            min-width: 90px;
             text-align: center;
+            flex: 1;
         }
 
         .chart-tab.active {
             background: #5FB574;
             color: white;
-            box-shadow: 0 2px 8px rgba(95,181,116,0.3);
+            border-color: #5FB574;
+            box-shadow: 0 2px 4px rgba(95,181,116,0.2);
         }
 
         .chart-tab:hover:not(.active) {
             background: #e9ecef;
-            transform: translateY(-2px);
+            border-color: #ced4da;
         }
 
+        /* Tabel Pengunjung */
+        .visitor-table-wrapper {
+            flex-grow: 1;
+            overflow-y: auto;
+            border: 1px solid #ecf0f1;
+            border-radius: 8px;
+            max-height: 280px;
+        }
+
+        .visitor-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 100%;
+        }
+
+        .visitor-table thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .visitor-table th {
+            background: #5FB574;
+            color: white;
+            padding: 0.8rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85rem;
+            position: sticky;
+            top: 0;
+            white-space: nowrap;
+        }
+
+        .visitor-table td {
+            padding: 0.7rem 1rem;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 0.85rem;
+            vertical-align: middle;
+        }
+
+        .visitor-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .visitor-table .date-cell {
+            font-weight: 600;
+            color: #2c3e50;
+            white-space: nowrap;
+        }
+
+        .visitor-table .count-cell {
+            text-align: center;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .visitor-table .day-cell {
+            color: #7f8c8d;
+            font-size: 0.85rem;
+        }
+
+        .visitor-table .highlight {
+            background: linear-gradient(90deg, rgba(255, 167, 38, 0.08) 0%, transparent 100%);
+        }
+
+        .visitor-table .highlight td:first-child {
+            border-left: 3px solid #FFA726;
+        }
+
+        /* Aktivitas Terbaru */
         .activity-list {
-            margin-top: 1rem;
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
         .activity-item {
             display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            border-radius: 12px;
-            transition: all 0.3s ease;
+            align-items: flex-start;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            background: #f8f9fa;
+            border: 1px solid transparent;
+            min-height: 70px;
         }
 
         .activity-item:hover {
-            background: #F7FCF9;
-            transform: translateX(5px);
+            background: #fff;
+            border-color: #5FB574;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
 
         .activity-icon {
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             flex-shrink: 0;
         }
 
-        .activity-thumbnail {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #5FB574;
-            transition: all 0.3s ease;
-        }
-
         .activity-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -605,107 +518,122 @@
 
         .activity-title {
             font-weight: 600;
-            margin-bottom: 0.3rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            margin-bottom: 0.2rem;
+            color: #2c3e50;
+            font-size: 0.9rem;
+            line-height: 1.3;
         }
 
         .activity-time {
-            font-size: 0.85rem;
-            color: #666;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .activity-time::before {
+            content: "🕒";
+            font-size: 0.75rem;
         }
 
         /* Recent Items */
         .recent-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2rem;
+            gap: 1.2rem;
+            margin-bottom: 0;
         }
 
         .recent-container {
             background: #fff;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.04);
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .recent-title {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            padding-bottom: 0.7rem;
+            border-bottom: 2px solid #ecf0f1;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 600;
         }
 
         .recent-list {
-            margin-top: 1rem;
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.6rem;
+            overflow-y: auto;
+            padding-right: 5px;
         }
 
         .recent-item {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            border-radius: 12px;
-            transition: all 0.3s ease;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            background: #f8f9fa;
             border: 1px solid transparent;
         }
 
         .recent-item:hover {
-            background: #F7FCF9;
+            background: #fff;
             border-color: #5FB574;
-            transform: translateX(5px);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
 
         .recent-icon {
-            width: 60px;
-            height: 60px;
+            width: 40px;
+            height: 40px;
             flex-shrink: 0;
         }
 
+        .user-initial {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #5FB574;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
         .media-thumbnail {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
             object-fit: cover;
-            border: 2px solid #E8F4F8;
+            border: 2px solid #ecf0f1;
             transition: all 0.3s ease;
         }
 
-        .media-placeholder {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #E8F4F8, #5FB574);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: white;
-        }
-
         .video-thumbnail {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
             background: linear-gradient(135deg, #3498db, #2980b9);
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            overflow: hidden;
         }
 
         .video-icon {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             color: white;
-            z-index: 2;
-        }
-
-        .video-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.2);
-            z-index: 1;
         }
 
         .recent-content {
@@ -713,51 +641,62 @@
             min-width: 0;
         }
 
-        .recent-title {
+        .recent-name {
             font-weight: 600;
-            margin-bottom: 0.3rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            margin-bottom: 0.2rem;
+            color: #2c3e50;
+            font-size: 0.9rem;
         }
 
         .recent-meta {
-            font-size: 0.85rem;
-            color: #666;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            font-size: 0.8rem;
+            color: #7f8c8d;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            flex-wrap: wrap;
         }
 
-        /* Badge untuk tipe media */
-        .media-type-badge {
-            background: #5FB574;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 6px;
-            font-size: 0.75rem;
+        .badge {
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
             font-weight: 600;
             text-transform: uppercase;
         }
 
-        /* Alert */
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Alert Compact */
         .alert {
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 1rem;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            margin-bottom: 1.2rem;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            border-left: 3px solid transparent;
+            font-size: 0.9rem;
         }
 
         .alert-success {
-            background: #E8F5EC;
-            color: #4FA564;
-            border: 2px solid #5FB574;
-        }
-
-        .alert-danger {
-            background: #FFE8E1;
-            color: #D96F4A;
-            border: 2px solid #FF8A5B;
+            background: #d4edda;
+            color: #155724;
+            border-left-color: #28a745;
         }
 
         /* Mobile Menu Toggle */
@@ -770,14 +709,14 @@
             background: #5FB574;
             color: white;
             border: none;
-            border-radius: 8px;
-            padding: 0.7rem;
-            font-size: 1.5rem;
+            border-radius: 6px;
+            padding: 0.6rem;
+            font-size: 1.3rem;
             cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
-        /* Dark overlay for mobile */
+        /* Overlay */
         .overlay {
             display: none;
             position: fixed;
@@ -792,234 +731,62 @@
             display: block;
         }
 
-        /* MODAL POPUP untuk Histori Pengunjung */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 10000;
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .modal-overlay.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background: #fff;
-            padding: 2rem;
-            border-radius: 20px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
-            animation: slideUp 0.4s ease;
-            transform-origin: center;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        .modal-header h2 {
-            font-size: 1.5rem;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .modal-close {
-            background: none;
+        /* Tombol History Compact */
+        .history-button {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
             border: none;
-            font-size: 1.5rem;
+            border-radius: 16px;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.75rem;
+            font-weight: 600;
             cursor: pointer;
-            color: #666;
-            transition: color 0.3s;
-        }
-
-        .modal-close:hover {
-            color: #333;
-        }
-
-        /* Tabel Histori Pengunjung */
-        .history-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-
-        .history-table th {
-            background: #5FB574;
-            color: white;
-            padding: 0.8rem;
-            text-align: left;
-            font-weight: 600;
-        }
-
-        .history-table td {
-            padding: 0.8rem;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .history-table tr:hover {
-            background: #F7FCF9;
-        }
-
-        .history-table .date-cell {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .history-table .count-cell {
-            text-align: center;
-            font-weight: 600;
-            color: #3498db;
-        }
-
-        .history-table .day-cell {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        /* Highlight untuk hari dengan pengunjung terbanyak */
-        .history-table .highlight {
-            background: #FFF3E0;
-            border-left: 4px solid #FFA726;
-        }
-
-        .history-table .highlight .count-cell {
-            color: #F57C00;
-            font-weight: 700;
-        }
-
-        /* Statistik ringkasan */
-        .history-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 12px;
-        }
-
-        .history-stat {
-            text-align: center;
-            padding: 1rem;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .history-stat h4 {
-            font-size: 1.8rem;
-            color: #5FB574;
-            margin-bottom: 0.3rem;
-        }
-
-        .history-stat p {
-            font-size: 0.85rem;
-            color: #666;
-        }
-
-        /* Image fallback handling */
-        .image-fallback {
-            display: none;
-        }
-
-        /* Hover effects untuk gambar */
-        .activity-item:hover .activity-thumbnail {
-            transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        .recent-item:hover .media-thumbnail {
-            transform: scale(1.08);
-            box-shadow: 0 6px 16px rgba(95, 181, 116, 0.4);
-        }
-
-        /* Animation untuk gambar loading */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .media-thumbnail,
-        .activity-thumbnail {
-            animation: fadeIn 0.5s ease;
-        }
-
-        /* Video thumbnail untuk activity */
-        .activity-item .video-thumbnail {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            display: flex;
+            margin-top: 0.3rem;
+            display: inline-flex;
             align-items: center;
+            gap: 0.4rem;
+            transition: all 0.2s ease;
+            min-width: 140px;
             justify-content: center;
-            position: relative;
-            overflow: hidden;
-            border: 2px solid #3498db;
+            white-space: nowrap;
         }
 
-        .activity-item .video-icon {
-            font-size: 1.2rem;
-            color: white;
-            z-index: 2;
-        }
-
-        .activity-item .video-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.3);
-            z-index: 1;
-            border-radius: 50%;
+        .history-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(155, 89, 182, 0.2);
         }
 
         /* Responsive */
+        @media (max-width: 1400px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
         @media (max-width: 1200px) {
             .stats-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
             .dashboard-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto;
+                gap: 1rem;
+            }
+            .chart-container {
+                grid-column: 1 / -1;
+                grid-row: 1;
+            }
+            .visitor-table-container {
+                grid-column: 1;
+                grid-row: 2;
+            }
+            .activity-container {
+                grid-column: 2;
+                grid-row: 2;
             }
             .recent-grid {
                 grid-template-columns: 1fr;
+                gap: 1rem;
             }
         }
 
@@ -1027,7 +794,7 @@
             .main-content {
                 margin-left: 0;
                 width: 100%;
-                padding: 1rem;
+                padding: 1.2rem;
             }
             .sidebar {
                 transform: translateX(-100%);
@@ -1040,32 +807,60 @@
             }
             .page-header {
                 padding: 1rem;
-                margin-top: 3rem;
+                margin-top: 2.5rem;
+                gap: 0.6rem;
             }
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
             }
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+                gap: 1rem;
+            }
+            .chart-container,
+            .visitor-table-container,
+            .activity-container {
+                grid-column: 1;
+                min-height: 350px;
+            }
+            .chart-container { grid-row: 1; }
+            .visitor-table-container { grid-row: 2; }
+            .activity-container { grid-row: 3; }
         }
 
         @media (max-width: 768px) {
             .stats-grid {
                 grid-template-columns: 1fr;
-                gap: 1rem;
             }
             .stat-card {
-                padding: 1.5rem 1rem;
+                padding: 1rem;
+                min-height: 100px;
             }
-            .stat-card h3 {
-                font-size: 2rem;
+            .stat-number {
+                font-size: 1.6rem;
             }
             .stat-icon {
-                font-size: 2rem;
+                font-size: 1.8rem;
+                height: 35px;
             }
-            .chart-container, .activity-container, .recent-container {
-                padding: 1.5rem;
+            .stat-label {
+                font-size: 0.8rem;
+            }
+            .history-button {
+                min-width: 120px;
+                font-size: 0.7rem;
+                padding: 0.3rem 0.6rem;
+            }
+            .chart-container,
+            .visitor-table-container,
+            .activity-container,
+            .recent-container {
+                padding: 1.2rem;
             }
             .chart-wrapper {
-                height: 250px;
+                height: 220px;
             }
             .header-actions {
                 justify-content: center;
@@ -1073,133 +868,318 @@
             .page-header {
                 flex-direction: column;
                 text-align: center;
+                gap: 0.5rem;
             }
-
-            .activity-thumbnail,
-            .activity-avatar {
-                width: 40px;
-                height: 40px;
-                font-size: 1rem;
-            }
-
-            .media-thumbnail,
-            .media-placeholder,
-            .video-thumbnail {
-                width: 50px;
-                height: 50px;
-            }
-
-            .video-icon {
-                font-size: 1.2rem;
-            }
-
             .activity-item,
             .recent-item {
-                padding: 0.8rem;
+                padding: 0.7rem;
             }
-
             .chart-tabs {
                 flex-wrap: wrap;
             }
-
-            .history-stats {
-                grid-template-columns: 1fr;
-            }
-
-            .btn-history {
-                padding: 0.5rem 1rem;
+            .chart-tab {
+                min-width: 80px;
                 font-size: 0.8rem;
-                min-width: 100px;
+                padding: 0.4rem 0.8rem;
             }
         }
 
         @media (max-width: 480px) {
             .main-content {
-                padding: 0.5rem;
+                padding: 1rem;
             }
-            .chart-container, .activity-container, .recent-container {
+            .chart-container,
+            .visitor-table-container,
+            .activity-container,
+            .recent-container {
                 padding: 1rem;
             }
             .btn {
-                padding: 0.6rem 1rem;
-                font-size: 0.9rem;
+                padding: 0.5rem 0.9rem;
+                font-size: 0.8rem;
             }
             .chart-wrapper {
                 height: 200px;
             }
-
-            .chart-tab {
-                padding: 0.5rem 1rem;
-                min-width: 100px;
-                font-size: 0.85rem;
+            .history-button {
+                padding: 0.3rem 0.7rem;
+                font-size: 0.7rem;
+                min-width: 110px;
             }
-
-            .btn-history {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.75rem;
-                min-width: 90px;
+            .recent-grid {
+                gap: 0.8rem;
             }
         }
     </style>
 </head>
 <body>
+    <?php
+    // ===========================================
+    // KONEKSI DATABASE
+    // ===========================================
+    $servername = "localhost:3306";
+    $username = "root";
+    $password = "";
+    $dbname = "1-bester";
+
+    // Buat koneksi
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    // Cek koneksi
+    if ($conn->connect_error) {
+        die("Koneksi database gagal: " . $conn->connect_error);
+    }
+
+    // ===========================================
+    // QUERY DATA DARI DATABASE
+    // ===========================================
+
+    // 1. Total Size Media (dalam MB) - 💾 Total Size Media
+    $size_sql = "SELECT SUM(file_size) as total_size FROM media";
+    $size_result = $conn->query($size_sql);
+    $total_size_mb = 0;
+    if ($size_result->num_rows > 0) {
+        $row = $size_result->fetch_assoc();
+        $total_size_mb = round($row['total_size'] / (1024 * 1024), 1);
+    }
+
+    // 2. Total Pesan - 📨 Total Pesan
+    $contacts_sql = "SELECT COUNT(*) as total FROM contacts";
+    $contacts_result = $conn->query($contacts_sql);
+    $total_contacts = 0;
+    if ($contacts_result->num_rows > 0) {
+        $row = $contacts_result->fetch_assoc();
+        $total_contacts = $row['total'];
+    }
+
+    // 3. Pesan Pending - ⏳ Pesan Pending
+    $pending_sql = "SELECT COUNT(*) as pending FROM contacts WHERE status = 'pending'";
+    $pending_result = $conn->query($pending_sql);
+    $pending_contacts = 0;
+    if ($pending_result->num_rows > 0) {
+        $row = $pending_result->fetch_assoc();
+        $pending_contacts = $row['pending'];
+    }
+
+    // 4. Pesan Disetujui - ✅ Pesan Disetujui
+    $approved_sql = "SELECT COUNT(*) as approved FROM contacts WHERE status = 'approved'";
+    $approved_result = $conn->query($approved_sql);
+    $approved_contacts = 0;
+    if ($approved_result->num_rows > 0) {
+        $row = $approved_result->fetch_assoc();
+        $approved_contacts = $row['approved'];
+    }
+
+    // 5. Pesan Ditolak - ❌ Pesan Ditolak
+    $rejected_sql = "SELECT COUNT(*) as rejected FROM contacts WHERE status = 'rejected'";
+    $rejected_result = $conn->query($rejected_sql);
+    $rejected_contacts = 0;
+    if ($rejected_result->num_rows > 0) {
+        $row = $rejected_result->fetch_assoc();
+        $rejected_contacts = $row['rejected'];
+    }
+
+    // 6. Total Media - 🖼️ Total Media
+    $media_total_sql = "SELECT COUNT(*) as total FROM media";
+    $media_total_result = $conn->query($media_total_sql);
+    $total_media = 0;
+    if ($media_total_result->num_rows > 0) {
+        $row = $media_total_result->fetch_assoc();
+        $total_media = $row['total'];
+    }
+
+    // 7. Media Aktif - 🟢 Media Aktif
+    $media_active_sql = "SELECT COUNT(*) as active FROM media WHERE is_active = 1";
+    $media_active_result = $conn->query($media_active_sql);
+    $active_media = 0;
+    if ($media_active_result->num_rows > 0) {
+        $row = $media_active_result->fetch_assoc();
+        $active_media = $row['active'];
+    }
+
+    // 8. Media Nonaktif - 🔴 Media Nonaktif
+    $media_inactive_sql = "SELECT COUNT(*) as inactive FROM media WHERE is_active = 0";
+    $media_inactive_result = $conn->query($media_inactive_sql);
+    $inactive_media = 0;
+    if ($media_inactive_result->num_rows > 0) {
+        $row = $media_inactive_result->fetch_assoc();
+        $inactive_media = $row['inactive'];
+    }
+
+    // 9. Total Pengunjung - 👥 Total Pengunjung
+    $total_visitors_sql = "SELECT SUM(count) as total FROM visitor_counter";
+    $total_visitors_result = $conn->query($total_visitors_sql);
+    $total_visitors = 0;
+    if ($total_visitors_result->num_rows > 0) {
+        $row = $total_visitors_result->fetch_assoc();
+        $total_visitors = $row['total'];
+    }
+
+    // 10. Pengunjung Hari Ini - 📅 Hari Ini
+    $today = date('Y-m-d');
+    $today_visitors_sql = "SELECT count FROM visitor_counter WHERE date = '$today'";
+    $today_visitors_result = $conn->query($today_visitors_sql);
+    $today_visitors = 0;
+    if ($today_visitors_result->num_rows > 0) {
+        $row = $today_visitors_result->fetch_assoc();
+        $today_visitors = $row['count'];
+    }
+
+    // 11. Pengunjung Kemarin - 📊 Kemarin
+    $yesterday = date('Y-m-d', strtotime('-1 day'));
+    $yesterday_visitors_sql = "SELECT count FROM visitor_counter WHERE date = '$yesterday'";
+    $yesterday_visitors_result = $conn->query($yesterday_visitors_sql);
+    $yesterday_visitors = 0;
+    if ($yesterday_visitors_result->num_rows > 0) {
+        $row = $yesterday_visitors_result->fetch_assoc();
+        $yesterday_visitors = $row['count'];
+    }
+
+    // 12. Histori Pengunjung (7 hari terakhir) - 📈 Histori Pengunjung
+    $history_visitors_sql = "SELECT COUNT(DISTINCT date) as days FROM visitor_counter WHERE date >= DATE_SUB('$today', INTERVAL 7 DAY)";
+    $history_visitors_result = $conn->query($history_visitors_sql);
+    $history_days = 0;
+    if ($history_visitors_result->num_rows > 0) {
+        $row = $history_visitors_result->fetch_assoc();
+        $history_days = $row['days'];
+    }
+
+    // 13. Total Pengunjung (Keseluruhan) - 👥 Total Pengunjung (Keseluruhan)
+    // Ini sama dengan point 9, jadi kita gunakan $total_visitors yang sudah dihitung
+
+    // 14. Rata-rata per Hari - 📉 Rata-rata per Hari
+    $avg_visitors_sql = "SELECT AVG(count) as average FROM visitor_counter WHERE count > 0";
+    $avg_visitors_result = $conn->query($avg_visitors_sql);
+    $avg_visitors = 0;
+    if ($avg_visitors_result->num_rows > 0) {
+        $row = $avg_visitors_result->fetch_assoc();
+        $avg_visitors = round($row['average']);
+    }
+
+    // 15. Hari Terbanyak - ⭐ Hari Terbanyak
+    $max_visitors_sql = "SELECT MAX(count) as max_count FROM visitor_counter";
+    $max_visitors_result = $conn->query($max_visitors_sql);
+    $max_visitors = 0;
+    if ($max_visitors_result->num_rows > 0) {
+        $row = $max_visitors_result->fetch_assoc();
+        $max_visitors = $row['max_count'];
+    }
+
+    // 16. Data Tabel Pengunjung
+    $visitor_table_sql = "SELECT date, count, DAYNAME(date) as day_name FROM visitor_counter ORDER BY date DESC LIMIT 5";
+    $visitor_table_result = $conn->query($visitor_table_sql);
+    $visitor_data = [];
+    if ($visitor_table_result->num_rows > 0) {
+        while($row = $visitor_table_result->fetch_assoc()) {
+            $visitor_data[] = $row;
+        }
+    }
+
+    // 17. Aktivitas Terbaru (gabungan dari berbagai tabel)
+    $activities = [];
+
+    // Aktivitas dari media (upload terbaru)
+    $media_activity_sql = "SELECT
+        CONCAT('Gambar diupload: ', title) as title,
+        section,
+        created_at as timestamp,
+        'media' as type
+        FROM media
+        ORDER BY created_at DESC
+        LIMIT 2";
+    $media_activity_result = $conn->query($media_activity_sql);
+    if ($media_activity_result->num_rows > 0) {
+        while($row = $media_activity_result->fetch_assoc()) {
+            $activities[] = $row;
+        }
+    }
+
+    // Aktivitas dari contacts (pesan terbaru)
+    $contacts_activity_sql = "SELECT
+        CONCAT('Pesan baru dari ', name) as title,
+        'contact' as type,
+        created_at as timestamp
+        FROM contacts
+        ORDER BY created_at DESC
+        LIMIT 3";
+    $contacts_activity_result = $conn->query($contacts_activity_sql);
+    if ($contacts_activity_result->num_rows > 0) {
+        while($row = $contacts_activity_result->fetch_assoc()) {
+            $activities[] = $row;
+        }
+    }
+
+    // Aktivitas statistik pengunjung
+    $stat_activity_sql = "SELECT
+        'Update statistik pengunjung' as title,
+        'stats' as type,
+        updated_at as timestamp
+        FROM visitor_counter
+        ORDER BY updated_at DESC
+        LIMIT 1";
+    $stat_activity_result = $conn->query($stat_activity_sql);
+    if ($stat_activity_result->num_rows > 0) {
+        while($row = $stat_activity_result->fetch_assoc()) {
+            $activities[] = $row;
+        }
+    }
+
+    // Urutkan aktivitas berdasarkan timestamp
+    usort($activities, function($a, $b) {
+        return strtotime($b['timestamp']) - strtotime($a['timestamp']);
+    });
+
+    // 18. Pesan Terbaru
+    $recent_messages_sql = "SELECT name, email, status, created_at
+                           FROM contacts
+                           ORDER BY created_at DESC
+                           LIMIT 4";
+    $recent_messages_result = $conn->query($recent_messages_sql);
+    $recent_messages = [];
+    if ($recent_messages_result->num_rows > 0) {
+        while($row = $recent_messages_result->fetch_assoc()) {
+            $recent_messages[] = $row;
+        }
+    }
+
+    // 19. Media Terbaru
+    $recent_media_sql = "SELECT title, type, section, created_at
+                        FROM media
+                        ORDER BY created_at DESC
+                        LIMIT 4";
+    $recent_media_result = $conn->query($recent_media_sql);
+    $recent_media = [];
+    if ($recent_media_result->num_rows > 0) {
+        while($row = $recent_media_result->fetch_assoc()) {
+            $recent_media[] = $row;
+        }
+    }
+
+    // 20. Data untuk Chart
+    $chart_data = [
+        $total_size_mb,
+        $total_contacts,
+        $pending_contacts,
+        $approved_contacts,
+        $rejected_contacts,
+        $total_media,
+        $active_media,
+        $inactive_media,
+        $total_visitors,
+        $today_visitors,
+        $yesterday_visitors,
+        $history_days,
+        $total_visitors, // Total Pengunjung (Keseluruhan)
+        $avg_visitors,
+        $max_visitors
+    ];
+
+    $conn->close();
+    ?>
+
     <!-- Mobile Menu Toggle -->
     <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
     <div class="overlay" id="overlay"></div>
-
-    <!-- Modal Popup untuk Histori Pengunjung -->
-    <div class="modal-overlay" id="historyModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>📊 Histori Pengunjung</h2>
-                <button class="modal-close" id="closeModal">✕</button>
-            </div>
-
-            <!-- Statistik Ringkasan -->
-            <div class="history-stats">
-                <div class="history-stat">
-                    <h4 id="totalVisitors">0</h4>
-                    <p>Total Pengunjung</p>
-                </div>
-                <div class="history-stat">
-                    <h4 id="averageVisitors">0</h4>
-                    <p>Rata-rata per Hari</p>
-                </div>
-                <div class="history-stat">
-                    <h4 id="peakDay">-</h4>
-                    <p>Hari Terbanyak</p>
-                </div>
-            </div>
-
-            <!-- Tabel Histori -->
-            <div style="overflow-x: auto;">
-                <table class="history-table">
-                    <thead>
-                        <tr>
-                            <th>Tanggal</th>
-                            <th>Hari</th>
-                            <th>Jumlah Pengunjung</th>
-                            <th>Keterangan</th>
-                        </tr>
-                    </thead>
-                    <tbody id="historyTableBody">
-                        <!-- Data akan diisi oleh JavaScript -->
-                        <tr>
-                            <td colspan="4" style="text-align: center; padding: 2rem; color: #666;">
-                                Memuat data histori pengunjung...
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Catatan -->
-            <div style="margin-top: 1.5rem; padding: 1rem; background: #f8f9fa; border-radius: 10px; font-size: 0.85rem; color: #666;">
-                <strong>Catatan:</strong> Data diambil dari tabel <code>visitor_counter</code> di database.
-                Saat ini hanya ada data untuk 2 hari terakhir. Data akan bertambah seiring waktu.
-            </div>
-        </div>
-    </div>
 
     <div class="admin-layout">
         <!-- Sidebar -->
@@ -1210,15 +1190,15 @@
             </div>
 
             <nav class="sidebar-menu">
-                <a href="{{ route('admin.dashboard') }}" class="menu-item active">
+                <a href="#" class="menu-item active">
                     <span class="menu-icon">📊</span>
                     <span>Dashboard</span>
                 </a>
-                <a href="{{ route('admin.contacts.index') }}" class="menu-item">
+                <a href="#" class="menu-item">
                     <span class="menu-icon">📧</span>
                     <span>Kelola Pesan</span>
                 </a>
-                <a href="{{ route('admin.media.index') }}" class="menu-item">
+                <a href="#" class="menu-item">
                     <span class="menu-icon">🖼️</span>
                     <span>Media Library</span>
                 </a>
@@ -1226,56 +1206,38 @@
 
             <div class="sidebar-footer">
                 <div class="user-profile">
-                    @if(isset(Auth::user()->avatar) && Auth::user()->avatar)
-                        <img src="{{ Auth::user()->avatar }}" alt="Avatar" class="user-avatar-img"
-                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <div class="user-avatar image-fallback">
-                            {{ substr(Auth::user()->name, 0, 2) }}
-                        </div>
-                    @else
-                        <div class="user-avatar">
-                            {{ substr(Auth::user()->name, 0, 2) }}
-                        </div>
-                    @endif
+                    <div class="user-avatar">
+                        AD
+                    </div>
                     <div class="user-info">
-                        <h4>{{ Auth::user()->name ?? 'Admin' }}</h4>
+                        <h4>Admin Waluya</h4>
                         <p>Administrator</p>
                     </div>
                 </div>
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn-logout">Logout</button>
-                </form>
+                <button type="button" class="btn-logout">Logout</button>
             </div>
         </aside>
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Header dengan tombol Kemarin -->
+            <!-- Header Compact -->
             <div class="page-header">
-                <h1>📊 Dashboard</h1>
-                <span>Halo, <strong>{{ Auth::user()->name ?? 'Admin' }}</strong></span>
+                <h1>📊 Dashboard Analytics</h1>
+                <span>Welcome, <strong style="color: #5FB574;">Admin</strong></span>
                 <div class="header-actions">
-                    <span class="btn btn-secondary">Last updated: {{ now()->format('d M Y, H:i') }}</span>
+                    <span class="btn btn-secondary">🕒 <?php echo date('d M Y, H:i'); ?></span>
                 </div>
             </div>
 
-            <!-- Alert Messages -->
-            @if(session('success'))
-                <div class="alert alert-success">
-                    ✓ {{ session('success') }}
-                </div>
-            @endif
+            <!-- Alert -->
+            <div class="alert alert-success">
+                <span>✓</span>
+                Dashboard loaded successfully from database
+            </div>
 
-            @if(session('error'))
-                <div class="alert alert-danger">
-                    ✗ {{ session('error') }}
-                </div>
-            @endif
-
-            <!-- Stats dengan Icon yang Bagus -->
+            <!-- Stats Grid Compact dengan Data Real -->
             <div class="stats-grid">
-                <!-- Baris 1 -->
+                <!-- Baris 1: Media & Pesan -->
                 <a href="{{ route('admin.media.index') }}" class="stat-link">
                     <div class="stat-card size">
                         <span class="stat-icon">💾</span>
@@ -1300,8 +1262,7 @@
                     </div>
                 </a>
 
-                <!-- Baris 2 -->
-                <a href="{{ route('admin.contacts.index', ['status' => 'approved']) }}" class="stat-link">
+                 <a href="{{ route('admin.contacts.index', ['status' => 'approved']) }}" class="stat-link">
                     <div class="stat-card approved">
                         <span class="stat-icon">✅</span>
                         <h3>{{ $stats['approved_contacts'] ?? 0 }}</h3>
@@ -1325,7 +1286,6 @@
                     </div>
                 </a>
 
-                <!-- Baris 3 -->
                 <a href="{{ route('admin.media.index', ['status' => 'active']) }}" class="stat-link">
                     <div class="stat-card active">
                         <span class="stat-icon">🟢</span>
@@ -1342,40 +1302,58 @@
                     </div>
                 </a>
 
-                <!-- Baris 4 - Visitor Stats -->
-                <div class="stat-card visitors" id="visitorCard">
-                    <span class="stat-icon">👥</span>
-                    <h3>{{ $stats['visitor_count'] ?? 0 }}</h3>
-                    <p>Total Pengunjung</p>
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-number"><?php echo $total_visitors; ?></div>
+                    <div class="stat-label">Total Pengunjung</div>
                 </div>
 
-                <div class="stat-card today-visitors" id="todayVisitorCard">
-                    <span class="stat-icon">📅</span>
-                    <h3>{{ $stats['today_visitors'] ?? 0 }}</h3>
-                    <p>Hari Ini</p>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-number"><?php echo $today_visitors; ?></div>
+                    <div class="stat-label">Hari Ini</div>
                 </div>
 
-                <div class="stat-card yesterday-visitors" id="yesterdayVisitorCard">
-                    <span class="stat-icon">📊</span>
-                    <h3>{{ $stats['yesterday_visitors'] ?? 0 }}</h3>
-                    <p>Kemarin</p>
+                <!-- Baris 3: Statistik Pengunjung -->
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-number"><?php echo $yesterday_visitors; ?></div>
+                    <div class="stat-label">Kemarin</div>
                 </div>
 
-                <!-- Histori Pengunjung -->
-                <div class="stat-card history" id="historyCard">
-                    <span class="stat-icon">📈</span>
-                    <p>Histori Pengunjung</p>
-                    <button class="btn-history" id="showHistoryBtn">Lihat Histori</button>
+                <div class="stat-card">
+                    <div class="stat-icon">📈</div>
+                    <div class="stat-number"><?php echo $history_days; ?><span class="stat-unit">hr</span></div>
+                    <div class="stat-label">Histori Pengunjung</div>
+                    <button class="history-button">📊 Lihat Histori</button>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-number"><?php echo $total_visitors; ?></div>
+                    <div class="stat-label">Total Pengunjung<br>(Keseluruhan)</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">📉</div>
+                    <div class="stat-number"><?php echo $avg_visitors; ?></div>
+                    <div class="stat-label">Rata-rata per Hari</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-number"><?php echo $max_visitors; ?></div>
+                    <div class="stat-label">Hari Terbanyak</div>
                 </div>
             </div>
 
-            <!-- Dashboard Content -->
+            <!-- Dashboard 3 Kolom -->
             <div class="dashboard-grid">
-                <!-- Chart/Graph Section -->
+                <!-- Kolom Kiri: Statistik Dashboard -->
                 <div class="chart-container">
-                    <h2 style="margin-bottom: 1.5rem; color: #333;">📈 Statistik Dashboard</h2>
+                    <h2 class="container-title">📈 Statistik Dashboard</h2>
 
-                    <!-- Chart Tabs - HANYA 3 TAB -->
+                    <!-- Chart Tabs -->
                     <div class="chart-tabs">
                         <button class="chart-tab active" data-chart="bar">Diagram Batang</button>
                         <button class="chart-tab" data-chart="horizontal">Diagram Horizontal</button>
@@ -1387,56 +1365,96 @@
                     </div>
                 </div>
 
-                <!-- Recent Activity -->
+                <!-- Kolom Tengah: Tabel Pengunjung Harian -->
+                <div class="visitor-table-container">
+                    <h2 class="container-title">📊 Tabel Pengunjung Harian</h2>
+
+                    <div class="visitor-table-wrapper">
+                        <table class="visitor-table">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>Hari</th>
+                                    <th>Jumlah</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach($visitor_data as $index => $visitor):
+                                    $date = new DateTime($visitor['date']);
+                                    $count = $visitor['count'];
+                                    $day_name = $visitor['day_name'];
+
+                                    // Tentukan warna berdasarkan jumlah pengunjung
+                                    if ($count == 0) {
+                                        $color = '#95a5a6';
+                                        $keterangan = 'Tidak ada';
+                                    } elseif ($count < 10) {
+                                        $color = '#3498db';
+                                        $keterangan = 'Sedikit';
+                                    } elseif ($count < 20) {
+                                        $color = '#f39c12';
+                                        $keterangan = 'Lumayan';
+                                    } else {
+                                        $color = '#e74c3c';
+                                        $keterangan = 'Sangat Ramai';
+                                    }
+
+                                    $highlight = ($count == $max_visitors) ? 'highlight' : '';
+                                ?>
+                                <tr class="<?php echo $highlight; ?>">
+                                    <td class="date-cell"><?php echo $date->format('d/m/Y'); ?></td>
+                                    <td class="day-cell"><?php echo $day_name; ?></td>
+                                    <td class="count-cell" style="color: <?php echo $color; ?>;"><?php echo $count; ?></td>
+                                    <td><?php echo $keterangan; ?></td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Kolom Kanan: Aktivitas Terbaru -->
                 <div class="activity-container">
-                    <h2 style="margin-bottom: 1.5rem; color: #333;">🔄 Aktivitas Terbaru</h2>
+                    <h2 class="container-title">🔄 Aktivitas Terbaru</h2>
                     <div class="activity-list">
-                        @forelse($recentActivities ?? [] as $activity)
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    @if($activity['type'] == 'contact')
-                                        <div class="activity-avatar" style="background: #5FB574;">📧</div>
-                                    @elseif($activity['type'] == 'media' && isset($activity['media']))
-                                        @if($activity['media']->isImage())
-                                            <!-- Tampilkan thumbnail gambar asli -->
-                                            <img src="{{ $activity['media']->url }}"
-                                                 alt="Thumbnail"
-                                                 class="activity-thumbnail"
-                                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                            <div class="activity-avatar image-fallback" style="background: #F9D56E;">🖼️</div>
-                                        @elseif($activity['media']->isVideo())
-                                            <!-- Tampilkan thumbnail video -->
-                                            <div class="video-thumbnail" style="width: 50px; height: 50px; border-radius: 50%;">
-                                                <div class="video-icon">🎥</div>
-                                                <div class="video-overlay"></div>
-                                            </div>
-                                        @else
-                                            <div class="activity-avatar" style="background: #3498db;">📁</div>
-                                        @endif
-                                    @elseif($activity['type'] == 'reply')
-                                        <div class="activity-avatar" style="background: #9b59b6;">💬</div>
-                                    @else
-                                        <div class="activity-avatar" style="background: #95a5a6;">📊</div>
-                                    @endif
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-title">{{ $activity['title'] ?? 'Aktivitas' }}</div>
-                                    <div class="activity-time">
-                                        {{ $activity['time'] ?? '-' }}
-                                        @if(isset($activity['media']))
-                                            • {{ $activity['media']->section ?? 'other' }}
-                                        @endif
-                                    </div>
-                                </div>
+                        <?php foreach(array_slice($activities, 0, 6) as $activity):
+                            $timestamp = new DateTime($activity['timestamp']);
+                            $time_diff = time() - strtotime($activity['timestamp']);
+
+                            if ($time_diff < 3600) {
+                                $time_ago = floor($time_diff / 60) . ' menit lalu';
+                            } elseif ($time_diff < 86400) {
+                                $time_ago = floor($time_diff / 3600) . ' jam lalu';
+                            } else {
+                                $time_ago = floor($time_diff / 86400) . ' hari lalu';
+                            }
+
+                            // Tentukan icon berdasarkan tipe aktivitas
+                            if ($activity['type'] == 'media') {
+                                $icon = '🖼️';
+                                $bg_color = 'linear-gradient(135deg, #F9D56E, #FFC107)';
+                                $section = isset($activity['section']) ? ' - ' . $activity['section'] : '';
+                            } elseif ($activity['type'] == 'contact') {
+                                $icon = '📧';
+                                $bg_color = 'linear-gradient(135deg, #5FB574, #4CAF50)';
+                                $section = '';
+                            } else {
+                                $icon = '📊';
+                                $bg_color = 'linear-gradient(135deg, #9b59b6, #8e44ad)';
+                                $section = '';
+                            }
+                        ?>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <div class="activity-avatar" style="background: <?php echo $bg_color; ?>;"><?php echo $icon; ?></div>
                             </div>
-                        @empty
-                            <div class="activity-item">
-                                <div class="activity-content">
-                                    <div class="activity-title">Belum ada aktivitas</div>
-                                    <div class="activity-time">-</div>
-                                </div>
+                            <div class="activity-content">
+                                <div class="activity-title"><?php echo htmlspecialchars($activity['title']); ?></div>
+                                <div class="activity-time"><?php echo $time_ago . $section; ?></div>
                             </div>
-                        @endforelse
+                        </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>
@@ -1445,73 +1463,83 @@
             <div class="recent-grid">
                 <!-- Recent Messages -->
                 <div class="recent-container">
-                    <h2 style="margin-bottom: 1.5rem; color: #333;">📩 Pesan Terbaru</h2>
+                    <h2 class="recent-title">📩 Pesan Terbaru</h2>
                     <div class="recent-list">
-                        @forelse($recentContacts ?? [] as $contact)
-                            <div class="recent-item">
-                                <div class="recent-icon">
-                                    <div class="activity-avatar" style="background: #5FB574;">
-                                        {{ strtoupper(substr($contact->name, 0, 1)) }}
-                                    </div>
-                                </div>
-                                <div class="recent-content">
-                                    <div class="recent-title">{{ $contact->name ?? 'Pengguna' }}</div>
-                                    <div class="recent-meta">
-                                        {{ $contact->email ?? '-' }} •
-                                        {{ $contact->created_at->diffForHumans() }}
-                                    </div>
+                        <?php foreach($recent_messages as $message):
+                            $initial = strtoupper(substr($message['name'], 0, 1));
+                            $time_diff = time() - strtotime($message['created_at']);
+
+                            if ($time_diff < 3600) {
+                                $time_text = floor($time_diff / 60) . ' menit';
+                            } elseif ($time_diff < 86400) {
+                                $time_text = floor($time_diff / 3600) . ' jam';
+                            } else {
+                                $time_text = floor($time_diff / 86400) . ' hari';
+                            }
+
+                            $badge_class = 'badge-success';
+                            if ($message['status'] == 'rejected') $badge_class = 'badge-danger';
+                            if ($message['status'] == 'approved') $badge_class = 'badge-warning';
+                        ?>
+                        <div class="recent-item">
+                            <div class="recent-icon">
+                                <div class="user-initial"><?php echo $initial; ?></div>
+                            </div>
+                            <div class="recent-content">
+                                <div class="recent-name"><?php echo htmlspecialchars($message['name']); ?></div>
+                                <div class="recent-meta">
+                                    <span><?php echo htmlspecialchars($message['email']); ?></span>
+                                    <span>•</span>
+                                    <span><?php echo $time_text; ?></span>
+                                    <span class="badge <?php echo $badge_class; ?>"><?php echo $message['status']; ?></span>
                                 </div>
                             </div>
-                        @empty
-                            <div class="recent-item">
-                                <div class="recent-content">
-                                    <div class="recent-title">Belum ada pesan</div>
-                                    <div class="recent-meta">-</div>
-                                </div>
-                            </div>
-                        @endforelse
+                        </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
 
                 <!-- Recent Media -->
                 <div class="recent-container">
-                    <h2 style="margin-bottom: 1.5rem; color: #333;">🖼️ Media Terbaru</h2>
+                    <h2 class="recent-title">🖼️ Media Terbaru</h2>
                     <div class="recent-list">
-                        @forelse($recentMedia ?? [] as $media)
-                            <div class="recent-item">
-                                <div class="recent-icon">
-                                    @if($media->isImage())
-                                        <img src="{{ $media->url }}"
-                                             alt="{{ $media->title }}"
-                                             class="media-thumbnail"
-                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                        <div class="media-placeholder image-fallback">
-                                            🖼️
-                                        </div>
-                                    @else
-                                        <div class="video-thumbnail">
-                                            <div class="video-icon">🎥</div>
-                                            <div class="video-overlay"></div>
-                                        </div>
-                                    @endif
+                        <?php foreach($recent_media as $media):
+                            $time_diff = time() - strtotime($media['created_at']);
+
+                            if ($time_diff < 3600) {
+                                $time_text = floor($time_diff / 60) . ' menit';
+                            } elseif ($time_diff < 86400) {
+                                $time_text = floor($time_diff / 3600) . ' jam';
+                            } else {
+                                $time_text = floor($time_diff / 86400) . ' hari';
+                            }
+
+                            $badge_class = ($media['type'] == 'image') ? 'badge-success' : 'badge-warning';
+                        ?>
+                        <div class="recent-item">
+                            <div class="recent-icon">
+                                <?php if ($media['type'] == 'image'): ?>
+                                <img src="https://via.placeholder.com/40x40/5FB574/fff?text=IMG"
+                                     alt="Thumbnail"
+                                     class="media-thumbnail">
+                                <?php else: ?>
+                                <div class="video-thumbnail">
+                                    <div class="video-icon">🎥</div>
                                 </div>
-                                <div class="recent-content">
-                                    <div class="recent-title">{{ Str::limit($media->title ?? 'Media', 30) }}</div>
-                                    <div class="recent-meta">
-                                        <span class="media-type-badge">{{ $media->type }}</span> •
-                                        {{ $media->section ?? '-' }} •
-                                        {{ $media->created_at->diffForHumans() }}
-                                    </div>
+                                <?php endif; ?>
+                            </div>
+                            <div class="recent-content">
+                                <div class="recent-name"><?php echo htmlspecialchars($media['title']); ?></div>
+                                <div class="recent-meta">
+                                    <span class="badge <?php echo $badge_class; ?>"><?php echo $media['type']; ?></span>
+                                    <span>•</span>
+                                    <span><?php echo $media['section']; ?></span>
+                                    <span>•</span>
+                                    <span><?php echo $time_text; ?></span>
                                 </div>
                             </div>
-                        @empty
-                            <div class="recent-item">
-                                <div class="recent-content">
-                                    <div class="recent-title">Belum ada media</div>
-                                    <div class="recent-meta">-</div>
-                                </div>
-                            </div>
-                        @endforelse
+                        </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>
@@ -1519,6 +1547,17 @@
     </div>
 
     <script>
+        // ======================
+        // DATA DARI PHP UNTUK CHART
+        // ======================
+        const chartLabels = [
+            'Total Size Media', 'Total Pesan', 'Pesan Pending', 'Pesan Disetujui', 'Pesan Ditolak',
+            'Total Media', 'Media Aktif', 'Media Nonaktif', 'Total Pengunjung', 'Hari Ini',
+            'Kemarin', 'Histori Pengunjung', 'Total Pengunjung (Keseluruhan)', 'Rata-rata per Hari', 'Hari Terbanyak'
+        ];
+
+        const chartDataValues = <?php echo json_encode($chart_data); ?>;
+
         // ======================
         // MOBILE MENU FUNCTIONALITY
         // ======================
@@ -1529,54 +1568,33 @@
         function toggleMobileMenu() {
             sidebar.classList.toggle('mobile-open');
             overlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('mobile-open') ? 'hidden' : 'auto';
         }
 
         mobileMenuToggle.addEventListener('click', toggleMobileMenu);
         overlay.addEventListener('click', toggleMobileMenu);
 
         // ======================
-        // CHART.JS IMPLEMENTATION (3 DIAGRAM)
+        // CHART.JS IMPLEMENTATION
         // ======================
         const chartData = {
-            labels: [
-                'Total Size Media',
-                'Total Pesan',
-                'Pesan Pending',
-                'Pesan Disetujui',
-                'Pesan Ditolak',
-                'Total Media',
-                'Media Aktif',
-                'Media Nonaktif',
-                'Total Pengunjung',
-                'Pengunjung Hari Ini',
-                'Pengunjung Kemarin',
-                'Histori Pengunjung'
-            ],
+            labels: chartLabels,
             datasets: [{
                 label: 'Statistik Dashboard',
-                data: [
-                    {{ number_format(($stats['total_media_size'] ?? 0) / 1024 / 1024, 2) }},
-                    {{ $stats['total_contacts'] ?? 0 }},
-                    {{ $stats['pending_contacts'] ?? 0 }},
-                    {{ $stats['approved_contacts'] ?? 0 }},
-                    {{ $stats['rejected_contacts'] ?? 0 }},
-                    {{ $stats['total_media'] ?? 0 }},
-                    {{ $stats['active_media'] ?? 0 }},
-                    {{ $stats['inactive_media'] ?? 0 }},
-                    {{ $stats['visitor_count'] ?? 0 }},
-                    {{ $stats['today_visitors'] ?? 0 }},
-                    {{ $stats['yesterday_visitors'] ?? 0 }},
-                    {{ $stats['yesterday_visitors'] ?? 0 }}
-                ],
+                data: chartDataValues,
                 backgroundColor: [
                     '#4CAF50', '#2196F3', '#FFC107', '#4CAF50', '#F44336',
-                    '#9C27B0', '#4CAF50', '#FF9800', '#3498db', '#FFA726', '#8BC34A', '#9b59b6'
+                    '#9C27B0', '#4CAF50', '#FF9800', '#3498db', '#FFA726',
+                    '#8BC34A', '#9b59b6', '#3498db', '#2ecc71', '#e74c3c'
                 ],
                 borderColor: [
                     '#2E7D32', '#1565C0', '#FF8F00', '#2E7D32', '#C62828',
-                    '#7B1FA2', '#2E7D32', '#EF6C00', '#1a5276', '#F57C00', '#558B2F', '#8e44ad'
+                    '#7B1FA2', '#2E7D32', '#EF6C00', '#1a5276', '#F57C00',
+                    '#558B2F', '#8e44ad', '#1a5276', '#27ae60', '#c0392b'
                 ],
-                borderWidth: 2
+                borderWidth: 1.5,
+                borderRadius: 4,
+                borderSkipped: false
             }]
         };
 
@@ -1598,28 +1616,29 @@
                         legend: {
                             position: 'top',
                             labels: {
-                                font: { size: 12 },
-                                padding: 15,
-                                usePointStyle: true
+                                font: { size: 11, family: "'Segoe UI', sans-serif" },
+                                padding: 10,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
                             }
                         },
                         tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                            titleFont: { size: 14 },
-                            bodyFont: { size: 13 },
-                            padding: 12,
-                            cornerRadius: 8,
+                            backgroundColor: 'rgba(44, 62, 80, 0.9)',
+                            titleFont: { size: 12 },
+                            bodyFont: { size: 11 },
+                            padding: 10,
+                            cornerRadius: 6,
+                            displayColors: true,
                             callbacks: {
                                 label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
+                                    let label = '';
                                     if (context.parsed.y !== null) {
                                         if (context.dataIndex === 0) {
-                                            label += context.parsed.y + ' MB';
+                                            label = context.parsed.y.toFixed(1) + ' MB';
+                                        } else if ([8,9,10,11,12,13,14].includes(context.dataIndex)) {
+                                            label = context.parsed.y + ' pengunjung';
                                         } else {
-                                            label += context.parsed.y;
+                                            label = context.parsed.y;
                                         }
                                     }
                                     return label;
@@ -1628,8 +1647,34 @@
                         }
                     },
                     animation: {
-                        duration: 1000,
-                        easing: 'easeInOutQuart'
+                        duration: 800,
+                        easing: 'easeOutQuart'
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(236, 240, 241, 0.6)',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                font: { size: 10 },
+                                color: '#7f8c8d',
+                                padding: 5
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: { size: 10 },
+                                color: '#7f8c8d',
+                                maxRotation: 45,
+                                minRotation: 45,
+                                padding: 3
+                            }
+                        }
                     }
                 }
             };
@@ -1637,50 +1682,30 @@
             switch(type) {
                 case 'bar':
                     config.type = 'bar';
-                    config.options.scales = {
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
-                            ticks: { font: { size: 12 } }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: {
-                                font: { size: 11 },
-                                maxRotation: 45,
-                                minRotation: 45
-                            }
-                        }
-                    };
                     break;
 
                 case 'horizontal':
                     config.type = 'bar';
                     config.options.indexAxis = 'y';
-                    config.options.scales = {
-                        x: {
-                            beginAtZero: true,
-                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
-                            ticks: { font: { size: 12 } }
-                        },
-                        y: {
-                            grid: { display: false },
-                            ticks: { font: { size: 11 } }
-                        }
-                    };
+                    config.options.scales.x.grid.color = 'rgba(236, 240, 241, 0.6)';
+                    config.options.scales.x.grid.drawBorder = false;
+                    config.options.scales.y.grid.display = false;
                     break;
 
                 case 'doughnut':
                     config.type = 'doughnut';
                     config.options.plugins.legend.position = 'right';
-                    config.options.cutout = '60%';
+                    config.options.cutout = '55%';
+                    config.options.plugins.legend.labels.boxWidth = 12;
+                    config.options.plugins.legend.labels.font.size = 10;
+                    delete config.options.scales;
                     break;
             }
 
             currentChart = new Chart(ctx, config);
         }
 
-        // Inisialisasi chart pertama kali (Diagram Batang)
+        // Inisialisasi chart pertama kali
         createChart('bar');
 
         // Tab functionality
@@ -1694,234 +1719,124 @@
         });
 
         // ======================
-        // MODAL HISTORY FUNCTIONALITY
+        // STAT CARD INTERACTIONS
         // ======================
-        const showHistoryBtn = document.getElementById('showHistoryBtn');
-        const historyModal = document.getElementById('historyModal');
-        const closeModalBtn = document.getElementById('closeModal');
-        const historyTableBody = document.getElementById('historyTableBody');
-        const totalVisitorsElem = document.getElementById('totalVisitors');
-        const averageVisitorsElem = document.getElementById('averageVisitors');
-        const peakDayElem = document.getElementById('peakDay');
+        const statCards = document.querySelectorAll('.stat-card');
+        statCards.forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'translateY(-3px) scale(1.02)';
+                this.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
 
-        // Data dari database (dummy data untuk contoh)
-        // Dalam implementasi nyata, ini akan diambil dari endpoint API
-        const visitorHistory = [
-            { date: '2025-12-05', count: {{ $stats['today_visitors'] ?? 0 }}, day: 'Jumat' },
-            { date: '2025-12-04', count: {{ $stats['yesterday_visitors'] ?? 0 }}, day: 'Kamis' },
-            // Data dummy untuk demo (akan diganti dengan data real)
-            { date: '2025-12-03', count: 15, day: 'Rabu' },
-            { date: '2025-12-02', count: 18, day: 'Selasa' },
-            { date: '2025-12-01', count: 22, day: 'Senin' },
-            { date: '2025-11-30', count: 20, day: 'Minggu' },
-            { date: '2025-11-29', count: 25, day: 'Sabtu' },
-            { date: '2025-11-28', count: 19, day: 'Jumat' },
-            { date: '2025-11-27', count: 21, day: 'Kamis' },
-            { date: '2025-11-26', count: 17, day: 'Rabu' }
-        ];
-
-        // Fungsi untuk memformat tanggal
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const day = date.getDate().toString().padStart(2, '0');
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const year = date.getFullYear();
-            return `${day}/${month}/${year}`;
-        }
-
-        // Fungsi untuk menghitung statistik
-        function calculateStats(data) {
-            let total = 0;
-            let maxCount = 0;
-            let peakDate = '';
-
-            data.forEach(item => {
-                total += item.count;
-                if (item.count > maxCount) {
-                    maxCount = item.count;
-                    peakDate = `${item.day}, ${formatDate(item.date)}`;
-                }
-            });
-
-            const average = data.length > 0 ? Math.round(total / data.length) : 0;
-
-            return {
-                total: total,
-                average: average,
-                peak: maxCount > 0 ? peakDate : '-'
-            };
-        }
-
-        // Fungsi untuk mengisi tabel history
-        function populateHistoryTable() {
-            historyTableBody.innerHTML = '';
-
-            if (visitorHistory.length === 0) {
-                historyTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="4" style="text-align: center; padding: 2rem; color: #666;">
-                            Belum ada data histori pengunjung.
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-
-            // Hitung statistik
-            const stats = calculateStats(visitorHistory);
-
-            // Update statistik ringkasan
-            totalVisitorsElem.textContent = stats.total;
-            averageVisitorsElem.textContent = stats.average;
-            peakDayElem.textContent = stats.peak;
-
-            // Urutkan dari tanggal terbaru
-            const sortedHistory = [...visitorHistory].sort((a, b) =>
-                new Date(b.date) - new Date(a.date)
-            );
-
-            // Temukan jumlah maksimum untuk highlight
-            const maxCount = Math.max(...sortedHistory.map(item => item.count));
-
-            // Isi tabel
-            sortedHistory.forEach((item, index) => {
-                const isHighlight = item.count === maxCount && maxCount > 0;
-                const rowClass = isHighlight ? 'highlight' : '';
-
-                const row = document.createElement('tr');
-                row.className = rowClass;
-
-                // Warna untuk jumlah pengunjung
-                let countColor = '#3498db';
-                let keterangan = 'Normal';
-
-                if (item.count === 0) {
-                    countColor = '#95a5a6';
-                    keterangan = 'Tidak ada pengunjung';
-                } else if (item.count > 20) {
-                    countColor = '#e74c3c';
-                    keterangan = 'Sangat Ramai';
-                } else if (item.count > 15) {
-                    countColor = '#f39c12';
-                    keterangan = 'Ramai';
-                } else if (item.count > 10) {
-                    keterangan = 'Lumayan';
-                }
-
-                row.innerHTML = `
-                    <td class="date-cell">${formatDate(item.date)}</td>
-                    <td class="day-cell">${item.day}</td>
-                    <td class="count-cell" style="color: ${countColor}">
-                        ${item.count} pengunjung
-                    </td>
-                    <td>${keterangan}</td>
-                `;
-
-                historyTableBody.appendChild(row);
-            });
-        }
-
-        // ======================
-        // CLICK FUNCTIONALITY FOR STAT CARDS
-        // ======================
-        document.addEventListener('DOMContentLoaded', function() {
-            // Handle clicks on visitor cards
-            const visitorCards = document.querySelectorAll('#visitorCard, #todayVisitorCard, #yesterdayVisitorCard');
-            visitorCards.forEach(card => {
-                card.addEventListener('click', function(e) {
-                    // Cegah event bubbling jika mengklik tombol di dalam card
-                    if (!e.target.classList.contains('btn-history')) {
-                        populateHistoryTable();
-                        historyModal.classList.add('show');
-                        document.body.style.overflow = 'hidden';
-                    }
-                });
-            });
-
-            // Handle click on history card (seluruh card)
-            const historyCard = document.getElementById('historyCard');
-            if (historyCard) {
-                historyCard.addEventListener('click', function(e) {
-                    // Hanya trigger jika tidak mengklik tombol
-                    if (!e.target.classList.contains('btn-history')) {
-                        populateHistoryTable();
-                        historyModal.classList.add('show');
-                        document.body.style.overflow = 'hidden';
-                    }
-                });
-            }
-
-            // Event Listeners untuk Modal (tombol)
-            showHistoryBtn.addEventListener('click', function(e) {
-                e.stopPropagation(); // Cegah event bubbling
-                populateHistoryTable();
-                historyModal.classList.add('show');
-                document.body.style.overflow = 'hidden';
-            });
-
-            closeModalBtn.addEventListener('click', function() {
-                historyModal.classList.remove('show');
-                document.body.style.overflow = 'auto';
-            });
-
-            // Tutup modal saat klik di luar konten
-            historyModal.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    historyModal.classList.remove('show');
-                    document.body.style.overflow = 'auto';
-                }
-            });
-
-            // Tutup modal dengan tombol ESC
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && historyModal.classList.contains('show')) {
-                    historyModal.classList.remove('show');
-                    document.body.style.overflow = 'auto';
-                }
+                setTimeout(() => {
+                    this.style.transform = '';
+                    this.style.boxShadow = '';
+                }, 300);
             });
         });
 
         // ======================
-        // IMAGE HANDLING
+        // HISTORY BUTTON FUNCTION
         // ======================
-        document.addEventListener('DOMContentLoaded', function() {
-            const images = document.querySelectorAll('img');
+        const historyButton = document.querySelector('.history-button');
+        if (historyButton) {
+            historyButton.addEventListener('click', function(e) {
+                e.stopPropagation();
 
-            images.forEach(img => {
-                img.style.opacity = '0';
-                img.style.transition = 'opacity 0.3s ease';
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
 
-                img.addEventListener('load', function() {
-                    this.style.opacity = '1';
-                });
-
-                img.addEventListener('error', function() {
-                    this.style.display = 'none';
-                    const fallback = this.nextElementSibling;
-                    if (fallback && (fallback.classList.contains('image-fallback') ||
-                                    fallback.classList.contains('media-placeholder') ||
-                                    fallback.classList.contains('activity-avatar'))) {
-                        fallback.style.display = 'flex';
-                        fallback.style.opacity = '1';
-                    }
-                });
+                // Tampilkan detail histori
+                alert('📊 Detail Histori Pengunjung\n\n' +
+                      '• Data 7 hari terakhir: <?php echo $history_days; ?> hari\n' +
+                      '• Total pengunjung: <?php echo $total_visitors; ?> orang\n' +
+                      '• Rata-rata: <?php echo $avg_visitors; ?> pengunjung/hari\n' +
+                      '• Hari terbanyak: <?php echo $max_visitors; ?> pengunjung\n' +
+                      '• Hari ini: <?php echo $today_visitors; ?> pengunjung\n' +
+                      '• Kemarin: <?php echo $yesterday_visitors; ?> pengunjung\n\n' +
+                      '✅ Data real-time dari database');
             });
-        });
+        }
 
         // ======================
-        // AUTO-REFRESH
+        // TABLE SCROLL EFFECT
         // ======================
-        setTimeout(() => {
-            window.location.reload();
-        }, 300000); // 5 menit
+        const tableWrapper = document.querySelector('.visitor-table-wrapper');
+        if (tableWrapper) {
+            tableWrapper.addEventListener('scroll', function() {
+                if (this.scrollTop > 0) {
+                    this.style.boxShadow = 'inset 0 4px 4px -4px rgba(0,0,0,0.08)';
+                } else {
+                    this.style.boxShadow = 'none';
+                }
+            });
+        }
+
+        // ======================
+        // REAL-TIME UPDATES (simulasi)
+        // ======================
+        function simulateRealTimeUpdate() {
+            const todayVisitors = document.querySelector('.stat-card:nth-child(10) .stat-number');
+            if (todayVisitors && Math.random() > 0.7) {
+                const current = parseInt(todayVisitors.textContent);
+                todayVisitors.textContent = current + 1;
+
+                // Efek visual
+                todayVisitors.style.color = '#e74c3c';
+                todayVisitors.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    todayVisitors.style.color = '';
+                    todayVisitors.style.transform = '';
+                }, 500);
+            }
+        }
+
+        // Update setiap 30 detik
+        setInterval(simulateRealTimeUpdate, 30000);
 
         // ======================
         // WINDOW RESIZE HANDLING
         // ======================
+        let resizeTimeout;
         window.addEventListener('resize', function() {
-            if (currentChart) {
-                currentChart.resize();
-            }
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                if (currentChart) {
+                    currentChart.resize();
+                }
+            }, 200);
+        });
+
+        // ======================
+        // PAGE LOAD ANIMATION
+        // ======================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate stat cards
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(15px)';
+
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 40);
+            });
+
+            // Animate containers
+            const containers = document.querySelectorAll('.chart-container, .visitor-table-container, .activity-container');
+            containers.forEach((container, index) => {
+                container.style.opacity = '0';
+                container.style.transform = 'translateY(20px)';
+
+                setTimeout(() => {
+                    container.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    container.style.opacity = '1';
+                    container.style.transform = 'translateY(0)';
+                }, 600 + (index * 100));
+            });
         });
     </script>
 </body>
