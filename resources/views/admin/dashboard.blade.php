@@ -1,3 +1,349 @@
+<?php
+// ===========================================
+// KONEKSI DATABASE
+// ===========================================
+$servername = "localhost:3306";
+$username = "root";
+$password = "";
+$dbname = "1-bester";
+
+// Buat koneksi
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Cek koneksi
+if ($conn->connect_error) {
+    die("Koneksi database gagal: " . $conn->connect_error);
+}
+
+// ===========================================
+// FUNGSI UTAMA UNTUK MENJAMIN DATA ADA
+// ===========================================
+function ensureVisitorData($conn) {
+    $today = date('Y-m-d');
+    $yesterday = date('Y-m-d', strtotime('-1 day'));
+
+    // Cek dan buat data untuk hari ini jika belum ada
+    $check_today = "SELECT COUNT(*) as exist FROM visitor_counter WHERE date = '$today'";
+    $result_today = $conn->query($check_today);
+    $row_today = $result_today->fetch_assoc();
+
+    if ($row_today['exist'] == 0) {
+        // Buat data untuk hari ini dengan count = 0
+        $insert_today = "INSERT INTO visitor_counter (date, count, created_at, updated_at)
+                       VALUES ('$today', 0, NOW(), NOW())";
+        $conn->query($insert_today);
+    } else {
+        // Cek apakah data hari ini perlu di-reset (jika tanggal terakhir update bukan hari ini)
+        $check_last_update = "SELECT updated_at, count FROM visitor_counter WHERE date = '$today'";
+        $result_last = $conn->query($check_last_update);
+        if ($result_last->num_rows > 0) {
+            $row_last = $result_last->fetch_assoc();
+            $last_updated = strtotime($row_last['updated_at']);
+            $last_date = date('Y-m-d', $last_updated);
+
+            // Reset jika data terakhir diupdate bukan hari ini (berarti hari baru)
+            if ($last_date != $today) {
+                $reset_sql = "UPDATE visitor_counter SET count = 0, updated_at = NOW() WHERE date = '$today'";
+                $conn->query($reset_sql);
+            }
+        }
+    }
+
+    // Cek dan buat data untuk kemarin jika belum ada
+    $check_yesterday = "SELECT COUNT(*) as exist FROM visitor_counter WHERE date = '$yesterday'";
+    $result_yesterday = $conn->query($check_yesterday);
+    $row_yesterday = $result_yesterday->fetch_assoc();
+
+    if ($row_yesterday['exist'] == 0) {
+        // Coba cari data terakhir sebelum hari ini
+        $find_yesterday_data = "SELECT count FROM visitor_counter
+                              WHERE date < '$today'
+                              ORDER BY date DESC LIMIT 1";
+        $result_yest_data = $conn->query($find_yesterday_data);
+        $yesterday_count = 0;
+
+        if ($result_yest_data->num_rows > 0) {
+            $row_yest = $result_yest_data->fetch_assoc();
+            $yesterday_count = $row_yest['count'] ?? 0;
+        }
+
+        $insert_yesterday = "INSERT INTO visitor_counter (date, count, created_at, updated_at)
+                           VALUES ('$yesterday', $yesterday_count, NOW(), NOW())";
+        $conn->query($insert_yesterday);
+    }
+
+    return ['today' => $today, 'yesterday' => $yesterday];
+}
+
+// Panggil fungsi untuk memastikan data ada
+$dates = ensureVisitorData($conn);
+$today = $dates['today'];
+$yesterday = $dates['yesterday'];
+
+// ===========================================
+// QUERY DATA DARI DATABASE
+// ===========================================
+
+// 1. Total Size Media (dalam MB)
+$size_sql = "SELECT SUM(file_size) as total_size FROM media";
+$size_result = $conn->query($size_sql);
+$total_size_mb = 0;
+if ($size_result->num_rows > 0) {
+    $row = $size_result->fetch_assoc();
+    $total_size_mb = round(($row['total_size'] ?? 0) / (1024 * 1024), 2);
+}
+
+// 2. Total Pesan
+$contacts_sql = "SELECT COUNT(*) as total FROM contacts";
+$contacts_result = $conn->query($contacts_sql);
+$total_contacts = 0;
+if ($contacts_result->num_rows > 0) {
+    $row = $contacts_result->fetch_assoc();
+    $total_contacts = $row['total'] ?? 0;
+}
+
+// 3. Pesan Pending
+$pending_sql = "SELECT COUNT(*) as pending FROM contacts WHERE status = 'pending'";
+$pending_result = $conn->query($pending_sql);
+$pending_contacts = 0;
+if ($pending_result->num_rows > 0) {
+    $row = $pending_result->fetch_assoc();
+    $pending_contacts = $row['pending'] ?? 0;
+}
+
+// 4. Pesan Disetujui
+$approved_sql = "SELECT COUNT(*) as approved FROM contacts WHERE status = 'approved'";
+$approved_result = $conn->query($approved_sql);
+$approved_contacts = 0;
+if ($approved_result->num_rows > 0) {
+    $row = $approved_result->fetch_assoc();
+    $approved_contacts = $row['approved'] ?? 0;
+}
+
+// 5. Pesan Ditolak
+$rejected_sql = "SELECT COUNT(*) as rejected FROM contacts WHERE status = 'rejected'";
+$rejected_result = $conn->query($rejected_sql);
+$rejected_contacts = 0;
+if ($rejected_result->num_rows > 0) {
+    $row = $rejected_result->fetch_assoc();
+    $rejected_contacts = $row['rejected'] ?? 0;
+}
+
+// 6. Total Media
+$media_total_sql = "SELECT COUNT(*) as total FROM media";
+$media_total_result = $conn->query($media_total_sql);
+$total_media = 0;
+if ($media_total_result->num_rows > 0) {
+    $row = $media_total_result->fetch_assoc();
+    $total_media = $row['total'] ?? 0;
+}
+
+// 7. Media Aktif
+$media_active_sql = "SELECT COUNT(*) as active FROM media WHERE is_active = 1";
+$media_active_result = $conn->query($media_active_sql);
+$active_media = 0;
+if ($media_active_result->num_rows > 0) {
+    $row = $media_active_result->fetch_assoc();
+    $active_media = $row['active'] ?? 0;
+}
+
+// 8. Media Nonaktif
+$media_inactive_sql = "SELECT COUNT(*) as inactive FROM media WHERE is_active = 0";
+$media_inactive_result = $conn->query($media_inactive_sql);
+$inactive_media = 0;
+if ($media_inactive_result->num_rows > 0) {
+    $row = $media_inactive_result->fetch_assoc();
+    $inactive_media = $row['inactive'] ?? 0;
+}
+
+// 9. Total Pengunjung Hari Ini
+$today_visitors_sql = "SELECT count FROM visitor_counter WHERE date = '$today'";
+$today_visitors_result = $conn->query($today_visitors_sql);
+$today_visitors = 0;
+if ($today_visitors_result->num_rows > 0) {
+    $row = $today_visitors_result->fetch_assoc();
+    $today_visitors = $row['count'] ?? 0;
+
+    // Jika hari ini lebih dari 0, reset ke 1 (karena baru buka)
+    if ($today_visitors > 1) {
+        // Reset hanya jika parameter reset diberikan
+        if (isset($_GET['reset_visitors'])) {
+            $reset_sql = "UPDATE visitor_counter SET count = 1 WHERE date = '$today'";
+            $conn->query($reset_sql);
+            $today_visitors = 1;
+        }
+    }
+}
+
+// 10. Total Pengunjung Keseluruhan (kumulatif semua hari)
+$total_visitors_sql = "SELECT SUM(count) as total FROM visitor_counter";
+$total_visitors_result = $conn->query($total_visitors_sql);
+$total_visitors = 0;
+if ($total_visitors_result->num_rows > 0) {
+    $row = $total_visitors_result->fetch_assoc();
+    $total_visitors = $row['total'] ?? 0;
+}
+
+// 11. Pengunjung Kemarin
+$yesterday_visitors_sql = "SELECT count FROM visitor_counter WHERE date = '$yesterday'";
+$yesterday_visitors_result = $conn->query($yesterday_visitors_sql);
+$yesterday_visitors = 0;
+if ($yesterday_visitors_result->num_rows > 0) {
+    $row = $yesterday_visitors_result->fetch_assoc();
+    $yesterday_visitors = $row['count'] ?? 0;
+}
+
+// 12. Histori Pengunjung (7 hari terakhir)
+$history_visitors_sql = "SELECT COUNT(DISTINCT date) as days FROM visitor_counter WHERE date >= DATE_SUB('$today', INTERVAL 7 DAY)";
+$history_visitors_result = $conn->query($history_visitors_sql);
+$history_days = 0;
+if ($history_visitors_result->num_rows > 0) {
+    $row = $history_visitors_result->fetch_assoc();
+    $history_days = $row['days'] ?? 0;
+}
+
+// 13. Rata-rata per Hari
+$avg_visitors_sql = "SELECT
+                    CASE
+                        WHEN COUNT(DISTINCT date) > 0
+                        THEN SUM(count) / COUNT(DISTINCT date)
+                        ELSE 0
+                    END as average
+                    FROM visitor_counter";
+$avg_visitors_result = $conn->query($avg_visitors_sql);
+$avg_visitors = 0;
+if ($avg_visitors_result->num_rows > 0) {
+    $row = $avg_visitors_result->fetch_assoc();
+    $avg_visitors = round($row['average'] ?? 0);
+}
+
+// 14. Hari Terbanyak (dengan nama hari)
+$max_visitors_sql = "SELECT date, count, DAYNAME(date) as day_name
+                     FROM visitor_counter
+                     ORDER BY count DESC, date DESC
+                     LIMIT 1";
+$max_visitors_result = $conn->query($max_visitors_sql);
+$max_visitors_day = 'Tidak ada data';
+$max_visitors_count = 0;
+
+if ($max_visitors_result->num_rows > 0) {
+    $row = $max_visitors_result->fetch_assoc();
+    $max_visitors_day = $row['day_name'];
+    $max_visitors_count = $row['count'];
+}
+
+// 15. Data Tabel Pengunjung (5 hari terakhir)
+$visitor_table_sql = "SELECT date, count, DAYNAME(date) as day_name FROM visitor_counter ORDER BY date DESC LIMIT 5";
+$visitor_table_result = $conn->query($visitor_table_sql);
+$visitor_data = [];
+if ($visitor_table_result->num_rows > 0) {
+    while($row = $visitor_table_result->fetch_assoc()) {
+        $visitor_data[] = $row;
+    }
+}
+
+// 16. Aktivitas Terbaru
+$activities = [];
+
+// Aktivitas dari media
+$media_activity_sql = "SELECT
+    CONCAT('Gambar diupload: ', title) as title,
+    section,
+    created_at as timestamp,
+    'media' as type
+    FROM media
+    ORDER BY created_at DESC
+    LIMIT 2";
+$media_activity_result = $conn->query($media_activity_sql);
+if ($media_activity_result->num_rows > 0) {
+    while($row = $media_activity_result->fetch_assoc()) {
+        $activities[] = $row;
+    }
+}
+
+// Aktivitas dari contacts
+$contacts_activity_sql = "SELECT
+    CONCAT('Pesan baru dari ', name) as title,
+    'contact' as type,
+    created_at as timestamp
+    FROM contacts
+    ORDER BY created_at DESC
+    LIMIT 3";
+$contacts_activity_result = $conn->query($contacts_activity_sql);
+if ($contacts_activity_result->num_rows > 0) {
+    while($row = $contacts_activity_result->fetch_assoc()) {
+        $activities[] = $row;
+    }
+}
+
+// Aktivitas statistik
+$stat_activity_sql = "SELECT
+    'Update statistik pengunjung' as title,
+    'stats' as type,
+    updated_at as timestamp
+    FROM visitor_counter
+    ORDER BY updated_at DESC
+    LIMIT 1";
+$stat_activity_result = $conn->query($stat_activity_sql);
+if ($stat_activity_result->num_rows > 0) {
+    while($row = $stat_activity_result->fetch_assoc()) {
+        $activities[] = $row;
+    }
+}
+
+// Urutkan aktivitas
+usort($activities, function($a, $b) {
+    return strtotime($b['timestamp']) - strtotime($a['timestamp']);
+});
+
+// 17. Pesan Terbaru
+$recent_messages_sql = "SELECT name, email, status, created_at
+                       FROM contacts
+                       ORDER BY created_at DESC
+                       LIMIT 4";
+$recent_messages_result = $conn->query($recent_messages_sql);
+$recent_messages = [];
+if ($recent_messages_result->num_rows > 0) {
+    while($row = $recent_messages_result->fetch_assoc()) {
+        $recent_messages[] = $row;
+    }
+}
+
+// 18. Media Terbaru
+$recent_media_sql = "SELECT title, type, section, created_at
+                    FROM media
+                    ORDER BY created_at DESC
+                    LIMIT 4";
+$recent_media_result = $conn->query($recent_media_sql);
+$recent_media = [];
+if ($recent_media_result->num_rows > 0) {
+    while($row = $recent_media_result->fetch_assoc()) {
+        $recent_media[] = $row;
+    }
+}
+
+// 19. Data untuk Chart (15 data)
+$chart_data = [
+    $total_size_mb,          // 1. Total Size Media
+    $total_contacts,         // 2. Total Pesan
+    $pending_contacts,       // 3. Pesan Pending
+    $approved_contacts,      // 4. Pesan Disetujui
+    $rejected_contacts,      // 5. Pesan Ditolak
+    $total_media,            // 6. Total Media
+    $active_media,           // 7. Media Aktif
+    $inactive_media,         // 8. Media Nonaktif
+    $today_visitors,         // 9. Hari Ini
+    $total_visitors,         // 10. Total Kumulatif
+    $yesterday_visitors,     // 11. Kemarin
+    $history_days,           // 12. Histori Pengunjung
+    $total_visitors,         // 13. Total Pengunjung (Keseluruhan)
+    $avg_visitors,           // 14. Rata-rata per Hari
+    $max_visitors_count      // 15. Hari Terbanyak (jumlah)
+];
+
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -6,7 +352,6 @@
     <title>Dashboard - Admin</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Semua CSS yang sama persis seperti sebelumnya */
         * {
             margin: 0;
             padding: 0;
@@ -15,7 +360,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
+            background: #E8F4F8;
             color: #333;
         }
 
@@ -25,10 +370,10 @@
             min-height: 100vh;
         }
 
-        /* Sidebar */
+        /* Sidebar - SAMA PERSIS DENGAN MEDIA LIBRARY */
         .sidebar {
-            width: 260px;
-            background: linear-gradient(180deg, #5FB574 0%, #4FA564 100%);
+            width: 280px;
+            background: #5FB574;
             color: #fff;
             padding: 0;
             position: fixed;
@@ -164,63 +509,58 @@
 
         /* Main Content */
         .main-content {
-            margin-left: 260px;
+            margin-left: 280px;
             flex: 1;
-            padding: 1.5rem;
-            width: calc(100% - 260px);
+            padding: 2rem;
+            width: calc(100% - 280px);
             transition: margin-left 0.3s ease;
         }
 
-        /* Header Compact */
+        /* Page Header */
         .page-header {
             background: #fff;
-            padding: 1.2rem 1.8rem;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.04);
-            margin-bottom: 1.5rem;
+            padding: 1.5rem 2rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 0.8rem;
-            border-left: 4px solid #5FB574;
+            gap: 1rem;
         }
 
         .page-header h1 {
-            font-size: 1.6rem;
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            font-size: 1.8rem;
+            color: #333;
         }
 
         .header-actions {
             display: flex;
-            gap: 0.8rem;
+            gap: 1rem;
             align-items: center;
             flex-wrap: wrap;
         }
 
         .btn {
-            padding: 0.6rem 1.2rem;
+            padding: 0.7rem 1.5rem;
             border: none;
-            border-radius: 6px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
             text-decoration: none;
             display: inline-block;
             transition: all 0.3s;
             text-align: center;
-            font-size: 0.85rem;
         }
 
         .btn-secondary {
-            background: #6c757d;
+            background: #95a5a6;
             color: #fff;
         }
 
         .btn-secondary:hover {
-            background: #5a6268;
+            background: #7f8c8d;
             transform: translateY(-2px);
             box-shadow: 0 3px 8px rgba(108, 117, 125, 0.2);
         }
@@ -233,6 +573,12 @@
             margin-bottom: 1.5rem;
         }
 
+        .stat-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
         .stat-card {
             background: #fff;
             padding: 1.2rem 1rem;
@@ -243,7 +589,7 @@
             position: relative;
             overflow: hidden;
             cursor: pointer;
-            border-top: 3px solid #5FB574;
+            border-top: 3px solid;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -295,29 +641,38 @@
             text-align: center;
         }
 
-        /* Warna border untuk stat cards - SESUAI PERMINTAAN BARIS */
-        /* Baris 1 */
-        .stat-card:nth-child(1) { border-top-color: #4CAF50; } /* 💾 Total Size Media */
-        .stat-card:nth-child(2) { border-top-color: #2196F3; } /* 📨 Total Pesan */
-        .stat-card:nth-child(3) { border-top-color: #FFC107; } /* ⏳ Pesan Pending */
-        .stat-card:nth-child(4) { border-top-color: #4CAF50; } /* ✅ Pesan Disetujui */
-        .stat-card:nth-child(5) { border-top-color: #F44336; } /* ❌ Pesan Ditolak */
+        .day-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0.2rem;
+            line-height: 1;
+        }
 
-        /* Baris 2 */
-        .stat-card:nth-child(6) { border-top-color: #9C27B0; } /* 🖼️ Total Media */
-        .stat-card:nth-child(7) { border-top-color: #4CAF50; } /* 🟢 Media Aktif */
-        .stat-card:nth-child(8) { border-top-color: #FF9800; } /* 🔴 Media Nonaktif */
-        .stat-card:nth-child(9) { border-top-color: #3498db; } /* 👥 Total Pengunjung */
-        .stat-card:nth-child(10) { border-top-color: #FFA726; } /* 📅 Hari Ini */
+        .day-count {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-top: 0.3rem;
+        }
 
-        /* Baris 3 */
-        .stat-card:nth-child(11) { border-top-color: #8BC34A; } /* 📊 Kemarin */
-        .stat-card:nth-child(12) { border-top-color: #9b59b6; } /* 📈 Histori Pengunjung */
-        .stat-card:nth-child(13) { border-top-color: #3498db; } /* 👥 Total Pengunjung (Keseluruhan) */
-        .stat-card:nth-child(14) { border-top-color: #2ecc71; } /* 📉 Rata-rata per Hari */
-        .stat-card:nth-child(15) { border-top-color: #e74c3c; } /* ⭐ Hari Terbanyak */
+        /* Warna border untuk stat cards */
+        .stat-card:nth-child(1) { border-top-color: #4CAF50; }
+        .stat-card:nth-child(2) { border-top-color: #2196F3; }
+        .stat-card:nth-child(3) { border-top-color: #FFC107; }
+        .stat-card:nth-child(4) { border-top-color: #4CAF50; }
+        .stat-card:nth-child(5) { border-top-color: #F44336; }
+        .stat-card:nth-child(6) { border-top-color: #9C27B0; }
+        .stat-card:nth-child(7) { border-top-color: #4CAF50; }
+        .stat-card:nth-child(8) { border-top-color: #FF9800; }
+        .stat-card:nth-child(9) { border-top-color: #FFA726; }
+        .stat-card:nth-child(10) { border-top-color: #3498db; }
+        .stat-card:nth-child(11) { border-top-color: #8BC34A; }
+        .stat-card:nth-child(12) { border-top-color: #9b59b6; }
+        .stat-card:nth-child(13) { border-top-color: #3498db; }
+        .stat-card:nth-child(14) { border-top-color: #2ecc71; }
+        .stat-card:nth-child(15) { border-top-color: #e74c3c; }
 
-        /* Dashboard 3 Kolom */
+        /* Dashboard Grid */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1.2fr 1fr 1fr;
@@ -332,8 +687,8 @@
         .activity-container {
             background: #fff;
             padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.04);
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
             position: relative;
             height: 100%;
             min-height: 380px;
@@ -354,7 +709,6 @@
             font-weight: 600;
         }
 
-        /* Chart */
         .chart-wrapper {
             position: relative;
             height: 250px;
@@ -396,7 +750,6 @@
             border-color: #ced4da;
         }
 
-        /* Tabel Pengunjung */
         .visitor-table-wrapper {
             flex-grow: 1;
             overflow-y: auto;
@@ -465,7 +818,6 @@
             border-left: 3px solid #FFA726;
         }
 
-        /* Aktivitas Terbaru */
         .activity-list {
             flex-grow: 1;
             overflow-y: auto;
@@ -537,7 +889,6 @@
             font-size: 0.75rem;
         }
 
-        /* Recent Items */
         .recent-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -548,8 +899,8 @@
         .recent-container {
             background: #fff;
             padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.04);
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
             min-height: 280px;
             display: flex;
             flex-direction: column;
@@ -680,10 +1031,9 @@
             color: #721c24;
         }
 
-        /* Alert Compact */
         .alert {
-            padding: 0.8rem 1.2rem;
-            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
             margin-bottom: 1.2rem;
             font-weight: 500;
             display: flex;
@@ -699,7 +1049,6 @@
             border-left-color: #28a745;
         }
 
-        /* Mobile Menu Toggle */
         .mobile-menu-toggle {
             display: none;
             position: fixed;
@@ -709,14 +1058,13 @@
             background: #5FB574;
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             padding: 0.6rem;
             font-size: 1.3rem;
             cursor: pointer;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
-        /* Overlay */
         .overlay {
             display: none;
             position: fixed;
@@ -731,7 +1079,6 @@
             display: block;
         }
 
-        /* Tombol History Compact */
         .history-button {
             background: linear-gradient(135deg, #9b59b6, #8e44ad);
             color: white;
@@ -756,7 +1103,7 @@
             box-shadow: 0 3px 8px rgba(155, 89, 182, 0.2);
         }
 
-        /* Responsive */
+        /* Responsive Design */
         @media (max-width: 1400px) {
             .stats-grid {
                 grid-template-columns: repeat(4, 1fr);
@@ -794,37 +1141,45 @@
             .main-content {
                 margin-left: 0;
                 width: 100%;
-                padding: 1.2rem;
+                padding: 1rem;
             }
+
             .sidebar {
                 transform: translateX(-100%);
             }
+
             .sidebar.mobile-open {
                 transform: translateX(0);
             }
+
             .mobile-menu-toggle {
                 display: block;
             }
+
             .page-header {
                 padding: 1rem;
-                margin-top: 2.5rem;
+                margin-top: 3rem;
                 gap: 0.6rem;
             }
+
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 0.8rem;
             }
+
             .dashboard-grid {
                 grid-template-columns: 1fr;
                 grid-template-rows: auto auto auto;
                 gap: 1rem;
             }
+
             .chart-container,
             .visitor-table-container,
             .activity-container {
                 grid-column: 1;
                 min-height: 350px;
             }
+
             .chart-container { grid-row: 1; }
             .visitor-table-container { grid-row: 2; }
             .activity-container { grid-row: 3; }
@@ -834,49 +1189,65 @@
             .stats-grid {
                 grid-template-columns: 1fr;
             }
+
             .stat-card {
                 padding: 1rem;
                 min-height: 100px;
             }
+
             .stat-number {
                 font-size: 1.6rem;
             }
+
+            .day-name {
+                font-size: 1.1rem;
+            }
+
             .stat-icon {
                 font-size: 1.8rem;
                 height: 35px;
             }
+
             .stat-label {
                 font-size: 0.8rem;
             }
+
             .history-button {
                 min-width: 120px;
                 font-size: 0.7rem;
                 padding: 0.3rem 0.6rem;
             }
+
             .chart-container,
             .visitor-table-container,
             .activity-container,
             .recent-container {
                 padding: 1.2rem;
             }
+
             .chart-wrapper {
                 height: 220px;
             }
+
             .header-actions {
                 justify-content: center;
             }
+
             .page-header {
                 flex-direction: column;
                 text-align: center;
                 gap: 0.5rem;
             }
+
             .activity-item,
             .recent-item {
                 padding: 0.7rem;
             }
+
             .chart-tabs {
                 flex-wrap: wrap;
             }
+
             .chart-tab {
                 min-width: 80px;
                 font-size: 0.8rem;
@@ -888,301 +1259,65 @@
             .main-content {
                 padding: 1rem;
             }
+
             .chart-container,
             .visitor-table-container,
             .activity-container,
             .recent-container {
                 padding: 1rem;
             }
+
             .btn {
                 padding: 0.5rem 0.9rem;
                 font-size: 0.8rem;
             }
+
             .chart-wrapper {
                 height: 200px;
             }
+
             .history-button {
                 padding: 0.3rem 0.7rem;
                 font-size: 0.7rem;
                 min-width: 110px;
             }
+
             .recent-grid {
                 gap: 0.8rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .admin-header h1 {
+                font-size: 1.2rem;
+            }
+
+            .edit-form {
+                padding: 0.8rem;
+            }
+
+            .media-preview {
+                padding: 0.8rem;
+            }
+
+            .btn {
+                padding: 0.8rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .form-help {
+                font-size: 0.8rem;
             }
         }
     </style>
 </head>
 <body>
-    <?php
-    // ===========================================
-    // KONEKSI DATABASE
-    // ===========================================
-    $servername = "localhost:3306";
-    $username = "root";
-    $password = "";
-    $dbname = "1-bester";
-
-    // Buat koneksi
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    // Cek koneksi
-    if ($conn->connect_error) {
-        die("Koneksi database gagal: " . $conn->connect_error);
-    }
-
-    // ===========================================
-    // QUERY DATA DARI DATABASE
-    // ===========================================
-
-    // 1. Total Size Media (dalam MB) - 💾 Total Size Media
-    $size_sql = "SELECT SUM(file_size) as total_size FROM media";
-    $size_result = $conn->query($size_sql);
-    $total_size_mb = 0;
-    if ($size_result->num_rows > 0) {
-        $row = $size_result->fetch_assoc();
-        $total_size_mb = round($row['total_size'] / (1024 * 1024), 1);
-    }
-
-    // 2. Total Pesan - 📨 Total Pesan
-    $contacts_sql = "SELECT COUNT(*) as total FROM contacts";
-    $contacts_result = $conn->query($contacts_sql);
-    $total_contacts = 0;
-    if ($contacts_result->num_rows > 0) {
-        $row = $contacts_result->fetch_assoc();
-        $total_contacts = $row['total'];
-    }
-
-    // 3. Pesan Pending - ⏳ Pesan Pending
-    $pending_sql = "SELECT COUNT(*) as pending FROM contacts WHERE status = 'pending'";
-    $pending_result = $conn->query($pending_sql);
-    $pending_contacts = 0;
-    if ($pending_result->num_rows > 0) {
-        $row = $pending_result->fetch_assoc();
-        $pending_contacts = $row['pending'];
-    }
-
-    // 4. Pesan Disetujui - ✅ Pesan Disetujui
-    $approved_sql = "SELECT COUNT(*) as approved FROM contacts WHERE status = 'approved'";
-    $approved_result = $conn->query($approved_sql);
-    $approved_contacts = 0;
-    if ($approved_result->num_rows > 0) {
-        $row = $approved_result->fetch_assoc();
-        $approved_contacts = $row['approved'];
-    }
-
-    // 5. Pesan Ditolak - ❌ Pesan Ditolak
-    $rejected_sql = "SELECT COUNT(*) as rejected FROM contacts WHERE status = 'rejected'";
-    $rejected_result = $conn->query($rejected_sql);
-    $rejected_contacts = 0;
-    if ($rejected_result->num_rows > 0) {
-        $row = $rejected_result->fetch_assoc();
-        $rejected_contacts = $row['rejected'];
-    }
-
-    // 6. Total Media - 🖼️ Total Media
-    $media_total_sql = "SELECT COUNT(*) as total FROM media";
-    $media_total_result = $conn->query($media_total_sql);
-    $total_media = 0;
-    if ($media_total_result->num_rows > 0) {
-        $row = $media_total_result->fetch_assoc();
-        $total_media = $row['total'];
-    }
-
-    // 7. Media Aktif - 🟢 Media Aktif
-    $media_active_sql = "SELECT COUNT(*) as active FROM media WHERE is_active = 1";
-    $media_active_result = $conn->query($media_active_sql);
-    $active_media = 0;
-    if ($media_active_result->num_rows > 0) {
-        $row = $media_active_result->fetch_assoc();
-        $active_media = $row['active'];
-    }
-
-    // 8. Media Nonaktif - 🔴 Media Nonaktif
-    $media_inactive_sql = "SELECT COUNT(*) as inactive FROM media WHERE is_active = 0";
-    $media_inactive_result = $conn->query($media_inactive_sql);
-    $inactive_media = 0;
-    if ($media_inactive_result->num_rows > 0) {
-        $row = $media_inactive_result->fetch_assoc();
-        $inactive_media = $row['inactive'];
-    }
-
-    // 9. Total Pengunjung - 👥 Total Pengunjung
-    $total_visitors_sql = "SELECT SUM(count) as total FROM visitor_counter";
-    $total_visitors_result = $conn->query($total_visitors_sql);
-    $total_visitors = 0;
-    if ($total_visitors_result->num_rows > 0) {
-        $row = $total_visitors_result->fetch_assoc();
-        $total_visitors = $row['total'];
-    }
-
-    // 10. Pengunjung Hari Ini - 📅 Hari Ini
-    $today = date('Y-m-d');
-    $today_visitors_sql = "SELECT count FROM visitor_counter WHERE date = '$today'";
-    $today_visitors_result = $conn->query($today_visitors_sql);
-    $today_visitors = 0;
-    if ($today_visitors_result->num_rows > 0) {
-        $row = $today_visitors_result->fetch_assoc();
-        $today_visitors = $row['count'];
-    }
-
-    // 11. Pengunjung Kemarin - 📊 Kemarin
-    $yesterday = date('Y-m-d', strtotime('-1 day'));
-    $yesterday_visitors_sql = "SELECT count FROM visitor_counter WHERE date = '$yesterday'";
-    $yesterday_visitors_result = $conn->query($yesterday_visitors_sql);
-    $yesterday_visitors = 0;
-    if ($yesterday_visitors_result->num_rows > 0) {
-        $row = $yesterday_visitors_result->fetch_assoc();
-        $yesterday_visitors = $row['count'];
-    }
-
-    // 12. Histori Pengunjung (7 hari terakhir) - 📈 Histori Pengunjung
-    $history_visitors_sql = "SELECT COUNT(DISTINCT date) as days FROM visitor_counter WHERE date >= DATE_SUB('$today', INTERVAL 7 DAY)";
-    $history_visitors_result = $conn->query($history_visitors_sql);
-    $history_days = 0;
-    if ($history_visitors_result->num_rows > 0) {
-        $row = $history_visitors_result->fetch_assoc();
-        $history_days = $row['days'];
-    }
-
-    // 13. Total Pengunjung (Keseluruhan) - 👥 Total Pengunjung (Keseluruhan)
-    // Ini sama dengan point 9, jadi kita gunakan $total_visitors yang sudah dihitung
-
-    // 14. Rata-rata per Hari - 📉 Rata-rata per Hari
-    $avg_visitors_sql = "SELECT AVG(count) as average FROM visitor_counter WHERE count > 0";
-    $avg_visitors_result = $conn->query($avg_visitors_sql);
-    $avg_visitors = 0;
-    if ($avg_visitors_result->num_rows > 0) {
-        $row = $avg_visitors_result->fetch_assoc();
-        $avg_visitors = round($row['average']);
-    }
-
-    // 15. Hari Terbanyak - ⭐ Hari Terbanyak
-    $max_visitors_sql = "SELECT MAX(count) as max_count FROM visitor_counter";
-    $max_visitors_result = $conn->query($max_visitors_sql);
-    $max_visitors = 0;
-    if ($max_visitors_result->num_rows > 0) {
-        $row = $max_visitors_result->fetch_assoc();
-        $max_visitors = $row['max_count'];
-    }
-
-    // 16. Data Tabel Pengunjung
-    $visitor_table_sql = "SELECT date, count, DAYNAME(date) as day_name FROM visitor_counter ORDER BY date DESC LIMIT 5";
-    $visitor_table_result = $conn->query($visitor_table_sql);
-    $visitor_data = [];
-    if ($visitor_table_result->num_rows > 0) {
-        while($row = $visitor_table_result->fetch_assoc()) {
-            $visitor_data[] = $row;
-        }
-    }
-
-    // 17. Aktivitas Terbaru (gabungan dari berbagai tabel)
-    $activities = [];
-
-    // Aktivitas dari media (upload terbaru)
-    $media_activity_sql = "SELECT
-        CONCAT('Gambar diupload: ', title) as title,
-        section,
-        created_at as timestamp,
-        'media' as type
-        FROM media
-        ORDER BY created_at DESC
-        LIMIT 2";
-    $media_activity_result = $conn->query($media_activity_sql);
-    if ($media_activity_result->num_rows > 0) {
-        while($row = $media_activity_result->fetch_assoc()) {
-            $activities[] = $row;
-        }
-    }
-
-    // Aktivitas dari contacts (pesan terbaru)
-    $contacts_activity_sql = "SELECT
-        CONCAT('Pesan baru dari ', name) as title,
-        'contact' as type,
-        created_at as timestamp
-        FROM contacts
-        ORDER BY created_at DESC
-        LIMIT 3";
-    $contacts_activity_result = $conn->query($contacts_activity_sql);
-    if ($contacts_activity_result->num_rows > 0) {
-        while($row = $contacts_activity_result->fetch_assoc()) {
-            $activities[] = $row;
-        }
-    }
-
-    // Aktivitas statistik pengunjung
-    $stat_activity_sql = "SELECT
-        'Update statistik pengunjung' as title,
-        'stats' as type,
-        updated_at as timestamp
-        FROM visitor_counter
-        ORDER BY updated_at DESC
-        LIMIT 1";
-    $stat_activity_result = $conn->query($stat_activity_sql);
-    if ($stat_activity_result->num_rows > 0) {
-        while($row = $stat_activity_result->fetch_assoc()) {
-            $activities[] = $row;
-        }
-    }
-
-    // Urutkan aktivitas berdasarkan timestamp
-    usort($activities, function($a, $b) {
-        return strtotime($b['timestamp']) - strtotime($a['timestamp']);
-    });
-
-    // 18. Pesan Terbaru
-    $recent_messages_sql = "SELECT name, email, status, created_at
-                           FROM contacts
-                           ORDER BY created_at DESC
-                           LIMIT 4";
-    $recent_messages_result = $conn->query($recent_messages_sql);
-    $recent_messages = [];
-    if ($recent_messages_result->num_rows > 0) {
-        while($row = $recent_messages_result->fetch_assoc()) {
-            $recent_messages[] = $row;
-        }
-    }
-
-    // 19. Media Terbaru
-    $recent_media_sql = "SELECT title, type, section, created_at
-                        FROM media
-                        ORDER BY created_at DESC
-                        LIMIT 4";
-    $recent_media_result = $conn->query($recent_media_sql);
-    $recent_media = [];
-    if ($recent_media_result->num_rows > 0) {
-        while($row = $recent_media_result->fetch_assoc()) {
-            $recent_media[] = $row;
-        }
-    }
-
-    // 20. Data untuk Chart
-    $chart_data = [
-        $total_size_mb,
-        $total_contacts,
-        $pending_contacts,
-        $approved_contacts,
-        $rejected_contacts,
-        $total_media,
-        $active_media,
-        $inactive_media,
-        $total_visitors,
-        $today_visitors,
-        $yesterday_visitors,
-        $history_days,
-        $total_visitors, // Total Pengunjung (Keseluruhan)
-        $avg_visitors,
-        $max_visitors
-    ];
-
-    $conn->close();
-    ?>
-
     <!-- Mobile Menu Toggle -->
     <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
     <div class="overlay" id="overlay"></div>
 
     <div class="admin-layout">
-        <!-- Sidebar -->
+        <!-- Sidebar - SAMA PERSIS DENGAN MEDIA LIBRARY -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h2><span class="logo-square"></span> <span>WALUYA LAND</span></h2>
@@ -1190,15 +1325,16 @@
             </div>
 
             <nav class="sidebar-menu">
-                <a href="#" class="menu-item active">
+                <!-- URUTAN MENU SAMA PERSIS -->
+                <a href="{{ route('admin.dashboard') }}" class="menu-item active">
                     <span class="menu-icon">📊</span>
                     <span>Dashboard</span>
                 </a>
-                <a href="#" class="menu-item">
+                <a href="{{ route('admin.contacts.index') }}" class="menu-item">
                     <span class="menu-icon">📧</span>
                     <span>Kelola Pesan</span>
                 </a>
-                <a href="#" class="menu-item">
+                <a href="{{ route('admin.media.index') }}" class="menu-item">
                     <span class="menu-icon">🖼️</span>
                     <span>Media Library</span>
                 </a>
@@ -1206,15 +1342,16 @@
 
             <div class="sidebar-footer">
                 <div class="user-profile">
-                    <div class="user-avatar">
-                        AD
-                    </div>
+                    <div class="user-avatar">AD</div>
                     <div class="user-info">
                         <h4>Admin Waluya</h4>
                         <p>Administrator</p>
                     </div>
                 </div>
-                <button type="button" class="btn-logout">Logout</button>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn-logout">Logout</button>
+                </form>
             </div>
         </aside>
 
@@ -1226,6 +1363,12 @@
                 <span>Welcome, <strong style="color: #5FB574;">Admin</strong></span>
                 <div class="header-actions">
                     <span class="btn btn-secondary">🕒 <?php echo date('d M Y, H:i'); ?></span>
+                    <?php if ($today_visitors > 1): ?>
+                    <a href="dashboard.php?reset_visitors=1" class="btn btn-secondary"
+                       onclick="return confirm('Reset pengunjung hari ini ke 1?')">
+                       🔄 Reset Pengunjung
+                    </a>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -1233,117 +1376,122 @@
             <div class="alert alert-success">
                 <span>✓</span>
                 Dashboard loaded successfully from database
+                <?php if (isset($_GET['reset_visitors'])): ?>
+                <span style="margin-left: 10px;">(Pengunjung hari ini telah direset)</span>
+                <?php endif; ?>
             </div>
 
             <!-- Stats Grid Compact dengan Data Real -->
             <div class="stats-grid">
                 <!-- Baris 1: Media & Pesan -->
                 <a href="{{ route('admin.media.index') }}" class="stat-link">
-                    <div class="stat-card size">
+                    <div class="stat-card">
                         <span class="stat-icon">💾</span>
-                        <h3>{{ number_format(($stats['total_media_size'] ?? 0) / 1024 / 1024, 2) }} MB</h3>
-                        <p>Total Size Media</p>
+                        <div class="stat-number"><?php echo $total_size_mb; ?><span class="stat-unit">MB</span></div>
+                        <div class="stat-label">Total Size Media</div>
                     </div>
                 </a>
 
                 <a href="{{ route('admin.contacts.index') }}" class="stat-link">
-                    <div class="stat-card contacts">
+                    <div class="stat-card">
                         <span class="stat-icon">📨</span>
-                        <h3>{{ $stats['total_contacts'] ?? 0 }}</h3>
-                        <p>Total Pesan</p>
+                        <div class="stat-number"><?php echo $total_contacts; ?></div>
+                        <div class="stat-label">Total Pesan</div>
                     </div>
                 </a>
 
                 <a href="{{ route('admin.contacts.index', ['status' => 'pending']) }}" class="stat-link">
-                    <div class="stat-card pending">
+                    <div class="stat-card">
                         <span class="stat-icon">⏳</span>
-                        <h3>{{ $stats['pending_contacts'] ?? 0 }}</h3>
-                        <p>Pesan Pending</p>
+                        <div class="stat-number"><?php echo $pending_contacts; ?></div>
+                        <div class="stat-label">Pesan Pending</div>
                     </div>
                 </a>
 
-                 <a href="{{ route('admin.contacts.index', ['status' => 'approved']) }}" class="stat-link">
-                    <div class="stat-card approved">
+                <a href="{{ route('admin.contacts.index', ['status' => 'approved']) }}" class="stat-link">
+                    <div class="stat-card">
                         <span class="stat-icon">✅</span>
-                        <h3>{{ $stats['approved_contacts'] ?? 0 }}</h3>
-                        <p>Pesan Disetujui</p>
+                        <div class="stat-number"><?php echo $approved_contacts; ?></div>
+                        <div class="stat-label">Pesan Disetujui</div>
                     </div>
                 </a>
 
                 <a href="{{ route('admin.contacts.index', ['status' => 'rejected']) }}" class="stat-link">
-                    <div class="stat-card rejected">
+                    <div class="stat-card">
                         <span class="stat-icon">❌</span>
-                        <h3>{{ $stats['rejected_contacts'] ?? 0 }}</h3>
-                        <p>Pesan Ditolak</p>
+                        <div class="stat-number"><?php echo $rejected_contacts; ?></div>
+                        <div class="stat-label">Pesan Ditolak</div>
                     </div>
                 </a>
 
+                <!-- Baris 2: Media & Pengunjung -->
                 <a href="{{ route('admin.media.index') }}" class="stat-link">
-                    <div class="stat-card media">
+                    <div class="stat-card">
                         <span class="stat-icon">🖼️</span>
-                        <h3>{{ $stats['total_media'] ?? 0 }}</h3>
-                        <p>Total Media</p>
+                        <div class="stat-number"><?php echo $total_media; ?></div>
+                        <div class="stat-label">Total Media</div>
                     </div>
                 </a>
 
                 <a href="{{ route('admin.media.index', ['status' => 'active']) }}" class="stat-link">
-                    <div class="stat-card active">
+                    <div class="stat-card">
                         <span class="stat-icon">🟢</span>
-                        <h3>{{ $stats['active_media'] ?? 0 }}</h3>
-                        <p>Media Aktif</p>
+                        <div class="stat-number"><?php echo $active_media; ?></div>
+                        <div class="stat-label">Media Aktif</div>
                     </div>
                 </a>
 
                 <a href="{{ route('admin.media.index', ['status' => 'inactive']) }}" class="stat-link">
-                    <div class="stat-card inactive">
+                    <div class="stat-card">
                         <span class="stat-icon">🔴</span>
-                        <h3>{{ $stats['inactive_media'] ?? 0 }}</h3>
-                        <p>Media Nonaktif</p>
+                        <div class="stat-number"><?php echo $inactive_media; ?></div>
+                        <div class="stat-label">Media Nonaktif</div>
                     </div>
                 </a>
 
                 <div class="stat-card">
-                    <div class="stat-icon">👥</div>
-                    <div class="stat-number"><?php echo $total_visitors; ?></div>
-                    <div class="stat-label">Total Pengunjung</div>
+                    <span class="stat-icon">📅</span>
+                    <div class="stat-number"><?php echo $today_visitors; ?></div>
+                    <div class="stat-label">Pengunjung Hari Ini</div>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon">📅</div>
-                    <div class="stat-number"><?php echo $today_visitors; ?></div>
-                    <div class="stat-label">Hari Ini</div>
+                    <span class="stat-icon">👥</span>
+                    <div class="stat-number"><?php echo $total_visitors; ?></div>
+                    <div class="stat-label">Total Kumulatif</div>
                 </div>
 
                 <!-- Baris 3: Statistik Pengunjung -->
                 <div class="stat-card">
-                    <div class="stat-icon">📊</div>
+                    <span class="stat-icon">📊</span>
                     <div class="stat-number"><?php echo $yesterday_visitors; ?></div>
-                    <div class="stat-label">Kemarin</div>
+                    <div class="stat-label">Pengunjung Kemarin</div>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon">📈</div>
+                    <span class="stat-icon">📈</span>
                     <div class="stat-number"><?php echo $history_days; ?><span class="stat-unit">hr</span></div>
                     <div class="stat-label">Histori Pengunjung</div>
-                    <button class="history-button">📊 Lihat</button>
+                    <button class="history-button">📊 Lihat Histori</button>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon">👥</div>
+                    <span class="stat-icon">👥</span>
                     <div class="stat-number"><?php echo $total_visitors; ?></div>
                     <div class="stat-label">Total Pengunjung<br>(Keseluruhan)</div>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon">📉</div>
+                    <span class="stat-icon">📉</span>
                     <div class="stat-number"><?php echo $avg_visitors; ?></div>
                     <div class="stat-label">Rata-rata per Hari</div>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-icon">⭐</div>
-                    <div class="stat-number"><?php echo $max_visitors; ?></div>
+                    <span class="stat-icon">⭐</span>
+                    <div class="day-name"><?php echo $max_visitors_day; ?></div>
                     <div class="stat-label">Hari Terbanyak</div>
+                    <div class="day-count">(<?php echo $max_visitors_count; ?> pengunjung)</div>
                 </div>
             </div>
 
@@ -1400,7 +1548,7 @@
                                         $keterangan = 'Sangat Ramai';
                                     }
 
-                                    $highlight = ($count == $max_visitors) ? 'highlight' : '';
+                                    $highlight = ($count == $max_visitors_count) ? 'highlight' : '';
                                 ?>
                                 <tr class="<?php echo $highlight; ?>">
                                     <td class="date-cell"><?php echo $date->format('d/m/Y'); ?></td>
@@ -1477,9 +1625,9 @@
                                 $time_text = floor($time_diff / 86400) . ' hari';
                             }
 
-                            $badge_class = 'badge-success';
+                            $badge_class = 'badge-warning';
                             if ($message['status'] == 'rejected') $badge_class = 'badge-danger';
-                            if ($message['status'] == 'approved') $badge_class = 'badge-warning';
+                            if ($message['status'] == 'approved') $badge_class = 'badge-success';
                         ?>
                         <div class="recent-item">
                             <div class="recent-icon">
@@ -1552,7 +1700,7 @@
         // ======================
         const chartLabels = [
             'Total Size Media', 'Total Pesan', 'Pesan Pending', 'Pesan Disetujui', 'Pesan Ditolak',
-            'Total Media', 'Media Aktif', 'Media Nonaktif', 'Total Pengunjung', 'Hari Ini',
+            'Total Media', 'Media Aktif', 'Media Nonaktif', 'Hari Ini', 'Total Kumulatif',
             'Kemarin', 'Histori Pengunjung', 'Total Pengunjung (Keseluruhan)', 'Rata-rata per Hari', 'Hari Terbanyak'
         ];
 
@@ -1584,12 +1732,12 @@
                 data: chartDataValues,
                 backgroundColor: [
                     '#4CAF50', '#2196F3', '#FFC107', '#4CAF50', '#F44336',
-                    '#9C27B0', '#4CAF50', '#FF9800', '#3498db', '#FFA726',
+                    '#9C27B0', '#4CAF50', '#FF9800', '#FFA726', '#3498db',
                     '#8BC34A', '#9b59b6', '#3498db', '#2ecc71', '#e74c3c'
                 ],
                 borderColor: [
                     '#2E7D32', '#1565C0', '#FF8F00', '#2E7D32', '#C62828',
-                    '#7B1FA2', '#2E7D32', '#EF6C00', '#1a5276', '#F57C00',
+                    '#7B1FA2', '#2E7D32', '#EF6C00', '#F57C00', '#1a5276',
                     '#558B2F', '#8e44ad', '#1a5276', '#27ae60', '#c0392b'
                 ],
                 borderWidth: 1.5,
@@ -1752,61 +1900,12 @@
                       '• Data 7 hari terakhir: <?php echo $history_days; ?> hari\n' +
                       '• Total pengunjung: <?php echo $total_visitors; ?> orang\n' +
                       '• Rata-rata: <?php echo $avg_visitors; ?> pengunjung/hari\n' +
-                      '• Hari terbanyak: <?php echo $max_visitors; ?> pengunjung\n' +
+                      '• Hari terbanyak: <?php echo $max_visitors_day; ?> (<?php echo $max_visitors_count; ?> pengunjung)\n' +
                       '• Hari ini: <?php echo $today_visitors; ?> pengunjung\n' +
                       '• Kemarin: <?php echo $yesterday_visitors; ?> pengunjung\n\n' +
                       '✅ Data real-time dari database');
             });
         }
-
-        // ======================
-        // TABLE SCROLL EFFECT
-        // ======================
-        const tableWrapper = document.querySelector('.visitor-table-wrapper');
-        if (tableWrapper) {
-            tableWrapper.addEventListener('scroll', function() {
-                if (this.scrollTop > 0) {
-                    this.style.boxShadow = 'inset 0 4px 4px -4px rgba(0,0,0,0.08)';
-                } else {
-                    this.style.boxShadow = 'none';
-                }
-            });
-        }
-
-        // ======================
-        // REAL-TIME UPDATES (simulasi)
-        // ======================
-        function simulateRealTimeUpdate() {
-            const todayVisitors = document.querySelector('.stat-card:nth-child(10) .stat-number');
-            if (todayVisitors && Math.random() > 0.7) {
-                const current = parseInt(todayVisitors.textContent);
-                todayVisitors.textContent = current + 1;
-
-                // Efek visual
-                todayVisitors.style.color = '#e74c3c';
-                todayVisitors.style.transform = 'scale(1.2)';
-                setTimeout(() => {
-                    todayVisitors.style.color = '';
-                    todayVisitors.style.transform = '';
-                }, 500);
-            }
-        }
-
-        // Update setiap 30 detik
-        setInterval(simulateRealTimeUpdate, 30000);
-
-        // ======================
-        // WINDOW RESIZE HANDLING
-        // ======================
-        let resizeTimeout;
-        window.addEventListener('resize', function() {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                if (currentChart) {
-                    currentChart.resize();
-                }
-            }, 200);
-        });
 
         // ======================
         // PAGE LOAD ANIMATION
