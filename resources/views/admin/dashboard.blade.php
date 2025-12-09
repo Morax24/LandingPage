@@ -1325,7 +1325,7 @@
                     <div class="stat-icon">📈</div>
                     <div class="stat-number"><?php echo $history_days; ?><span class="stat-unit">hr</span></div>
                     <div class="stat-label">Histori Pengunjung</div>
-                    <button class="history-button">📊 Lihat Histori</button>
+                    <button class="history-button">📊 Lihat</button>
                 </div>
 
                 <div class="stat-card">
