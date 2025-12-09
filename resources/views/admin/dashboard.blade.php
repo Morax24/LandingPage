@@ -16,6 +16,27 @@ if ($conn->connect_error) {
 }
 
 // ===========================================
+// FUNGSI UNTUK MENGAMBIL PATH GAMBAR MEDIA
+// ===========================================
+function getMediaThumbnailPath($media) {
+    // Jika ada file_path di database, gunakan itu
+    if (!empty($media['file_path'])) {
+        // Cek apakah file ada di server
+        $full_path = $_SERVER['DOCUMENT_ROOT'] . '/' . $media['file_path'];
+        if (file_exists($full_path)) {
+            return $media['file_path'];
+        }
+    }
+
+    // Fallback ke placeholder berdasarkan tipe
+    if ($media['type'] == 'image') {
+        return 'https://via.placeholder.com/40x40/5FB574/fff?text=IMG';
+    } else {
+        return 'https://via.placeholder.com/40x40/3498db/fff?text=VID';
+    }
+}
+
+// ===========================================
 // FUNGSI UTAMA UNTUK MENJAMIN DATA ADA
 // ===========================================
 function ensureVisitorData($conn) {
@@ -309,8 +330,8 @@ if ($recent_messages_result->num_rows > 0) {
     }
 }
 
-// 18. Media Terbaru
-$recent_media_sql = "SELECT title, type, section, created_at
+// 18. Media Terbaru (DENGAN FILE_PATH)
+$recent_media_sql = "SELECT title, type, section, file_path, created_at
                     FROM media
                     ORDER BY created_at DESC
                     LIMIT 4";
@@ -318,6 +339,7 @@ $recent_media_result = $conn->query($recent_media_sql);
 $recent_media = [];
 if ($recent_media_result->num_rows > 0) {
     while($row = $recent_media_result->fetch_assoc()) {
+        $row['thumbnail_path'] = getMediaThumbnailPath($row);
         $recent_media[] = $row;
     }
 }
@@ -565,6 +587,55 @@ $conn->close();
             box-shadow: 0 3px 8px rgba(108, 117, 125, 0.2);
         }
 
+        /* Alert dengan close button */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 1.2rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            border-left: 3px solid transparent;
+            font-size: 0.9rem;
+            position: relative;
+            padding-right: 3rem;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border-left-color: #28a745;
+        }
+
+        .alert-close {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: inherit;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .alert-close:hover {
+            opacity: 1;
+            background: rgba(0,0,0,0.1);
+        }
+
         /* Stats Grid */
         .stats-grid {
             display: grid;
@@ -750,18 +821,21 @@ $conn->close();
             border-color: #ced4da;
         }
 
+        /* Responsive Table Styles */
         .visitor-table-wrapper {
             flex-grow: 1;
+            overflow-x: auto; /* Horizontal scroll untuk mobile */
             overflow-y: auto;
             border: 1px solid #ecf0f1;
             border-radius: 8px;
             max-height: 280px;
+            -webkit-overflow-scrolling: touch; /* Smooth scroll iOS */
         }
 
         .visitor-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 100%;
+            min-width: 600px; /* Minimum width agar tidak hancur */
         }
 
         .visitor-table thead {
@@ -797,17 +871,20 @@ $conn->close();
             font-weight: 600;
             color: #2c3e50;
             white-space: nowrap;
+            min-width: 100px;
         }
 
         .visitor-table .count-cell {
             text-align: center;
             font-weight: 700;
             font-size: 1rem;
+            min-width: 60px;
         }
 
         .visitor-table .day-cell {
             color: #7f8c8d;
             font-size: 0.85rem;
+            min-width: 80px;
         }
 
         .visitor-table .highlight {
@@ -816,6 +893,75 @@ $conn->close();
 
         .visitor-table .highlight td:first-child {
             border-left: 3px solid #FFA726;
+        }
+
+        /* Mobile Cards untuk pengunjung (alternatif) */
+        .visitor-mobile-cards {
+            display: none;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .visitor-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1rem;
+            border-left: 4px solid #5FB574;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            transition: all 0.2s ease;
+        }
+
+        .visitor-card:hover {
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .visitor-card-header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed #dee2e6;
+        }
+
+        .visitor-card-date {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 0.95rem;
+        }
+
+        .visitor-card-day {
+            color: #7f8c8d;
+            font-size: 0.8rem;
+        }
+
+        .visitor-card-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .visitor-card-label {
+            font-size: 0.75rem;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .visitor-card-value {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #2c3e50;
+        }
+
+        .visitor-card-highlight {
+            background: linear-gradient(90deg, rgba(255, 167, 38, 0.1) 0%, transparent 100%);
+            border-left-color: #FFA726;
         }
 
         .activity-list {
@@ -1031,24 +1177,6 @@ $conn->close();
             color: #721c24;
         }
 
-        .alert {
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 1.2rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            border-left: 3px solid transparent;
-            font-size: 0.9rem;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border-left-color: #28a745;
-        }
-
         .mobile-menu-toggle {
             display: none;
             position: fixed;
@@ -1103,7 +1231,7 @@ $conn->close();
             box-shadow: 0 3px 8px rgba(155, 89, 182, 0.2);
         }
 
-        /* Responsive Design */
+        /* Responsive Design - TABEL UTAMA */
         @media (max-width: 1400px) {
             .stats-grid {
                 grid-template-columns: repeat(4, 1fr);
@@ -1253,6 +1381,59 @@ $conn->close();
                 font-size: 0.8rem;
                 padding: 0.4rem 0.8rem;
             }
+
+            /* Responsive table untuk mobile */
+            .visitor-table-wrapper {
+                max-height: 250px;
+                font-size: 0.9rem;
+            }
+
+            .visitor-table {
+                min-width: 550px;
+            }
+
+            .visitor-table th,
+            .visitor-table td {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.8rem;
+            }
+
+            .visitor-table .date-cell {
+                min-width: 90px;
+            }
+
+            .visitor-table .day-cell {
+                min-width: 70px;
+            }
+
+            .visitor-table .count-cell {
+                min-width: 50px;
+                font-size: 0.9rem;
+            }
+
+            .container-title {
+                font-size: 1.1rem;
+            }
+
+            /* Tampilkan mobile cards, sembunyikan table */
+            .visitor-table-wrapper {
+                display: none;
+            }
+
+            .visitor-mobile-cards {
+                display: flex;
+            }
+        }
+
+        @media (min-width: 769px) {
+            /* Tampilkan table, sembunyikan mobile cards di desktop */
+            .visitor-table-wrapper {
+                display: block;
+            }
+
+            .visitor-mobile-cards {
+                display: none;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1284,6 +1465,20 @@ $conn->close();
 
             .recent-grid {
                 gap: 0.8rem;
+            }
+
+            /* Mobile cards lebih kecil di smartphone kecil */
+            .visitor-card {
+                padding: 0.8rem;
+                gap: 0.6rem;
+            }
+
+            .visitor-card-date {
+                font-size: 0.9rem;
+            }
+
+            .visitor-card-value {
+                font-size: 0.85rem;
             }
         }
 
@@ -1372,13 +1567,14 @@ $conn->close();
                 </div>
             </div>
 
-            <!-- Alert -->
-            <div class="alert alert-success">
+            <!-- Alert dengan auto-close -->
+            <div class="alert alert-success" id="dashboardAlert">
                 <span>✓</span>
                 Dashboard loaded successfully from database
                 <?php if (isset($_GET['reset_visitors'])): ?>
                 <span style="margin-left: 10px;">(Pengunjung hari ini telah direset)</span>
                 <?php endif; ?>
+                <button class="alert-close" onclick="closeAlert()">×</button>
             </div>
 
             <!-- Stats Grid Compact dengan Data Real -->
@@ -1468,11 +1664,12 @@ $conn->close();
                     <div class="stat-label">Pengunjung Kemarin</div>
                 </div>
 
-                <div class="stat-card">
+                <!-- Stat Card Histori Pengunjung (TANPA TOMBOL) -->
+                <div class="stat-card" id="historiCard">
                     <span class="stat-icon">📈</span>
                     <div class="stat-number"><?php echo $history_days; ?><span class="stat-unit">hr</span></div>
                     <div class="stat-label">Histori Pengunjung</div>
-                    <button class="history-button">📊 Lihat Histori</button>
+                    <!-- TOMBOL DIHAPUS DI SINI -->
                 </div>
 
                 <div class="stat-card">
@@ -1517,6 +1714,7 @@ $conn->close();
                 <div class="visitor-table-container">
                     <h2 class="container-title">📊 Tabel Pengunjung Harian</h2>
 
+                    <!-- Desktop Table (untuk layar besar) -->
                     <div class="visitor-table-wrapper">
                         <table class="visitor-table">
                             <thead>
@@ -1559,6 +1757,49 @@ $conn->close();
                                 <?php endforeach; ?>
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Mobile Cards (untuk layar kecil) -->
+                    <div class="visitor-mobile-cards">
+                        <?php foreach($visitor_data as $index => $visitor):
+                            $date = new DateTime($visitor['date']);
+                            $count = $visitor['count'];
+                            $day_name = $visitor['day_name'];
+
+                            // Tentukan warna berdasarkan jumlah pengunjung
+                            if ($count == 0) {
+                                $color = '#95a5a6';
+                                $keterangan = 'Tidak ada';
+                            } elseif ($count < 10) {
+                                $color = '#3498db';
+                                $keterangan = 'Sedikit';
+                            } elseif ($count < 20) {
+                                $color = '#f39c12';
+                                $keterangan = 'Lumayan';
+                            } else {
+                                $color = '#e74c3c';
+                                $keterangan = 'Sangat Ramai';
+                            }
+
+                            $highlight_class = ($count == $max_visitors_count) ? 'visitor-card-highlight' : '';
+                        ?>
+                        <div class="visitor-card <?php echo $highlight_class; ?>">
+                            <div class="visitor-card-header">
+                                <div class="visitor-card-date"><?php echo $date->format('d/m/Y'); ?></div>
+                                <div class="visitor-card-day"><?php echo $day_name; ?></div>
+                            </div>
+
+                            <div class="visitor-card-item">
+                                <div class="visitor-card-label">Jumlah</div>
+                                <div class="visitor-card-value" style="color: <?php echo $color; ?>;"><?php echo $count; ?></div>
+                            </div>
+
+                            <div class="visitor-card-item">
+                                <div class="visitor-card-label">Keterangan</div>
+                                <div class="visitor-card-value"><?php echo $keterangan; ?></div>
+                            </div>
+                        </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
 
@@ -1663,13 +1904,15 @@ $conn->close();
                             }
 
                             $badge_class = ($media['type'] == 'image') ? 'badge-success' : 'badge-warning';
+                            $thumbnail_src = $media['thumbnail_path'];
                         ?>
                         <div class="recent-item">
                             <div class="recent-icon">
                                 <?php if ($media['type'] == 'image'): ?>
-                                <img src="https://via.placeholder.com/40x40/5FB574/fff?text=IMG"
+                                <img src="<?php echo $thumbnail_src; ?>"
                                      alt="Thumbnail"
-                                     class="media-thumbnail">
+                                     class="media-thumbnail"
+                                     onerror="this.src='https://via.placeholder.com/40x40/5FB574/fff?text=IMG'">
                                 <?php else: ?>
                                 <div class="video-thumbnail">
                                     <div class="video-icon">🎥</div>
@@ -1721,6 +1964,30 @@ $conn->close();
 
         mobileMenuToggle.addEventListener('click', toggleMobileMenu);
         overlay.addEventListener('click', toggleMobileMenu);
+
+        // ======================
+        // ALERT AUTO-CLOSE FUNCTIONALITY
+        // ======================
+        function closeAlert() {
+            const alert = document.getElementById('dashboardAlert');
+            if (alert) {
+                alert.style.transition = 'opacity 0.3s ease';
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }
+        }
+
+        // Auto-close alert setelah 4 detik
+        document.addEventListener('DOMContentLoaded', function() {
+            const alert = document.getElementById('dashboardAlert');
+            if (alert) {
+                setTimeout(() => {
+                    alert.style.transition = 'opacity 0.5s ease';
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 500);
+                }, 4000); // 4 detik
+            }
+        });
 
         // ======================
         // CHART.JS IMPLEMENTATION
@@ -1883,19 +2150,23 @@ $conn->close();
         });
 
         // ======================
-        // HISTORY BUTTON FUNCTION
+        // HISTORI CARD CLICK FUNCTION
         // ======================
-        const historyButton = document.querySelector('.history-button');
-        if (historyButton) {
-            historyButton.addEventListener('click', function(e) {
+        const historiCard = document.getElementById('historiCard');
+        if (historiCard) {
+            historiCard.addEventListener('click', function(e) {
                 e.stopPropagation();
 
-                this.style.transform = 'scale(0.95)';
+                // Animasi klik
+                this.style.transform = 'translateY(-3px) scale(1.02)';
+                this.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
+
                 setTimeout(() => {
                     this.style.transform = '';
-                }, 200);
+                    this.style.boxShadow = '';
+                }, 300);
 
-                // Tampilkan detail histori
+                // Tampilkan detail histori (fungsi dipindahkan ke sini)
                 alert('📊 Detail Histori Pengunjung\n\n' +
                       '• Data 7 hari terakhir: <?php echo $history_days; ?> hari\n' +
                       '• Total pengunjung: <?php echo $total_visitors; ?> orang\n' +
@@ -1905,6 +2176,9 @@ $conn->close();
                       '• Kemarin: <?php echo $yesterday_visitors; ?> pengunjung\n\n' +
                       '✅ Data real-time dari database');
             });
+
+            // Tambahkan cursor pointer untuk menunjukkan bisa diklik
+            historiCard.style.cursor = 'pointer';
         }
 
         // ======================
