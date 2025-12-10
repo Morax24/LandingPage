@@ -11,18 +11,28 @@ class LandingController extends Controller
     public function index()
     {
         // ==================== MEDIA FROM DATABASE ====================
-        $heroMedia = Media::active()->forSection('hero')->ordered()->first();
-        $storyMedia = Media::active()->forSection('story')->ordered()->first();
-        $whyLearnMedia = Media::active()->forSection('whylearn')->ordered()->first();
-
-        $featuresMedia = Media::active()->forSection('features')->ordered()->limit(4)->get();
-        $aktivitasMedia = Media::active()->forSection('aktivitas')->ordered()->limit(6)->get();
-        $productsMedia = Media::active()->forSection('products')->ordered()->limit(2)->get();
+        // Gunakan method static dari model Media
+        $heroMedia = Media::getHeroMedia();
+        $storyMedia = Media::getStoryMedia();
+        $whyLearnMedia = Media::getWhyLearnMedia();
+        $featuresMedia = Media::getFeaturesMedia();
+        $aktivitasMedia = Media::getActivitiesMedia();
+        $productsMedia = Media::getProductsMedia();
 
         // ==================== TESTIMONIALS ====================
-        $testimonials = Contact::where('status', 'approved')
-            ->latest()
+        // HANYA yang type = 'testimonial'
+        $testimonials = Contact::testimonial()
+            ->approved()
+            ->orderBy('created_at', 'desc')
             ->limit(8)
+            ->get();
+
+        // ==================== FORUM POSTS ====================
+        // HANYA yang type = 'forum'
+        $forumPosts = Contact::forum()
+            ->approved()
+            ->orderBy('created_at', 'desc')
+            ->limit(6)
             ->get();
 
         // ==================== STATS ====================
@@ -43,6 +53,7 @@ class LandingController extends Controller
                 'aktivitas_count' => $aktivitasMedia->count(),
                 'products_count' => $productsMedia->count(),
                 'testimonials_count' => $testimonials->count(),
+                'forum_posts_count' => $forumPosts->count(),
             ]);
         }
 
@@ -54,6 +65,7 @@ class LandingController extends Controller
             'aktivitasMedia',
             'productsMedia',
             'testimonials',
+            'forumPosts',
             'stats'
         ));
     }

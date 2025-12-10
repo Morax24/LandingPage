@@ -706,7 +706,7 @@
             min-height: 200px;
         }
 
-        /* TESTIMONIAL SECTION - BACKGROUND ABU-ABU */
+        /* TESTIMONIAL SECTION - YANG DIPERBAIKI */
         .testimonial-section {
             padding: 4rem 5%;
             background: #f8f9fa;
@@ -714,7 +714,7 @@
 
         .testimonial-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
             margin-top: 2rem;
         }
@@ -722,20 +722,24 @@
         .testimonial-card {
             background: #fff;
             padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         .testimonial-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
         }
 
         .testimonial-header {
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .testimonial-avatar {
@@ -752,13 +756,49 @@
             flex-shrink: 0;
         }
 
-        .testimonial-card h4 {
-            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+        .testimonial-info {
+            flex: 1;
         }
 
-        .testimonial-card p {
+        .testimonial-card h4 {
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+            margin-bottom: 0.3rem;
+        }
+
+        .testimonial-institution {
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .testimonial-date {
+            color: #999;
+            font-size: 0.75rem;
+        }
+
+        .testimonial-card .testimonial-message {
             font-size: clamp(0.85rem, 2vw, 0.95rem);
             line-height: 1.6;
+            color: #555;
+            margin-top: auto;
+            font-style: italic;
+            padding-top: 1rem;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        /* NO TESTIMONIALS STATE */
+        .no-testimonials {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .no-testimonials p {
+            color: #666;
+            margin-bottom: 1.5rem;
         }
 
         /* FAQ SECTION - BACKGROUND ABU-ABU */
@@ -795,7 +835,7 @@
             resize: vertical;
         }
 
-        .btn-submit-faq {
+        .btn-submit {
             background: #f39c12;
             color: #fff;
             padding: 0.8rem 2rem;
@@ -805,6 +845,13 @@
             font-weight: bold;
             width: 100%;
             font-size: clamp(0.9rem, 2vw, 1rem);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
         }
 
         .faq-accordion {
@@ -1018,6 +1065,109 @@
             transform-origin: center;
         }
 
+        /* MODAL SEND CONFIRMATION - DIUBAH: TIDAK ADA EMAIL FIELD */
+        .send-confirm-modal {
+            background: #fff;
+            padding: 2.5rem;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.4s ease;
+            transform-origin: center;
+        }
+
+        .send-confirm-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: #f39c12;
+            display: inline-block;
+        }
+
+        .generated-email {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: left;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .email-field {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .email-field label {
+            font-weight: bold;
+            min-width: 100px;
+        }
+
+        .email-field input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .send-confirm-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .btn-send-email {
+            background: #f39c12;
+            color: #fff;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-send-email:hover {
+            background: #e67e22;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.6);
+        }
+
+        .btn-send-whatsapp {
+            background: #25D366;
+            color: #fff;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-send-whatsapp:hover {
+            background: #128C7E;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -1110,32 +1260,6 @@
             font-size: 0.85rem;
             margin-top: 0.5rem;
             text-align: left;
-        }
-
-        /* TOAST NOTIFICATION - OPSIONAL TAMBAHAN */
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #28a745;
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            z-index: 10000;
-            animation: slideInRight 0.3s ease;
-            display: none;
-        }
-
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
         }
 
         /* RESPONSIVE */
@@ -1269,6 +1393,16 @@
             .item-4 { grid-row: 5 / span 1; }
             .item-5 { grid-row: 6 / span 1; }
 
+            /* Send confirm actions responsive */
+            .send-confirm-actions {
+                flex-direction: column;
+            }
+
+            .btn-send-email,
+            .btn-send-whatsapp {
+                width: 100%;
+            }
+
             /* Desktop Layout - Tampil di atas 768px */
             .faq-contact-mobile {
                 display: none;
@@ -1288,6 +1422,10 @@
                 width: 80px;
                 height: 80px;
                 line-height: 80px;
+            }
+
+            .send-confirm-modal {
+                padding: 1.5rem;
             }
         }
 
@@ -1804,14 +1942,17 @@
         </div>
     </section>
 
-    <!-- BAGIAN TESTIMONIAL YANG DIPERBAIKI - MENAMPILKAN SEMUA USER -->
+    <!-- =========================================== -->
+    <!-- BAGIAN TESTIMONIAL YANG SUDAH DIPERBAIKI -->
+    <!-- =========================================== -->
     <section id="testimonial" class="testimonial-section">
         <span class="story-badge">Testimoni</span>
         <h2 class="section-title">Apa yang Dikatakan Para Pemain</h2>
         <p class="section-subtitle">Feedback dan manfaat dari siswa</p>
+
         <div class="testimonial-grid">
-            @if($testimonials && $testimonials->count() > 0)
-                @foreach($testimonials as $testimonial)
+            @if(isset($testimonials) && $testimonials->count() > 0)
+                @foreach($testimonials->take(5) as $testimonial)
                     <div class="testimonial-card">
                         <div class="testimonial-header">
                             <div class="testimonial-avatar">
@@ -1819,42 +1960,31 @@
                                     $names = explode(' ', $testimonial->name);
                                     $initials = '';
                                     foreach($names as $n) {
-                                        $initials .= strtoupper(substr($n, 0, 1));
+                                        if(!empty(trim($n))) {
+                                            $initials .= strtoupper(substr(trim($n), 0, 1));
+                                        }
                                     }
-                                    echo substr($initials, 0, 2);
+                                    echo substr($initials, 0, 2) ?: 'GU';
                                 @endphp
                             </div>
-                            <div>
+                            <div class="testimonial-info">
                                 <h4>{{ $testimonial->name }}</h4>
-                                <small style="color: #999;">
+                                <div class="testimonial-institution">
                                     {{ $testimonial->institution ?? 'Pengguna' }}
-                                </small>
+                                </div>
+                                <div class="testimonial-date">
+                                    {{ $testimonial->created_at->translatedFormat('d F Y') }}
+                                </div>
                             </div>
                         </div>
-                        <p>"{{ $testimonial->message }}"</p>
+                        <p class="testimonial-message">"{{ $testimonial->message }}"</p>
                     </div>
                 @endforeach
             @else
-                <!-- Fallback testimonials -->
-                <div class="testimonial-card">
-                    <div class="testimonial-header">
-                        <div class="testimonial-avatar">YG</div>
-                        <div>
-                            <h4>Yoga</h4>
-                            <small style="color: #999;">SMK</small>
-                        </div>
-                    </div>
-                    <p>"Mantap rekomen"</p>
-                </div>
-                <div class="testimonial-card">
-                    <div class="testimonial-header">
-                        <div class="testimonial-avatar">BW</div>
-                        <div>
-                            <h4>bowo</h4>
-                            <small style="color: #999;">abcd</small>
-                        </div>
-                    </div>
-                    <p>"Rekomen budget pelajar"</p>
+                <div class="no-testimonials">
+                    <h3>Belum ada testimoni</h3>
+                    <p>Jadilah yang pertama memberikan testimoni tentang pengalaman Anda!</p>
+                    <button onclick="showTestimonialForm()" class="btn-primary">⭐ Berikan Testimoni</button>
                 </div>
             @endif
         </div>
@@ -1921,63 +2051,57 @@
 
             <div class="faq-contact-form-mobile">
                 <p style="margin-bottom: 1.5rem; color: #666; text-align: center;">Punya pertanyaan lain? silahkan cantumkan disini</p>
-                <form action="{{ route('contact.store') }}" method="POST" id="contactFormMobile">
+                <form id="contactFormMobile" onsubmit="openSendConfirmModal('mobile'); return false;">
                     @csrf
+                    <input type="hidden" name="type" value="forum">
 
-                    <!-- TAMBAHKAN INPUT EMAIL DI SINI -->
-                    <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
-                    @error('email')
-                        <span class="error-text">{{ $message }}</span>
-                    @enderror
-
-                    <input type="text" name="name" placeholder="Nama Lengkap" value="{{ old('name') }}" required>
+                    <input type="text" name="name" placeholder="Nama Lengkap *" id="nameMobile" required>
                     @error('name')
                         <span class="error-text">{{ $message }}</span>
                     @enderror
 
-                    <input type="text" name="institution" placeholder="Instansi" value="{{ old('institution') }}">
+                    <input type="text" name="institution" placeholder="Instansi (opsional)" id="institutionMobile">
                     @error('institution')
                         <span class="error-text">{{ $message }}</span>
                     @enderror
 
-                    <textarea name="message" placeholder="Pesan/Pertanyaan" required>{{ old('message') }}</textarea>
+                    <textarea name="message" placeholder="Pesan/Pertanyaan *" id="messageMobile" required></textarea>
                     @error('message')
                         <span class="error-text">{{ $message }}</span>
                     @enderror
 
-                    <button type="submit" class="btn-submit-faq">Kirim</button>
+                    <!-- TOMBOL "KIRIM" SAJA -->
+                    <button type="submit" class="btn-submit">Kirim</button>
                 </form>
             </div>
         </div>
 
-        <!-- Desktop Layout (2 kolom - tetap seperti sebelumnya) -->
+        <!-- Desktop Layout (2 kolom) -->
         <div class="faq-contact-desktop">
             <div class="faq-contact-grid">
                 <div class="faq-contact-form">
                     <p style="margin-bottom: 1.5rem; color: #666;">Punya pertanyaan lain? silahkan cantumkan disini!</p>
-                    <form action="{{ route('contact.store') }}" method="POST" id="contactFormDesktop">
+                    <form id="contactFormDesktop" onsubmit="openSendConfirmModal('desktop'); return false;">
                         @csrf
-                        <input type="text" name="name" placeholder="Nama Lengkap" value="{{ old('name') }}" required>
+                        <input type="hidden" name="type" value="forum">
+
+                        <input type="text" name="name" placeholder="Nama Lengkap *" id="nameDesktop" required>
                         @error('name')
                             <span class="error-text">{{ $message }}</span>
                         @enderror
 
-                        <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" required>
-                        @error('email')
-                            <span class="error-text">{{ $message }}</span>
-                        @enderror
-
-                        <input type="text" name="institution" placeholder="Instansi" value="{{ old('institution') }}">
+                        <input type="text" name="institution" placeholder="Instansi (opsional)" id="institutionDesktop">
                         @error('institution')
                             <span class="error-text">{{ $message }}</span>
                         @enderror
 
-                        <textarea name="message" placeholder="Pesan/Pertanyaan" required>{{ old('message') }}</textarea>
+                        <textarea name="message" placeholder="Pesan/Pertanyaan *" id="messageDesktop" required></textarea>
                         @error('message')
                             <span class="error-text">{{ $message }}</span>
                         @enderror
 
-                        <button type="submit" class="btn-submit-faq">Kirim</button>
+                        <!-- TOMBOL "KIRIM" SAJA -->
+                        <button type="submit" class="btn-submit">Kirim</button>
                     </form>
                 </div>
 
@@ -2041,11 +2165,11 @@
     <section class="forum-section">
         <span class="story-badge">Forum</span>
         <h2 class="section-title">Forum Terbuka untuk Tanya, Saran, dan Insight</h2>
-        <p class="section-subtitle">Punya ide, saran, atau pertanyaan untuk kami? ajukan pertanyaan langsung pada tim
-            kami</p>
+        <p class="section-subtitle">Punya ide, saran, atau pertanyaan untuk kami? ajukan pertanyaan langsung pada tim kami</p>
+
         <div class="forum-grid">
-            @if($testimonials && $testimonials->count() > 0)
-                @foreach($testimonials->take(6) as $post)
+            @if(isset($forumPosts) && $forumPosts->count() > 0)
+                @foreach($forumPosts as $post)
                     <div class="forum-card">
                         <div class="forum-header">
                             <div class="forum-avatar">
@@ -2053,9 +2177,11 @@
                                     $names = explode(' ', $post->name);
                                     $initials = '';
                                     foreach($names as $n) {
-                                        $initials .= strtoupper(substr($n, 0, 1));
+                                        if(!empty(trim($n))) {
+                                            $initials .= strtoupper(substr(trim($n), 0, 1));
+                                        }
                                     }
-                                    echo substr($initials, 0, 2);
+                                    echo substr($initials, 0, 2) ?: 'GU';
                                 @endphp
                             </div>
                             <div>
@@ -2069,22 +2195,21 @@
                                 </small>
                             </div>
                         </div>
-                        <p>"{{ $post->message }}"</p>
+                        <p>"{{ Str::limit($post->message, 120) }}"</p>
                     </div>
                 @endforeach
             @else
-                <!-- Fallback forum posts -->
                 <div class="forum-card">
                     <div class="forum-header">
-                        <div class="forum-avatar">YG</div>
+                        <div class="forum-avatar">WL</div>
                         <div>
-                            <h4>Yoga</h4>
-                            <small style="color: #999;">SMK</small>
+                            <h4>Waluya Land Team</h4>
+                            <small style="color: #999;">Admin</small>
                             <br>
-                            <small style="color: #999;">yoga@gmail.com</small>
+                            <small style="color: #999;">admin@waluyaland.com</small>
                         </div>
                     </div>
-                    <p>"Mantap rekomen"</p>
+                    <p>"Selamat datang di forum Waluya Land! Silakan ajukan pertanyaan atau saran Anda di sini."</p>
                 </div>
             @endif
         </div>
@@ -2133,12 +2258,52 @@
         </div>
     </footer>
 
+    <!-- MODAL KONFIRMASI PENGIRIMAN - TANPA EMAIL FIELD -->
+    <div class="modal-overlay" id="sendConfirmModal">
+        <div class="send-confirm-modal">
+            <div class="send-confirm-icon">📧</div>
+            <h3 class="modal-title">Konfirmasi Pengiriman Pesan</h3>
+            <p class="modal-message">Pesan Anda siap dikirim:</p>
+
+            <div class="generated-email">
+                <div class="email-field">
+                    <label>Nama Lengkap:</label>
+                    <span id="confirmName"></span>
+                </div>
+                <div class="email-field">
+                    <label>Instansi:</label>
+                    <span id="confirmInstitution"></span>
+                </div>
+                <div class="email-field">
+                    <label>Pesan:</label>
+                    <div style="margin-top: 0.5rem; padding: 0.8rem; background: #fff; border-radius: 5px;">
+                        <span id="confirmMessage"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="send-confirm-actions">
+                <button class="btn-send-email" onclick="sendFormData()">
+                    <span>📧 Kirim via Email</span>
+                </button>
+                <button class="btn-send-whatsapp" onclick="sendWhatsAppMessage()">
+                    <span>💬 Kirim via WhatsApp</span>
+                </button>
+            </div>
+
+            <button class="modal-btn" onclick="closeSendConfirmModal()"
+                    style="margin-top: 1.5rem; background: #6c757d;">
+                Kembali ke Form
+            </button>
+        </div>
+    </div>
+
     <!-- MODAL POP UP SUKSES -->
     <div class="modal-overlay" id="successModal">
         <div class="modal-content">
             <div class="modal-icon success">✓</div>
             <h3 class="modal-title">Pesan Berhasil Dikirim!</h3>
-            <p class="modal-message">Terima kasih telah menghubungi kami. Kami akan segera membalas pesan Anda melalui email yang telah Anda berikan.</p>
+            <p class="modal-message" id="successMessage">Terima kasih telah menghubungi kami. Kami akan segera membalas pesan Anda melalui email yang telah Anda berikan.</p>
             <button class="modal-btn" onclick="closeModal()">Mengerti</button>
         </div>
     </div>
@@ -2150,6 +2315,54 @@
             <h3 class="modal-title">Gagal Mengirim Pesan</h3>
             <p class="modal-message" id="errorMessage">Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.</p>
             <button class="modal-btn" onclick="closeModal()">Coba Lagi</button>
+        </div>
+    </div>
+
+    <!-- MODAL FORM TESTIMONI -->
+    <div class="modal-overlay" id="testimonialModal">
+        <div class="modal-content" style="max-width: 500px; padding: 2.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 class="modal-title">⭐ Berikan Testimoni</h2>
+                <button onclick="closeTestimonialModal()" style="background: none; border: none; font-size: 1.8rem; cursor: pointer; color: #666; line-height: 1;">×</button>
+            </div>
+
+            <form action="{{ route('contact.store') }}" method="POST" id="testimonialForm">
+                @csrf
+                <input type="hidden" name="type" value="testimonial">
+
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="Nama Lengkap *" required value="{{ old('name') }}">
+                    @error('name')
+                        <span class="error-text" style="display: block;">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Email *" required value="{{ old('email') }}">
+                    @error('email')
+                        <span class="error-text" style="display: block;">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <input type="text" name="institution" placeholder="Instansi/Sekolah (opsional)" value="{{ old('institution') }}">
+                    @error('institution')
+                        <span class="error-text" style="display: block;">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <textarea name="message" placeholder="Ceritakan pengalaman Anda menggunakan Waluya Land... *" required rows="5">{{ old('message') }}</textarea>
+                    @error('message')
+                        <span class="error-text" style="display: block;">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="modal-btn" style="flex: 1;">Kirim Testimoni</button>
+                    <button type="button" onclick="closeTestimonialModal()" class="btn btn-secondary" style="padding: 1rem 2rem; background: #95a5a6;">Batal</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -2191,7 +2404,220 @@
             }
         }
 
-        function showSuccessModal() {
+        // ===========================================
+        // FUNGSI UNTUK MODAL KONFIRMASI PENGIRIMAN
+        // ===========================================
+        let currentFormType = '';
+        let formDataToSend = {};
+
+        function openSendConfirmModal(formType) {
+            currentFormType = formType;
+
+            // Ambil nilai dari form yang sesuai
+            let nameInput, institutionInput, messageInput;
+
+            if (formType === 'mobile') {
+                nameInput = document.getElementById('nameMobile');
+                institutionInput = document.getElementById('institutionMobile');
+                messageInput = document.getElementById('messageMobile');
+            } else {
+                nameInput = document.getElementById('nameDesktop');
+                institutionInput = document.getElementById('institutionDesktop');
+                messageInput = document.getElementById('messageDesktop');
+            }
+
+            const name = nameInput.value.trim();
+            const institution = institutionInput.value.trim();
+            const message = messageInput.value.trim();
+
+            // Validasi
+            if (!name) {
+                showErrorModal('Harap isi Nama Lengkap');
+                return;
+            }
+
+            if (!message) {
+                showErrorModal('Harap isi Pesan/Pertanyaan');
+                return;
+            }
+
+            // Simpan data untuk dikirim nanti
+            formDataToSend = {
+                name: name,
+                institution: institution,
+                message: message,
+                formType: formType
+            };
+
+            // Generate email otomatis (untuk backend)
+            let generatedEmail = generateEmailFromName(name);
+
+            // Update form dengan email yang digenerate (field tersembunyi)
+            if (formType === 'mobile') {
+                // Tambahkan field email tersembunyi di form mobile
+                let hiddenEmailField = document.querySelector('#contactFormMobile input[name="email"]');
+                if (!hiddenEmailField) {
+                    hiddenEmailField = document.createElement('input');
+                    hiddenEmailField.type = 'hidden';
+                    hiddenEmailField.name = 'email';
+                    hiddenEmailField.id = 'hiddenEmailMobile';
+                    document.getElementById('contactFormMobile').appendChild(hiddenEmailField);
+                }
+                hiddenEmailField.value = generatedEmail;
+            } else {
+                // Tambahkan field email tersembunyi di form desktop
+                let hiddenEmailField = document.querySelector('#contactFormDesktop input[name="email"]');
+                if (!hiddenEmailField) {
+                    hiddenEmailField = document.createElement('input');
+                    hiddenEmailField.type = 'hidden';
+                    hiddenEmailField.name = 'email';
+                    hiddenEmailField.id = 'hiddenEmailDesktop';
+                    document.getElementById('contactFormDesktop').appendChild(hiddenEmailField);
+                }
+                hiddenEmailField.value = generatedEmail;
+            }
+
+            // Tampilkan data di modal konfirmasi
+            document.getElementById('confirmName').textContent = name;
+            document.getElementById('confirmInstitution').textContent = institution || '-';
+            document.getElementById('confirmMessage').textContent = message;
+
+            // Tampilkan modal
+            document.getElementById('sendConfirmModal').classList.add('show');
+        }
+
+        function generateEmailFromName(name) {
+            // Bersihkan nama dari karakter khusus
+            let cleanName = name.toLowerCase()
+                .replace(/[^a-z0-9\s]/g, '') // Hapus karakter khusus
+                .replace(/\s+/g, ' ') // Normalisasi spasi
+                .trim();
+
+            // Ganti spasi dengan titik
+            let emailName = cleanName.replace(/\s+/g, '.');
+
+            // Jika nama terlalu pendek, tambahkan angka acak
+            if (emailName.length < 3) {
+                emailName += Math.floor(Math.random() * 100);
+            }
+
+            // Tambahkan domain @gmail.com
+            return emailName + '@gmail.com';
+        }
+
+        function sendFormData() {
+            // Kirim data ke server
+            const formData = new FormData();
+            formData.append('_token', '{{ csrf_token() }}');
+            formData.append('type', 'forum');
+            formData.append('name', formDataToSend.name);
+
+            // Gunakan email yang telah digenerate (dari field tersembunyi)
+            let emailField;
+            if (currentFormType === 'mobile') {
+                emailField = document.getElementById('hiddenEmailMobile');
+            } else {
+                emailField = document.getElementById('hiddenEmailDesktop');
+            }
+            formData.append('email', emailField.value);
+
+            formData.append('institution', formDataToSend.institution || '');
+            formData.append('message', formDataToSend.message);
+
+            // Tampilkan loading
+            const sendBtn = document.querySelector('.btn-send-email');
+            const originalText = sendBtn.innerHTML;
+            sendBtn.innerHTML = 'Mengirim...';
+            sendBtn.disabled = true;
+
+            fetch('{{ route("contact.store") }}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Reset form
+                    if (currentFormType === 'mobile') {
+                        document.getElementById('contactFormMobile').reset();
+                    } else {
+                        document.getElementById('contactFormDesktop').reset();
+                    }
+
+                    // Tutup modal konfirmasi
+                    closeSendConfirmModal();
+
+                    // Tampilkan modal sukses
+                    showSuccessModal('Pesan berhasil dikirim! Kami akan menghubungi Anda melalui email.');
+
+                    // Scroll ke atas
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                } else {
+                    showErrorModal(data.message || 'Terjadi kesalahan saat mengirim pesan.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showErrorModal('Koneksi bermasalah. Silakan coba lagi.');
+            })
+            .finally(() => {
+                // Reset button
+                sendBtn.innerHTML = originalText;
+                sendBtn.disabled = false;
+            });
+        }
+
+        function sendWhatsAppMessage() {
+            // Format pesan untuk WhatsApp
+            const name = formDataToSend.name;
+            const institution = formDataToSend.institution;
+            const message = formDataToSend.message;
+
+            let whatsappMessage = `Halo Waluya Land!\n\n`;
+            whatsappMessage += `Saya ingin bertanya mengenai produk Waluya Land:\n\n`;
+            whatsappMessage += `Nama: ${name}\n`;
+            if (institution) {
+                whatsappMessage += `Instansi: ${institution}\n`;
+            }
+            whatsappMessage += `Pertanyaan/Pesan: ${message}\n\n`;
+            whatsappMessage += `Mohon informasi lebih lanjut. Terima kasih!`;
+
+            // Encode pesan untuk URL
+            const encodedMessage = encodeURIComponent(whatsappMessage);
+
+            // Nomor WhatsApp
+            const phoneNumber = '628986908167';
+
+            // Buat URL WhatsApp
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+            // Buka WhatsApp di tab baru
+            window.open(whatsappUrl, '_blank');
+
+            // Tutup modal konfirmasi
+            closeSendConfirmModal();
+
+            // Tampilkan konfirmasi
+            showSuccessModal('WhatsApp akan terbuka. Silakan kirim pesan Anda!');
+        }
+
+        function closeSendConfirmModal() {
+            document.getElementById('sendConfirmModal').classList.remove('show');
+        }
+
+        // ===========================================
+        // FUNGSI MODAL LAINNYA
+        // ===========================================
+        function showSuccessModal(message) {
+            if (message) {
+                document.getElementById('successMessage').textContent = message;
+            }
             document.getElementById('successModal').classList.add('show');
             // Auto close after 5 seconds
             setTimeout(() => {
@@ -2211,78 +2637,28 @@
             document.getElementById('errorModal').classList.remove('show');
         }
 
+        // Fungsi untuk testimonial modal
+        function showTestimonialForm() {
+            document.getElementById('testimonialModal').classList.add('show');
+        }
+
+        function closeTestimonialModal() {
+            document.getElementById('testimonialModal').classList.remove('show');
+        }
+
         // Close modal when clicking outside
         document.querySelectorAll('.modal-overlay').forEach(modal => {
             modal.addEventListener('click', function(e) {
                 if (e.target === this) {
-                    closeModal();
+                    if (this.id === 'sendConfirmModal') {
+                        closeSendConfirmModal();
+                    } else if (this.id === 'testimonialModal') {
+                        closeTestimonialModal();
+                    } else {
+                        closeModal();
+                    }
                 }
             });
-        });
-
-        // Handle form submission with AJAX
-        document.addEventListener('DOMContentLoaded', function() {
-            const contactFormMobile = document.getElementById('contactFormMobile');
-            const contactFormDesktop = document.getElementById('contactFormDesktop');
-
-            function handleFormSubmit(form, event) {
-                event.preventDefault();
-
-                // Show loading state
-                const submitBtn = form.querySelector('button[type="submit"]');
-                const originalText = submitBtn.textContent;
-                submitBtn.textContent = 'Mengirim...';
-                submitBtn.disabled = true;
-
-                const formData = new FormData(form);
-
-                fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Reset form
-                        form.reset();
-                        // Show success modal
-                        showSuccessModal();
-                        // Scroll to top gently
-                        window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth'
-                        });
-                    } else {
-                        // Show error modal
-                        showErrorModal(data.message || 'Terjadi kesalahan');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showErrorModal('Koneksi bermasalah. Silakan coba lagi.');
-                })
-                .finally(() => {
-                    // Reset button state
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                });
-            }
-
-            if (contactFormMobile) {
-                contactFormMobile.addEventListener('submit', function(e) {
-                    handleFormSubmit(this, e);
-                });
-            }
-
-            if (contactFormDesktop) {
-                contactFormDesktop.addEventListener('submit', function(e) {
-                    handleFormSubmit(this, e);
-                });
-            }
         });
 
         // Handle broken images
@@ -2303,7 +2679,7 @@
         @if(session('success'))
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
-                showSuccessModal();
+                showSuccessModal('{{ session('success') }}');
             }, 500);
         });
         @endif
@@ -2320,22 +2696,22 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeModal();
+                closeTestimonialModal();
+                closeSendConfirmModal();
             }
         });
-    </script>
-    <!-- VISITOR TRACKING - TAMBAHKAN INI -->
-<script>
-// Tracking pengunjung otomatis saat page load
-document.addEventListener('DOMContentLoaded', function() {
-    fetch('/track-visitor')
-        .then(response => response.json())
-        .then(data => {
-            console.log('Visitor tracked successfully');
-        })
-        .catch(error => {
-            console.log('Visitor tracking failed:', error);
+
+        // VISITOR TRACKING
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/track-visitor')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Visitor tracked successfully');
+                })
+                .catch(error => {
+                    console.log('Visitor tracking failed:', error);
+                });
         });
-});
-</script>
+    </script>
 </body>
 </html>

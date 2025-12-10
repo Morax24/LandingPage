@@ -253,7 +253,35 @@ if ($max_visitors_result->num_rows > 0) {
     $max_visitors_count = $row['count'];
 }
 
-// 15. Data Tabel Pengunjung (5 hari terakhir)
+// 15. Total Testimoni
+$testimonial_sql = "SELECT COUNT(*) as total FROM contacts WHERE type = 'testimonial'";
+$testimonial_result = $conn->query($testimonial_sql);
+$total_testimonials = 0;
+if ($testimonial_result->num_rows > 0) {
+    $row = $testimonial_result->fetch_assoc();
+    $total_testimonials = $row['total'] ?? 0;
+}
+
+// Data untuk Chart (15 data)
+$chart_data = [
+    $total_size_mb,          // 1. Total Size Media
+    $total_contacts,         // 2. Total Pesan
+    $pending_contacts,       // 3. Pesan Pending
+    $approved_contacts,      // 4. Pesan Disetujui
+    $rejected_contacts,      // 5. Pesan Ditolak
+    $total_media,            // 6. Total Media
+    $active_media,           // 7. Media Aktif
+    $inactive_media,         // 8. Media Nonaktif
+    $today_visitors,         // 9. Hari Ini
+    $total_visitors,         // 10. Total Kumulatif
+    $yesterday_visitors,     // 11. Kemarin
+    $history_days,           // 12. Histori Pengunjung
+    $total_testimonials,     // 13. Total Testimoni (GANTI!)
+    $avg_visitors,           // 14. Rata-rata per Hari
+    $max_visitors_count      // 15. Hari Terbanyak (jumlah)
+];
+
+// 16. Data Tabel Pengunjung (5 hari terakhir)
 $visitor_table_sql = "SELECT date, count, DAYNAME(date) as day_name FROM visitor_counter ORDER BY date DESC LIMIT 5";
 $visitor_table_result = $conn->query($visitor_table_sql);
 $visitor_data = [];
@@ -263,7 +291,7 @@ if ($visitor_table_result->num_rows > 0) {
     }
 }
 
-// 16. Aktivitas Terbaru
+// 17. Aktivitas Terbaru
 $activities = [];
 
 // Aktivitas dari media
@@ -317,7 +345,7 @@ usort($activities, function($a, $b) {
     return strtotime($b['timestamp']) - strtotime($a['timestamp']);
 });
 
-// 17. Pesan Terbaru
+// 18. Pesan Terbaru
 $recent_messages_sql = "SELECT name, email, status, created_at
                        FROM contacts
                        ORDER BY created_at DESC
@@ -330,7 +358,7 @@ if ($recent_messages_result->num_rows > 0) {
     }
 }
 
-// 18. Media Terbaru (DENGAN FILE_PATH)
+// 19. Media Terbaru (DENGAN FILE_PATH)
 $recent_media_sql = "SELECT title, type, section, file_path, created_at
                     FROM media
                     ORDER BY created_at DESC
@@ -343,25 +371,6 @@ if ($recent_media_result->num_rows > 0) {
         $recent_media[] = $row;
     }
 }
-
-// 19. Data untuk Chart (15 data)
-$chart_data = [
-    $total_size_mb,          // 1. Total Size Media
-    $total_contacts,         // 2. Total Pesan
-    $pending_contacts,       // 3. Pesan Pending
-    $approved_contacts,      // 4. Pesan Disetujui
-    $rejected_contacts,      // 5. Pesan Ditolak
-    $total_media,            // 6. Total Media
-    $active_media,           // 7. Media Aktif
-    $inactive_media,         // 8. Media Nonaktif
-    $today_visitors,         // 9. Hari Ini
-    $total_visitors,         // 10. Total Kumulatif
-    $yesterday_visitors,     // 11. Kemarin
-    $history_days,           // 12. Histori Pengunjung
-    $total_visitors,         // 13. Total Pengunjung (Keseluruhan)
-    $avg_visitors,           // 14. Rata-rata per Hari
-    $max_visitors_count      // 15. Hari Terbanyak (jumlah)
-];
 
 $conn->close();
 ?>
@@ -739,7 +748,7 @@ $conn->close();
         .stat-card:nth-child(10) { border-top-color: #3498db; }
         .stat-card:nth-child(11) { border-top-color: #8BC34A; }
         .stat-card:nth-child(12) { border-top-color: #9b59b6; }
-        .stat-card:nth-child(13) { border-top-color: #3498db; }
+        .stat-card:nth-child(13) { border-top-color: #F9D56E; } /* Emas untuk Testimoni */
         .stat-card:nth-child(14) { border-top-color: #2ecc71; }
         .stat-card:nth-child(15) { border-top-color: #e74c3c; }
 
@@ -824,18 +833,18 @@ $conn->close();
         /* Responsive Table Styles */
         .visitor-table-wrapper {
             flex-grow: 1;
-            overflow-x: auto; /* Horizontal scroll untuk mobile */
+            overflow-x: auto;
             overflow-y: auto;
             border: 1px solid #ecf0f1;
             border-radius: 8px;
             max-height: 280px;
-            -webkit-overflow-scrolling: touch; /* Smooth scroll iOS */
+            -webkit-overflow-scrolling: touch;
         }
 
         .visitor-table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 600px; /* Minimum width agar tidak hancur */
+            min-width: 600px;
         }
 
         .visitor-table thead {
@@ -1207,31 +1216,7 @@ $conn->close();
             display: block;
         }
 
-        .history-button {
-            background: linear-gradient(135deg, #9b59b6, #8e44ad);
-            color: white;
-            border: none;
-            border-radius: 16px;
-            padding: 0.4rem 0.8rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 0.3rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            transition: all 0.2s ease;
-            min-width: 140px;
-            justify-content: center;
-            white-space: nowrap;
-        }
-
-        .history-button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(155, 89, 182, 0.2);
-        }
-
-        /* Responsive Design - TABEL UTAMA */
+        /* Responsive Design */
         @media (max-width: 1400px) {
             .stats-grid {
                 grid-template-columns: repeat(4, 1fr);
@@ -1340,12 +1325,6 @@ $conn->close();
                 font-size: 0.8rem;
             }
 
-            .history-button {
-                min-width: 120px;
-                font-size: 0.7rem;
-                padding: 0.3rem 0.6rem;
-            }
-
             .chart-container,
             .visitor-table-container,
             .activity-container,
@@ -1386,6 +1365,7 @@ $conn->close();
             .visitor-table-wrapper {
                 max-height: 250px;
                 font-size: 0.9rem;
+                display: none;
             }
 
             .visitor-table {
@@ -1398,35 +1378,12 @@ $conn->close();
                 font-size: 0.8rem;
             }
 
-            .visitor-table .date-cell {
-                min-width: 90px;
-            }
-
-            .visitor-table .day-cell {
-                min-width: 70px;
-            }
-
-            .visitor-table .count-cell {
-                min-width: 50px;
-                font-size: 0.9rem;
-            }
-
-            .container-title {
-                font-size: 1.1rem;
-            }
-
-            /* Tampilkan mobile cards, sembunyikan table */
-            .visitor-table-wrapper {
-                display: none;
-            }
-
             .visitor-mobile-cards {
                 display: flex;
             }
         }
 
         @media (min-width: 769px) {
-            /* Tampilkan table, sembunyikan mobile cards di desktop */
             .visitor-table-wrapper {
                 display: block;
             }
@@ -1457,17 +1414,10 @@ $conn->close();
                 height: 200px;
             }
 
-            .history-button {
-                padding: 0.3rem 0.7rem;
-                font-size: 0.7rem;
-                min-width: 110px;
-            }
-
             .recent-grid {
                 gap: 0.8rem;
             }
 
-            /* Mobile cards lebih kecil di smartphone kecil */
             .visitor-card {
                 padding: 0.8rem;
                 gap: 0.6rem;
@@ -1481,29 +1431,6 @@ $conn->close();
                 font-size: 0.85rem;
             }
         }
-
-        @media (max-width: 360px) {
-            .admin-header h1 {
-                font-size: 1.2rem;
-            }
-
-            .edit-form {
-                padding: 0.8rem;
-            }
-
-            .media-preview {
-                padding: 0.8rem;
-            }
-
-            .btn {
-                padding: 0.8rem 1rem;
-                font-size: 0.9rem;
-            }
-
-            .form-help {
-                font-size: 0.8rem;
-            }
-        }
     </style>
 </head>
 <body>
@@ -1512,47 +1439,55 @@ $conn->close();
     <div class="overlay" id="overlay"></div>
 
     <div class="admin-layout">
+        <!-- Sidebar -->
         <!-- Sidebar - SAMA PERSIS DENGAN MEDIA LIBRARY -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h2><span class="logo-square"></span> <span>WALUYA LAND</span></h2>
-                <p>Admin Panel</p>
-            </div>
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h2><span class="logo-square"></span> <span>WALUYA LAND</span></h2>
+        <p>Admin Panel</p>
+    </div>
 
-            <nav class="sidebar-menu">
-                <!-- URUTAN MENU SAMA PERSIS -->
-                <a href="{{ route('admin.dashboard') }}" class="menu-item active">
-                    <span class="menu-icon">📊</span>
-                    <span>Dashboard</span>
-                </a>
-                <a href="{{ route('admin.contacts.index') }}" class="menu-item">
-                    <span class="menu-icon">📧</span>
-                    <span>Kelola Pesan</span>
-                </a>
-                <a href="{{ route('admin.media.index') }}" class="menu-item">
-                    <span class="menu-icon">🖼️</span>
-                    <span>Media Library</span>
-                </a>
-            </nav>
+    <nav class="sidebar-menu">
+        <a href="{{ route('admin.dashboard') }}" class="menu-item active">
+            <span class="menu-icon">📊</span>
+            <span>Dashboard</span>
+        </a>
+        <a href="{{ route('admin.contacts.index') }}" class="menu-item">
+            <span class="menu-icon">📧</span>
+            <span>Kelola Pesan</span>
+        </a>
+        <!-- =========================================== -->
+        <!-- TAMBAH MENU TESTIMONI DI SINI -->
+        <!-- =========================================== -->
+        <a href="{{ route('admin.testimonials.index') }}" class="menu-item">
+            <span class="menu-icon">⭐</span>
+            <span>Kelola Testimoni</span>
+        </a>
+        <!-- =========================================== -->
+        <a href="{{ route('admin.media.index') }}" class="menu-item">
+            <span class="menu-icon">🖼️</span>
+            <span>Media Library</span>
+        </a>
+    </nav>
 
-            <div class="sidebar-footer">
-                <div class="user-profile">
-                    <div class="user-avatar">AD</div>
-                    <div class="user-info">
-                        <h4>Admin Waluya</h4>
-                        <p>Administrator</p>
-                    </div>
-                </div>
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn-logout">Logout</button>
-                </form>
+    <div class="sidebar-footer">
+        <div class="user-profile">
+            <div class="user-avatar">AD</div>
+            <div class="user-info">
+                <h4>Admin Waluya</h4>
+                <p>Administrator</p>
             </div>
-        </aside>
+        </div>
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="btn-logout">Logout</button>
+        </form>
+    </div>
+</aside>
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Header Compact -->
+            <!-- Header -->
             <div class="page-header">
                 <h1>📊 Dashboard Analytics</h1>
                 <span>Welcome, <strong style="color: #5FB574;">Admin</strong></span>
@@ -1567,7 +1502,7 @@ $conn->close();
                 </div>
             </div>
 
-            <!-- Alert dengan auto-close -->
+            <!-- Alert -->
             <div class="alert alert-success" id="dashboardAlert">
                 <span>✓</span>
                 Dashboard loaded successfully from database
@@ -1577,7 +1512,7 @@ $conn->close();
                 <button class="alert-close" onclick="closeAlert()">×</button>
             </div>
 
-            <!-- Stats Grid Compact dengan Data Real -->
+            <!-- Stats Grid -->
             <div class="stats-grid">
                 <!-- Baris 1: Media & Pesan -->
                 <a href="{{ route('admin.media.index') }}" class="stat-link">
@@ -1664,19 +1599,20 @@ $conn->close();
                     <div class="stat-label">Pengunjung Kemarin</div>
                 </div>
 
-                <!-- Stat Card Histori Pengunjung (TANPA TOMBOL) -->
                 <div class="stat-card" id="historiCard">
                     <span class="stat-icon">📈</span>
                     <div class="stat-number"><?php echo $history_days; ?><span class="stat-unit">hr</span></div>
                     <div class="stat-label">Histori Pengunjung</div>
-                    <!-- TOMBOL DIHAPUS DI SINI -->
                 </div>
 
-                <div class="stat-card">
-                    <span class="stat-icon">👥</span>
-                    <div class="stat-number"><?php echo $total_visitors; ?></div>
-                    <div class="stat-label">Total Pengunjung<br>(Keseluruhan)</div>
-                </div>
+                <!-- Total Testimoni (GANTI DARI "Hari Paling Sepi") -->
+                <a href="{{ route('admin.contacts.index', ['type' => 'testimonial']) }}" class="stat-link">
+                    <div class="stat-card" id="testimonialCard">
+                        <span class="stat-icon">⭐</span>
+                        <div class="stat-number"><?php echo $total_testimonials; ?></div>
+                        <div class="stat-label">Total Testimoni</div>
+                    </div>
+                </a>
 
                 <div class="stat-card">
                     <span class="stat-icon">📉</span>
@@ -1685,9 +1621,9 @@ $conn->close();
                 </div>
 
                 <div class="stat-card">
-                    <span class="stat-icon">⭐</span>
+                    <span class="stat-icon">🤩</span>
                     <div class="day-name"><?php echo $max_visitors_day; ?></div>
-                    <div class="stat-label">Hari Terbanyak</div>
+                    <div class="stat-label">Kunjungan Tertinggi</div>
                     <div class="day-count">(<?php echo $max_visitors_count; ?> pengunjung)</div>
                 </div>
             </div>
@@ -1714,7 +1650,7 @@ $conn->close();
                 <div class="visitor-table-container">
                     <h2 class="container-title">📊 Tabel Pengunjung Harian</h2>
 
-                    <!-- Desktop Table (untuk layar besar) -->
+                    <!-- Desktop Table -->
                     <div class="visitor-table-wrapper">
                         <table class="visitor-table">
                             <thead>
@@ -1731,7 +1667,7 @@ $conn->close();
                                     $count = $visitor['count'];
                                     $day_name = $visitor['day_name'];
 
-                                    // Tentukan warna berdasarkan jumlah pengunjung
+                                    // Tentukan warna
                                     if ($count == 0) {
                                         $color = '#95a5a6';
                                         $keterangan = 'Tidak ada';
@@ -1747,6 +1683,7 @@ $conn->close();
                                     }
 
                                     $highlight = ($count == $max_visitors_count) ? 'highlight' : '';
+                                    // Hapus highlight untuk hari paling sepi
                                 ?>
                                 <tr class="<?php echo $highlight; ?>">
                                     <td class="date-cell"><?php echo $date->format('d/m/Y'); ?></td>
@@ -1759,14 +1696,13 @@ $conn->close();
                         </table>
                     </div>
 
-                    <!-- Mobile Cards (untuk layar kecil) -->
+                    <!-- Mobile Cards -->
                     <div class="visitor-mobile-cards">
                         <?php foreach($visitor_data as $index => $visitor):
                             $date = new DateTime($visitor['date']);
                             $count = $visitor['count'];
                             $day_name = $visitor['day_name'];
 
-                            // Tentukan warna berdasarkan jumlah pengunjung
                             if ($count == 0) {
                                 $color = '#95a5a6';
                                 $keterangan = 'Tidak ada';
@@ -1819,7 +1755,6 @@ $conn->close();
                                 $time_ago = floor($time_diff / 86400) . ' hari lalu';
                             }
 
-                            // Tentukan icon berdasarkan tipe aktivitas
                             if ($activity['type'] == 'media') {
                                 $icon = '🖼️';
                                 $bg_color = 'linear-gradient(135deg, #F9D56E, #FFC107)';
@@ -1944,7 +1879,7 @@ $conn->close();
         const chartLabels = [
             'Total Size Media', 'Total Pesan', 'Pesan Pending', 'Pesan Disetujui', 'Pesan Ditolak',
             'Total Media', 'Media Aktif', 'Media Nonaktif', 'Hari Ini', 'Total Kumulatif',
-            'Kemarin', 'Histori Pengunjung', 'Total Pengunjung (Keseluruhan)', 'Rata-rata per Hari', 'Hari Terbanyak'
+            'Kemarin', 'Histori Pengunjung', '⭐ Total Testimoni', 'Rata-rata per Hari', 'Hari Terbanyak'
         ];
 
         const chartDataValues = <?php echo json_encode($chart_data); ?>;
@@ -1985,7 +1920,7 @@ $conn->close();
                     alert.style.transition = 'opacity 0.5s ease';
                     alert.style.opacity = '0';
                     setTimeout(() => alert.remove(), 500);
-                }, 4000); // 4 detik
+                }, 4000);
             }
         });
 
@@ -2000,12 +1935,12 @@ $conn->close();
                 backgroundColor: [
                     '#4CAF50', '#2196F3', '#FFC107', '#4CAF50', '#F44336',
                     '#9C27B0', '#4CAF50', '#FF9800', '#FFA726', '#3498db',
-                    '#8BC34A', '#9b59b6', '#3498db', '#2ecc71', '#e74c3c'
+                    '#8BC34A', '#9b59b6', '#F9D56E', '#2ecc71', '#e74c3c'  // #F9D56E untuk Testimoni
                 ],
                 borderColor: [
                     '#2E7D32', '#1565C0', '#FF8F00', '#2E7D32', '#C62828',
                     '#7B1FA2', '#2E7D32', '#EF6C00', '#F57C00', '#1a5276',
-                    '#558B2F', '#8e44ad', '#1a5276', '#27ae60', '#c0392b'
+                    '#558B2F', '#8e44ad', '#FFC107', '#27ae60', '#c0392b'  // #FFC107 untuk Testimoni
                 ],
                 borderWidth: 1.5,
                 borderRadius: 4,
@@ -2050,7 +1985,9 @@ $conn->close();
                                     if (context.parsed.y !== null) {
                                         if (context.dataIndex === 0) {
                                             label = context.parsed.y.toFixed(1) + ' MB';
-                                        } else if ([8,9,10,11,12,13,14].includes(context.dataIndex)) {
+                                        } else if (context.dataIndex === 12) {
+                                            label = '⭐ ' + context.parsed.y + ' testimoni';
+                                        } else if ([8,9,10,11,13,14].includes(context.dataIndex)) {
                                             label = context.parsed.y + ' pengunjung';
                                         } else {
                                             label = context.parsed.y;
@@ -2166,7 +2103,7 @@ $conn->close();
                     this.style.boxShadow = '';
                 }, 300);
 
-                // Tampilkan detail histori (fungsi dipindahkan ke sini)
+                // Tampilkan detail histori
                 alert('📊 Detail Histori Pengunjung\n\n' +
                       '• Data 7 hari terakhir: <?php echo $history_days; ?> hari\n' +
                       '• Total pengunjung: <?php echo $total_visitors; ?> orang\n' +
@@ -2177,8 +2114,56 @@ $conn->close();
                       '✅ Data real-time dari database');
             });
 
-            // Tambahkan cursor pointer untuk menunjukkan bisa diklik
             historiCard.style.cursor = 'pointer';
+        }
+
+        // ======================
+        // ⭐ TESTIMONI CARD CLICK FUNCTION
+        // ======================
+        const testimonialCard = document.getElementById('testimonialCard');
+        if (testimonialCard) {
+            testimonialCard.addEventListener('click', function(e) {
+                e.stopPropagation();
+
+                // Animasi
+                this.style.transform = 'translateY(-3px) scale(1.02)';
+                this.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
+
+                setTimeout(() => {
+                    this.style.transform = '';
+                    this.style.boxShadow = '';
+                }, 300);
+
+                // Info testimoni dari PHP
+                const testimonialCount = <?php echo $total_testimonials; ?>;
+                const totalContacts = <?php echo $total_contacts; ?>;
+                const pendingContacts = <?php echo $pending_contacts; ?>;
+                const approvedContacts = <?php echo $approved_contacts; ?>;
+                const rejectedContacts = <?php echo $rejected_contacts; ?>;
+
+                let message = '⭐ STATISTIK TESTIMONI\n\n';
+                message += `• Total Testimoni: ${testimonialCount}\n`;
+
+                if (testimonialCount > 0) {
+                    const percentage = (testimonialCount / totalContacts * 100).toFixed(1);
+                    message += `• Persentase: ${percentage}% dari total pesan\n`;
+                }
+
+                message += '\n📊 PERBANDINGAN:\n';
+                message += `• Total Pesan: ${totalContacts}\n`;
+                message += `• Pending: ${pendingContacts}\n`;
+                message += `• Approved: ${approvedContacts}\n`;
+                message += `• Rejected: ${rejectedContacts}\n\n`;
+
+                message += '💡 INFO:\n';
+                message += '• Testimoni adalah pesan khusus tipe "testimonial"\n';
+                message += '• Dapat dilihat di halaman Kelola Pesan\n';
+                message += '• Gunakan filter tipe untuk melihat testimoni saja';
+
+                alert(message);
+            });
+
+            testimonialCard.style.cursor = 'pointer';
         }
 
         // ======================

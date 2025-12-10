@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
+use App\Http\Controllers\Admin\TestimonialController; // TAMBAH INI
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ForumReplyController;
 use App\Http\Controllers\Admin\ForumReplyController as AdminForumReplyController;
@@ -11,7 +12,7 @@ use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Admin\DashboardController;
 
 // ============================================
-// VISITOR TRACKING - TAMBAHKAN INI DI ATAS
+// VISITOR TRACKING
 // ============================================
 Route::get('/track-visitor', [DashboardController::class, 'trackVisitor'])->name('track.visitor');
 
@@ -109,5 +110,14 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/forum-replies/bulk-approve', [AdminForumReplyController::class, 'bulkApprove'])->name('forum-replies.bulk-approve');
     Route::post('/forum-replies/bulk-delete', [AdminForumReplyController::class, 'bulkDelete'])->name('forum-replies.bulk-delete');
 
-
+    // ============================================
+    // TESTIMONIAL ROUTES - TAMBAHKAN DI SINI
+    // ============================================
+    Route::prefix('testimonials')->name('testimonials.')->group(function () {
+        Route::get('/', [TestimonialController::class, 'index'])->name('index');
+        Route::post('/', [TestimonialController::class, 'store'])->name('store');
+        Route::post('/{id}/approve', [TestimonialController::class, 'approve'])->name('approve');
+        Route::post('/{id}/reject', [TestimonialController::class, 'reject'])->name('reject');
+        Route::delete('/{id}', [TestimonialController::class, 'destroy'])->name('destroy');
+    });
 });

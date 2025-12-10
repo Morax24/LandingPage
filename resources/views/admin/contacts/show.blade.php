@@ -728,41 +728,48 @@
     <div class="admin-layout">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h2><span class="logo-square"></span> <span>WALUYA LAND</span></h2>
-                <p>Admin Panel</p>
-            </div>
+    <div class="sidebar-header">
+        <h2><span class="logo-square"></span> <span>WALUYA LAND</span></h2>
+        <p>Admin Panel</p>
+    </div>
 
-            <nav class="sidebar-menu">
-                <!-- TAMBAHKAN LINK KE DASHBOARD -->
-                <a href="{{ route('admin.dashboard') }}" class="menu-item">
-                    <span class="menu-icon">📊</span>
-                    <span>Dashboard</span>
-                </a>
-                <a href="{{ route('admin.contacts.index') }}" class="menu-item active">
-                    <span class="menu-icon">📧</span>
-                    <span>Kelola Pesan</span>
-                </a>
-                <a href="{{ route('admin.media.index') }}" class="menu-item">
-                    <span class="menu-icon">🖼️</span>
-                    <span>Media Library</span>
-                </a>
-            </nav>
+    <nav class="sidebar-menu">
+        <a href="{{ route('admin.dashboard') }}" class="menu-item">
+            <span class="menu-icon">📊</span>
+            <span>Dashboard</span>
+        </a>
+        <a href="{{ route('admin.contacts.index') }}" class="menu-item active">
+            <span class="menu-icon">📧</span>
+            <span>Kelola Pesan</span>
+        </a>
+        <!-- =========================================== -->
+        <!-- TAMBAH MENU TESTIMONI DI SINI -->
+        <!-- =========================================== -->
+        <a href="{{ route('admin.testimonials.index') }}" class="menu-item">
+            <span class="menu-icon">⭐</span>
+            <span>Kelola Testimoni</span>
+        </a>
+        <!-- =========================================== -->
+        <a href="{{ route('admin.media.index') }}" class="menu-item">
+            <span class="menu-icon">🖼️</span>
+            <span>Media Library</span>
+        </a>
+    </nav>
 
-            <div class="sidebar-footer">
-                <div class="user-profile">
-                    <div class="user-avatar">AM</div>
-                    <div class="user-info">
-                        <h4>Admin Malaya</h4>
-                        <p>Administrator</p>
-                    </div>
-                </div>
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn-logout">Logout</button>
-                </form>
+    <div class="sidebar-footer">
+        <div class="user-profile">
+            <div class="user-avatar">AM</div>
+            <div class="user-info">
+                <h4>Admin Malaya</h4>
+                <p>Administrator</p>
             </div>
-        </aside>
+        </div>
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="btn-logout">Logout</button>
+        </form>
+    </div>
+</aside>
 
         <!-- Main Content -->
         <main class="main-content">

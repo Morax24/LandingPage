@@ -705,6 +705,14 @@
                     <span class="menu-icon">📧</span>
                     <span>Kelola Pesan</span>
                 </a>
+                <!-- =========================================== -->
+                <!-- TAMBAH MENU TESTIMONI DI SINI -->
+                <!-- =========================================== -->
+                <a href="{{ route('admin.testimonials.index') }}" class="menu-item">
+                    <span class="menu-icon">⭐</span>
+                    <span>Kelola Testimoni</span>
+                </a>
+                <!-- =========================================== -->
                 <a href="{{ route('admin.media.index') }}" class="menu-item">
                     <span class="menu-icon">🖼️</span>
                     <span>Media Library</span>
@@ -732,6 +740,7 @@
                 <h1>📧 Kelola Pesan Contact</h1>
                 <div class="header-actions">
                     <span>Halo, <strong>{{ Auth::user()->name }}</strong></span>
+                    <!-- =========================================== -->
                 </div>
             </div>
 
@@ -782,12 +791,12 @@
             <!-- Filters -->
             <div class="filters">
                 <form method="GET" action="{{ route('admin.contacts.index') }}">
-                    <select name="status">
+                    <!-- <select name="status">
                         <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>Semua Status</option>
                         <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Menunggu</option>
                         <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Disetujui</option>
                         <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Ditolak</option>
-                    </select>
+                    </select> -->
 
                     <input type="text" name="search" placeholder="Cari nama, email, atau pesan..." value="{{ request('search') }}">
 

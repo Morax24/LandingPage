@@ -17,6 +17,7 @@ class Contact extends Model
         'email',
         'institution',
         'message',
+        'type',
         'status',
         'approved_at',
         'approved_by',
@@ -81,6 +82,24 @@ class Contact extends Model
     }
 
     /**
+     * Scope untuk filter berdasarkan type
+     */
+    public function scopeOfType($query, $type)
+    {
+        return $query->where('type', $type);
+    }
+
+    public function scopeForum($query)
+    {
+        return $query->where('type', 'forum');
+    }
+
+    public function scopeTestimonial($query)
+    {
+        return $query->where('type', 'testimonial');
+    }
+
+    /**
      * Scope untuk urutkan terbaru
      */
     public function scopeLatest($query)
@@ -114,14 +133,28 @@ class Contact extends Model
         };
     }
 
-    // Tambahkan di dalam class Contact
-public function replies()
-{
-    return $this->hasMany(ForumReply::class)->where('status', 'approved')->latest();
-}
+    /**
+     * Accessor untuk type text
+     */
+    public function getTypeTextAttribute()
+    {
+        return match($this->type) {
+            'forum' => 'Forum',
+            'testimonial' => 'Testimoni',
+            default => 'Tidak Diketahui'
+        };
+    }
 
-public function allReplies()
-{
-    return $this->hasMany(ForumReply::class)->latest();
-}
+    /**
+     * Relasi ke Forum Replies
+     */
+    public function replies()
+    {
+        return $this->hasMany(ForumReply::class)->where('status', 'approved')->latest();
+    }
+
+    public function allReplies()
+    {
+        return $this->hasMany(ForumReply::class)->latest();
+    }
 }

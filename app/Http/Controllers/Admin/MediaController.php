@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Media;
-use App\Http\Requests\StoreMediaRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -31,7 +30,7 @@ class MediaController extends Controller
         }
 
         if ($request->has('search') && $request->search) {
-            $search = $request->search;
+            $search = $request->request->get('search');
             $query->where(function($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
                   ->orWhere('description', 'like', "%{$search}%")
@@ -60,74 +59,255 @@ class MediaController extends Controller
         return view('admin.media.create', compact('sections'));
     }
 
-    public function store(StoreMediaRequest $request)
+    public function store(Request $request)
     {
         try {
-            $file = $request->file('file');
+            \Log::info('=== START UPLOAD PROCESS ===');
+            \Log::info('Request method: ' . $request->method());
+            \Log::info('Has items: ' . ($request->has('items') ? 'YES' : 'NO'));
 
-            // Validasi file
-            if (!$file) {
-                throw new \Exception('Tidak ada file yang diupload');
+            // CEK TIPE UPLOAD
+            if ($request->has('items') && is_array($request->items)) {
+                \Log::info('Multiple upload detected');
+                \Log::info('Items count: ' . count($request->items));
+                return $this->handleMultipleUpload($request);
+            } else {
+                \Log::info('Single upload detected');
+                return $this->handleSingleUpload($request);
             }
-
-            if (!$file->isValid()) {
-                throw new \Exception('File tidak valid: ' . $file->getErrorMessage());
-            }
-
-            // Generate safe filename
-            $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9\._-]/', '_', $file->getClientOriginalName());
-            $filePath = 'media/' . $filename;
-
-            // Pastikan folder media ada
-            $uploadPath = public_path('media');
-            if (!is_dir($uploadPath)) {
-                mkdir($uploadPath, 0777, true);
-            }
-
-            // Copy file langsung
-            $tempPath = $file->getRealPath();
-
-            if (!file_exists($tempPath)) {
-                // Fallback: gunakan getPathname()
-                $tempPath = $file->getPathname();
-            }
-
-            if (!file_exists($tempPath)) {
-                throw new \Exception('File temporary tidak ditemukan');
-            }
-
-            // Copy file dari temporary ke destination
-            if (!copy($tempPath, $uploadPath . '/' . $filename)) {
-                throw new \Exception('Gagal menyalin file ke folder media');
-            }
-
-            // Set permission
-            chmod($uploadPath . '/' . $filename, 0644);
-
-            // Create media record - TAMBAHKAN PRICE
-            Media::create([
-                'title' => $request->title,
-                'description' => $request->description,
-                'type' => $request->type,
-                'file_path' => $filePath,
-                'file_name' => $filename,
-                'mime_type' => $file->getClientMimeType(),
-                'file_size' => $file->getSize(),
-                'section' => $request->section,
-                'price' => $request->price ?? 0, // TAMBAHKAN INI
-                'order' => $request->order ?? 0,
-                'uploaded_by' => Auth::id(),
-            ]);
-
-            return redirect()
-                ->route('admin.media.index')
-                ->with('success', 'Media berhasil diupload!');
 
         } catch (\Exception $e) {
+            \Log::error('Upload error: ' . $e->getMessage());
+            \Log::error('Trace: ' . $e->getTraceAsString());
+
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', 'Gagal upload: ' . $se->getMessage());
+                ->with('error', 'Gagal upload: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Handle single file upload (form lama)
+     */
+    private function handleSingleUpload($request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'type' => 'required|in:image,video',
+            'section' => 'required|in:features,aktivitas,hero,story,other,whylearn,products',
+            'file' => 'required|file|max:10240',
+            'price' => 'nullable|numeric|min:0|max:9999999999.99', // TAMBAHKAN VALIDASI MAX
+        ]);
+
+        $file = $request->file('file');
+
+        // Generate safe filename
+        $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9\._-]/', '_', $file->getClientOriginalName());
+        $filePath = 'media/' . $filename;
+
+        // Pastikan folder media ada
+        $uploadPath = public_path('media');
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0777, true);
+        }
+
+        // Save file
+        $file->move($uploadPath, $filename);
+
+        // Validasi harga sebelum save
+        $price = $request->price ?? 0;
+        if ($price > 9999999999.99) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Harga terlalu besar! Maksimal Rp 9.999.999.999,99');
+        }
+
+        // Create media record
+        Media::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'type' => $request->type,
+            'file_path' => $filePath,
+            'file_name' => $filename,
+            'mime_type' => $file->getClientMimeType(),
+            'file_size' => $file->getSize(),
+            'section' => $request->section,
+            'price' => $price,
+            'order' => $request->order ?? 0,
+            'is_active' => true,
+            'uploaded_by' => Auth::id(),
+        ]);
+
+        return redirect()
+            ->route('admin.media.index')
+            ->with('success', 'Media berhasil diupload!');
+    }
+
+    /**
+     * Handle multiple file upload (form baru)
+     */
+    private function handleMultipleUpload($request)
+    {
+        \Log::info('=== HANDLE MULTIPLE UPLOAD ===');
+
+        $uploadedCount = 0;
+        $errors = [];
+
+        // Validasi keseluruhan request dengan batas maksimum harga
+        $request->validate([
+            'items' => 'required|array',
+            'items.*.title' => 'required|string|max:255',
+            'items.*.type' => 'required|in:image,video',
+            'items.*.section' => 'required|in:features,aktivitas,hero,story,other,whylearn,products',
+            'items.*.file' => 'required|file|max:10240',
+            'items.*.price' => 'nullable|numeric|min:0|max:9999999999.99', // TAMBAHKAN VALIDASI MAX DI SINI
+        ]);
+
+        \Log::info('Validation passed');
+
+        // Ambil files dari request secara langsung
+        $files = $request->file('items');
+        \Log::info('Files from request: ' . ($files ? 'EXISTS' : 'NULL'));
+
+        if (!$files || !is_array($files)) {
+            \Log::error('No files found in request');
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Tidak ada file yang dikirim.');
+        }
+
+        \Log::info('Files count: ' . count($files));
+
+        // Process each file
+        foreach ($files as $index => $fileArray) {
+            try {
+                \Log::info("Processing file index: {$index}");
+
+                // Pastikan $fileArray adalah array
+                if (!is_array($fileArray)) {
+                    \Log::error("File {$index} is not an array");
+                    continue;
+                }
+
+                // Get the uploaded file object
+                $file = $fileArray['file'] ?? null;
+
+                if (!$file || !$file->isValid()) {
+                    \Log::error("File {$index} is not valid");
+                    $errors[] = "File " . ($index + 1) . ": File tidak valid";
+                    continue;
+                }
+
+                // Check file size BEFORE moving
+                if (!$file->getSize()) {
+                    \Log::error("File {$index} has zero size");
+                    $errors[] = "File " . ($index + 1) . ": Ukuran file 0";
+                    continue;
+                }
+
+                \Log::info("File {$index} details:");
+                \Log::info("- Original name: " . $file->getClientOriginalName());
+                \Log::info("- MIME type: " . $file->getClientMimeType());
+                \Log::info("- Size: " . $file->getSize());
+                \Log::info("- Extension: " . $file->getClientOriginalExtension());
+
+                // Get other data from form
+                $title = $request->input("items.{$index}.title", 'Untitled');
+                $description = $request->input("items.{$index}.description");
+                $type = $request->input("items.{$index}.type", 'image');
+                $section = $request->input("items.{$index}.section", 'other');
+                $price = $request->input("items.{$index}.price", 0);
+                $order = $request->input("items.{$index}.order", $index);
+
+                // Validasi harga sebelum proses
+                if ($price > 9999999999.99) {
+                    $errors[] = "File " . ($index + 1) . ": Harga terlalu besar! Maksimal Rp 9.999.999.999,99";
+                    continue;
+                }
+
+                \Log::info("File {$index} form data:");
+                \Log::info("- Title: {$title}");
+                \Log::info("- Type: {$type}");
+                \Log::info("- Section: {$section}");
+                \Log::info("- Price: {$price}");
+
+                // Generate safe filename
+                $safeName = preg_replace('/[^a-zA-Z0-9\._-]/', '_', $file->getClientOriginalName());
+                $filename = time() . '_' . $index . '_' . $safeName;
+                $filePath = 'media/' . $filename;
+
+                \Log::info("File {$index} will be saved as: {$filename}");
+
+                // Ensure media directory exists
+                $uploadPath = public_path('media');
+                if (!is_dir($uploadPath)) {
+                    mkdir($uploadPath, 0777, true);
+                    \Log::info("Created media directory: {$uploadPath}");
+                }
+
+                // Move file IMMEDIATELY
+                $file->move($uploadPath, $filename);
+                \Log::info("File {$index} moved successfully");
+
+                // Verify file was saved
+                $savedPath = $uploadPath . '/' . $filename;
+                if (!file_exists($savedPath)) {
+                    \Log::error("File {$index} was not saved to: {$savedPath}");
+                    $errors[] = "File " . ($index + 1) . ": Gagal menyimpan file";
+                    continue;
+                }
+
+                $fileSize = filesize($savedPath);
+                \Log::info("File {$index} saved size: {$fileSize} bytes");
+
+                // Create media record
+                Media::create([
+                    'title' => $title,
+                    'description' => $description,
+                    'type' => $type,
+                    'file_path' => $filePath,
+                    'file_name' => $filename,
+                    'mime_type' => $file->getClientMimeType(),
+                    'file_size' => $fileSize,
+                    'section' => $section,
+                    'price' => $price,
+                    'order' => $order,
+                    'is_active' => true,
+                    'uploaded_by' => Auth::id(),
+                ]);
+
+                $uploadedCount++;
+                \Log::info("File {$index} uploaded successfully. Total uploaded: {$uploadedCount}");
+
+            } catch (\Exception $e) {
+                \Log::error("Error processing file {$index}: " . $e->getMessage());
+                \Log::error("Trace: " . $e->getTraceAsString());
+                $errors[] = "File " . ($index + 1) . ": " . $e->getMessage();
+            }
+        }
+
+        \Log::info("=== UPLOAD COMPLETE ===");
+        \Log::info("Uploaded: {$uploadedCount}");
+        \Log::info("Errors: " . count($errors));
+
+        if ($uploadedCount > 0) {
+            $message = $uploadedCount . ' media berhasil diupload!';
+            if (!empty($errors)) {
+                $message .= '<br> Beberapa error: ' . implode('<br>', $errors);
+            }
+
+            return redirect()
+                ->route('admin.media.index')
+                ->with('success', $message);
+        } else {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', 'Gagal upload media: ' . implode('<br>', $errors));
         }
     }
 
@@ -145,7 +325,7 @@ class MediaController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'section' => 'required|in:features,aktivitas,hero,story,other,whylearn,products',
-            'price' => 'nullable|numeric|min:0', // TAMBAHKAN INI
+            'price' => 'nullable|numeric|min:0|max:9999999999.99', // TAMBAHKAN VALIDASI MAX
             'order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
         ]);
@@ -156,7 +336,7 @@ class MediaController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'section' => $request->section,
-            'price' => $request->price ?? 0, // TAMBAHKAN INI
+            'price' => $request->price ?? 0,
             'order' => $request->order ?? 0,
             'is_active' => $request->has('is_active') ? true : false,
         ];

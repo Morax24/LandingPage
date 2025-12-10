@@ -577,41 +577,48 @@
     <div class="admin-layout">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <h2><span class="logo-square"></span> <span>WALUYA LAND</span></h2>
-                <p>Admin Panel</p>
-            </div>
+    <div class="sidebar-header">
+        <h2><span class="logo-square"></span> <span>WALUYA LAND</span></h2>
+        <p>Admin Panel</p>
+    </div>
 
-            <nav class="sidebar-menu">
-                <!-- MENU DASHBOARD DITAMBAHKAN -->
-                <a href="{{ route('admin.dashboard') }}" class="menu-item">
-                    <span class="menu-icon">📊</span>
-                    <span>Dashboard</span>
-                </a>
-                <a href="{{ route('admin.contacts.index') }}" class="menu-item">
-                    <span class="menu-icon">📧</span>
-                    <span>Kelola Pesan</span>
-                </a>
-                <a href="{{ route('admin.media.index') }}" class="menu-item active">
-                    <span class="menu-icon">🖼️</span>
-                    <span>Media Library</span>
-                </a>
-            </nav>
+    <nav class="sidebar-menu">
+        <a href="{{ route('admin.dashboard') }}" class="menu-item">
+            <span class="menu-icon">📊</span>
+            <span>Dashboard</span>
+        </a>
+        <a href="{{ route('admin.contacts.index') }}" class="menu-item">
+            <span class="menu-icon">📧</span>
+            <span>Kelola Pesan</span>
+        </a>
+        <!-- =========================================== -->
+        <!-- TAMBAH MENU TESTIMONI DI SINI -->
+        <!-- =========================================== -->
+        <a href="{{ route('admin.testimonials.index') }}" class="menu-item">
+            <span class="menu-icon">⭐</span>
+            <span>Kelola Testimoni</span>
+        </a>
+        <!-- =========================================== -->
+        <a href="{{ route('admin.media.index') }}" class="menu-item active">
+            <span class="menu-icon">🖼️</span>
+            <span>Media Library</span>
+        </a>
+    </nav>
 
-            <div class="sidebar-footer">
-                <div class="user-profile">
-                    <div class="user-avatar">AM</div>
-                    <div class="user-info">
-                        <h4>Admin Malaya</h4>
-                        <p>Administrator</p>
-                    </div>
-                </div>
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn-logout">Logout</button>
-                </form>
+    <div class="sidebar-footer">
+        <div class="user-profile">
+            <div class="user-avatar">AM</div>
+            <div class="user-info">
+                <h4>Admin Malaya</h4>
+                <p>Administrator</p>
             </div>
-        </aside>
+        </div>
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="btn-logout">Logout</button>
+        </form>
+    </div>
+</aside>
 
         <!-- Main Content -->
         <main class="main-content">
@@ -655,14 +662,14 @@
                     <p><strong>Tipe:</strong> {{ strtoupper($media->type) }}</p>
                     <p><strong>Nama File:</strong> {{ $media->file_name }}</p>
                     <p><strong>Ukuran:</strong> {{ $media->file_size_formatted }}</p>
-                    <p><strong>Harga:</strong> {{ $media->formatted_price }}</p> <!-- TAMBAHKAN INI -->
+                    <p><strong>Harga:</strong> {{ $media->formatted_price }}</p>
                     <p><strong>Diupload:</strong> {{ $media->created_at->format('d M Y H:i') }}</p>
                     <p><strong>Diupload oleh:</strong> {{ $media->uploader->name ?? 'Unknown' }}</p>
                     <p><strong>Path:</strong> <code>{{ $media->file_path }}</code></p>
                 </div>
 
                 <!-- Form Update -->
-                <form action="{{ route('admin.media.update', $media->id) }}" method="POST" class="edit-form">
+                <form action="{{ route('admin.media.update', $media->id) }}" method="POST" class="edit-form" id="editForm">
                     @csrf
                     @method('PUT')
 
@@ -684,17 +691,18 @@
                         @enderror
                     </div>
 
-                    <!-- Section -->
+                    <!-- Section - DISAMAKAN DENGAN CREATE.BLADE.PHP -->
                     <div class="form-group">
                         <label for="section">Section *</label>
                         <select name="section" id="section" required onchange="updateSectionInfo()">
                             <option value="">-- Pilih Section --</option>
-                            <option value="hero" {{ old('section', $media->section) == 'hero' ? 'selected' : '' }}>Intro</option>
-                            <option value="story" {{ old('section', $media->section) == 'story' ? 'selected' : '' }}>Background</option>
-                            <option value="features" {{ old('section', $media->section) == 'features' ? 'selected' : '' }}>Fitur Unggulan</option>
-                            <option value="whylearn" {{ old('section', $media->section) == 'whylearn' ? 'selected' : '' }}>Fitur 3</option>
-                            <option value="aktivitas" {{ old('section', $media->section) == 'aktivitas' ? 'selected' : '' }}>Aktivitas & Tutorial (6 slots)</option>
-                            <option value="products" {{ old('section', $media->section) == 'products' ? 'selected' : '' }}>Products</option>
+                            <!-- OPTION YANG SAMA DENGAN CREATE.BLADE.PHP -->
+                            <option value="hero" {{ old('section', $media->section) == 'hero' ? 'selected' : '' }}>Intro (1 gambar)</option>
+                            <option value="story" {{ old('section', $media->section) == 'story' ? 'selected' : '' }}>Background (1 gambar)</option>
+                            <option value="whylearn" {{ old('section', $media->section) == 'whylearn' ? 'selected' : '' }}>Fitur 3 (1 gambar)</option>
+                            <option value="features" {{ old('section', $media->section) == 'features' ? 'selected' : '' }}>Fitur Unggulan (4 gambar)</option>
+                            <option value="aktivitas" {{ old('section', $media->section) == 'aktivitas' ? 'selected' : '' }}>Aktivitas & Tutorial (6 gambar)</option>
+                            <option value="products" {{ old('section', $media->section) == 'products' ? 'selected' : '' }}>Products (2 gambar)</option>
                         </select>
                         @error('section')
                             <span class="error-text">{{ $message }}</span>
@@ -705,15 +713,33 @@
                     <!-- Price -->
                     <div class="form-group">
                         <label for="price">Harga Produk (Rp)</label>
-                        <input type="number" name="price" id="price"
+                        <input type="number"
+                               name="price"
+                               id="price"
                                value="{{ old('price', $media->price ?? 0) }}"
-                               min="0" step="1000"
-                               placeholder="Contoh: 300000">
+                               min="0"
+                               max="9999999999.99"
+                               step="0.01"
+                               placeholder="Contoh: 300000.00">
                         @error('price')
                             <span class="error-text">{{ $message }}</span>
                         @enderror
-                        <small class="form-help">Hanya untuk section Products</small>
+                        <small class="form-help">Hanya untuk section Products. Maksimal Rp 9.999.999.999,99</small>
                     </div>
+
+                    <!-- Order
+                    <div class="form-group">
+                        <label for="order">Urutan</label>
+                        <input type="number"
+                               name="order"
+                               id="order"
+                               value="{{ old('order', $media->order) }}"
+                               min="0">
+                        @error('order')
+                            <span class="error-text">{{ $message }}</span>
+                        @enderror
+                        <small class="form-help">Semakin kecil angkanya, semakin awal ditampilkan</small>
+                    </div> -->
 
                     <!-- Active Status -->
                     <div class="form-group">
@@ -770,14 +796,14 @@
             const sectionHelp = document.getElementById('sectionHelp');
             const priceInput = document.getElementById('price');
 
+            // DESKRIPSI YANG SAMA DENGAN CREATE.BLADE.PHP
             const descriptions = {
-                'hero': '🎯 Hero section - gambar board game utama. Hanya 1 media aktif yang ditampilkan.',
-                'story': '📖 Story section - gambar box di samping cerita. Hanya 1 media aktif yang ditampilkan.',
-                'features': '⭐ Features section. Maksimal 4 slot yang ditampilkan.',
-                'whylearn': '💡 WhyLearn section. Maksimal 2 slot yang ditampilkan.',
-                'aktivitas': '🎮 Aktivitas & Tutorial section. Maksimal 6 slot yang ditampilkan.',
-                'products': '📦 Product Images - gambar untuk bagian produk/pricing. Maksimal 2 slot yang ditampilkan. HARUS DIISI HARGA!',
-                'other': '📁 Media lain yang tidak ditampilkan di landing page.'
+                'hero': '🎯 Intro - gambar utama board game. Hanya 1 media aktif yang ditampilkan.',
+                'story': '📖 Background - gambar box di samping cerita. Hanya 1 media aktif yang ditampilkan.',
+                'whylearn': '💡 Fitur 3 - gambar fitur ketiga. Hanya 1 media aktif yang ditampilkan.',
+                'features': '⭐ Fitur Unggulan - 4 slot yang ditampilkan.',
+                'aktivitas': '🎮 Aktivitas & Tutorial - 6 slot yang ditampilkan.',
+                'products': '📦 Products - gambar untuk bagian produk. 2 slot yang ditampilkan. HARUS DIISI HARGA!'
             };
 
             if (section && descriptions[section]) {
@@ -814,10 +840,93 @@
             }
         }
 
+        // Setup price validation
+        function setupPriceValidation() {
+            const priceInput = document.getElementById('price');
+            if (!priceInput) return;
+
+            priceInput.addEventListener('input', function(e) {
+                let value = e.target.value;
+
+                // Remove non-numeric characters except decimal point
+                value = value.replace(/[^\d.]/g, '');
+
+                // Ensure only one decimal point
+                const parts = value.split('.');
+                if (parts.length > 2) {
+                    value = parts[0] + '.' + parts.slice(1).join('');
+                }
+
+                // Limit to 2 decimal places
+                if (parts.length === 2 && parts[1].length > 2) {
+                    value = parts[0] + '.' + parts[1].substring(0, 2);
+                }
+
+                // Check max value
+                const numericValue = parseFloat(value);
+                if (!isNaN(numericValue) && numericValue > 9999999999.99) {
+                    alert('Harga terlalu besar! Maksimal Rp 9.999.999.999,99');
+                    value = '9999999999.99';
+                }
+
+                e.target.value = value;
+            });
+
+            priceInput.addEventListener('blur', function(e) {
+                let value = parseFloat(e.target.value);
+                if (!isNaN(value)) {
+                    // Format to 2 decimal places
+                    e.target.value = value.toFixed(2);
+                }
+            });
+        }
+
+        // Form validation
+        function setupFormValidation() {
+            const form = document.getElementById('editForm');
+            if (!form) return;
+
+            form.addEventListener('submit', function(e) {
+                const section = document.getElementById('section').value;
+                const priceInput = document.getElementById('price');
+
+                // Validasi price untuk products
+                if (section === 'products') {
+                    const price = parseFloat(priceInput.value);
+
+                    if (!priceInput.value || isNaN(price) || price < 0) {
+                        e.preventDefault();
+                        alert('Harap isi harga yang valid untuk section Products!');
+                        priceInput.focus();
+                        return;
+                    }
+
+                    if (price > 9999999999.99) {
+                        e.preventDefault();
+                        alert('Harga terlalu besar! Maksimal Rp 9.999.999.999,99');
+                        priceInput.focus();
+                        return;
+                    }
+                }
+
+                // Validasi order
+                const orderInput = document.getElementById('order');
+                const order = parseInt(orderInput.value);
+                if (order < 0) {
+                    e.preventDefault();
+                    alert('Urutan tidak boleh negatif!');
+                    orderInput.focus();
+                    return;
+                }
+            });
+        }
+
         // Auto-call saat halaman load
         document.addEventListener('DOMContentLoaded', function() {
             updateSectionInfo();
             checkImageLoad();
+            setupPriceValidation();
+            setupFormValidation();
         });
     </script>
 </body>
