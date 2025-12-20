@@ -377,6 +377,21 @@
             width: 100%;
         }
 
+        /* Style khusus untuk price field (hanya muncul untuk products) */
+        .price-field {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .price-field.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* Mobile Menu Toggle */
         .mobile-menu-toggle {
             display: none;
@@ -691,12 +706,11 @@
                         @enderror
                     </div>
 
-                    <!-- Section - DISAMAKAN DENGAN CREATE.BLADE.PHP -->
+                    <!-- Section -->
                     <div class="form-group">
                         <label for="section">Section *</label>
-                        <select name="section" id="section" required onchange="updateSectionInfo()">
+                        <select name="section" id="section" required onchange="togglePriceField()">
                             <option value="">-- Pilih Section --</option>
-                            <!-- OPTION YANG SAMA DENGAN CREATE.BLADE.PHP -->
                             <option value="hero" {{ old('section', $media->section) == 'hero' ? 'selected' : '' }}>Intro (1 gambar)</option>
                             <option value="story" {{ old('section', $media->section) == 'story' ? 'selected' : '' }}>Background (1 gambar)</option>
                             <option value="whylearn" {{ old('section', $media->section) == 'whylearn' ? 'selected' : '' }}>Fitur 3 (1 gambar)</option>
@@ -710,9 +724,9 @@
                         <small class="form-help" id="sectionHelp">Pilih di section mana media ini akan ditampilkan</small>
                     </div>
 
-                    <!-- Price -->
-                    <div class="form-group">
-                        <label for="price">Harga Produk (Rp)</label>
+                    <!-- Price Field - HANYA UNTUK PRODUCTS -->
+                    <div class="form-group price-field" id="priceField">
+                        <label for="price">Harga Produk (Rp) *</label>
                         <input type="number"
                                name="price"
                                id="price"
@@ -739,7 +753,7 @@
                             <span class="error-text">{{ $message }}</span>
                         @enderror
                         <small class="form-help">Semakin kecil angkanya, semakin awal ditampilkan</small>
-                    </div> -->
+                    </div>-->
 
                     <!-- Active Status -->
                     <div class="form-group">
@@ -791,12 +805,14 @@
             }
         });
 
-        function updateSectionInfo() {
+        // Fungsi untuk menampilkan/menyembunyikan price field berdasarkan section
+        function togglePriceField() {
             const section = document.getElementById('section').value;
-            const sectionHelp = document.getElementById('sectionHelp');
+            const priceField = document.getElementById('priceField');
             const priceInput = document.getElementById('price');
+            const sectionHelp = document.getElementById('sectionHelp');
 
-            // DESKRIPSI YANG SAMA DENGAN CREATE.BLADE.PHP
+            // DESKRIPSI SECTION
             const descriptions = {
                 'hero': '🎯 Intro - gambar utama board game. Hanya 1 media aktif yang ditampilkan.',
                 'story': '📖 Background - gambar box di samping cerita. Hanya 1 media aktif yang ditampilkan.',
@@ -806,22 +822,29 @@
                 'products': '📦 Products - gambar untuk bagian produk. 2 slot yang ditampilkan. HARUS DIISI HARGA!'
             };
 
+            // Update deskripsi section
             if (section && descriptions[section]) {
                 sectionHelp.textContent = descriptions[section];
                 sectionHelp.style.color = '#5FB574';
                 sectionHelp.style.fontWeight = '500';
-
-                // Set required untuk price jika section products
-                if (section === 'products') {
-                    priceInput.required = true;
-                } else {
-                    priceInput.required = false;
-                }
             } else {
                 sectionHelp.textContent = 'Pilih di section mana media ini akan ditampilkan';
                 sectionHelp.style.color = '#666';
                 sectionHelp.style.fontWeight = 'normal';
+            }
+
+            // Tampilkan price field hanya untuk products
+            if (section === 'products') {
+                priceField.classList.add('show');
+                priceInput.required = true;
+            } else {
+                priceField.classList.remove('show');
                 priceInput.required = false;
+
+                // Reset harga jika bukan products
+                if (section !== 'products') {
+                    priceInput.value = '0';
+                }
             }
         }
 
@@ -923,7 +946,9 @@
 
         // Auto-call saat halaman load
         document.addEventListener('DOMContentLoaded', function() {
-            updateSectionInfo();
+            // Panggil togglePriceField saat halaman dimuat
+            togglePriceField();
+
             checkImageLoad();
             setupPriceValidation();
             setupFormValidation();

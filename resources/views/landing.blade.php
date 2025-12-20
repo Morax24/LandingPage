@@ -49,15 +49,13 @@
 
         .grid-image-original {
             width: 100%;
-            height: auto;
-            display: block;
+            height: 100%;
             object-fit: cover;
         }
 
         .feature-image-original {
             width: 100%;
-            height: auto;
-            display: block;
+            height: 100%;
             object-fit: cover;
         }
 
@@ -369,7 +367,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 3rem;
-            align-items: center;
+            align-items: start;
         }
 
         .why-learn-media {
@@ -468,7 +466,7 @@
             font-size: clamp(0.85rem, 2vw, 1rem);
         }
 
-        /* NEW FEATURES GRID - ZIGZAG LAYOUT */
+        /* NEW FEATURES GRID - ZIGZAG LAYOUT - DENGAN TINGGI TETAP YANG DIINGINKAN */
         .features-zigzag {
             display: flex;
             flex-direction: column;
@@ -480,7 +478,7 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 2rem;
-            align-items: center;
+            align-items: start;
         }
 
         .feature-media-box {
@@ -491,7 +489,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 400px;
+            height: 600px;
         }
 
         .feature-text-box {
@@ -501,7 +499,7 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            height: 400px;
+            height: 650px;
             padding-top: 1rem;
         }
 
@@ -522,6 +520,7 @@
             .feature-row {
                 grid-template-columns: 1fr 1fr;
                 gap: 3rem;
+                align-items: start;
             }
 
             .feature-row:nth-child(even) .feature-media-box {
@@ -533,13 +532,128 @@
             }
         }
 
-        /* NEW GRID LAYOUT FOR AKTIVITAS */
+        /* Responsive untuk mobile - TINGGI DIUBAH */
+        @media (max-width: 767px) {
+            .features-zigzag {
+                gap: 2rem;
+            }
+
+            .feature-row {
+                gap: 1.5rem;
+            }
+
+            .feature-media-box {
+                height: 400px; /* Lebih pendek di mobile */
+            }
+
+            .feature-text-box {
+                height: auto; /* Auto height di mobile */
+                padding: 1rem 0;
+                min-height: auto;
+            }
+
+            .feature-text-box h3 {
+                font-size: 1.4rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .feature-text-box p {
+                font-size: 1rem;
+                line-height: 1.6;
+            }
+        }
+
+        /* Responsive untuk mobile kecil */
+        @media (max-width: 480px) {
+            .feature-media-box {
+                height: 350px;
+            }
+
+            .feature-text-box {
+                padding: 0.5rem 0;
+            }
+
+            .feature-text-box h3 {
+                font-size: 1.3rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .feature-text-box p {
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+        }
+
+        /* NEW GRID LAYOUT FOR AKTIVITAS - DIPERBAIKI UNTUK RESPONSIF */
         .grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             grid-template-rows: repeat(6, 1fr);
             gap: 8px;
             margin-top: 2rem;
+            width: 100%;
+            height: 900px;
+        }
+
+        /* Tinggi grid untuk desktop saja */
+        @media (min-width: 768px) {
+            .grid {
+                height: 80vh;
+                max-height: 800px;
+            }
+        }
+
+        /* Mobile: ubah ke grid sederhana */
+        @media (max-width: 767px) {
+            .grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: repeat(3, 200px);
+                gap: 10px;
+                height: auto;
+            }
+
+            .item-0 {
+                grid-column: 1 / span 2;
+                grid-row: 1 / span 1;
+                height: 250px;
+            }
+
+            .item-1,
+            .item-2,
+            .item-3,
+            .item-4,
+            .item-5 {
+                grid-column: auto;
+                grid-row: auto;
+                height: 180px;
+            }
+
+            /* Atur layout untuk 6 item di mobile */
+            .item-1 { grid-area: 2 / 1 / span 1 / span 1; }
+            .item-2 { grid-area: 2 / 2 / span 1 / span 1; }
+            .item-3 { grid-area: 3 / 1 / span 1 / span 1; }
+            .item-4 { grid-area: 3 / 2 / span 1 / span 1; }
+            .item-5 { grid-area: 4 / 1 / span 1 / span 2; }
+        }
+
+        /* Mobile kecil: 1 kolom */
+        @media (max-width: 480px) {
+            .grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(6, 200px);
+            }
+
+            .item-0,
+            .item-1,
+            .item-2,
+            .item-3,
+            .item-4,
+            .item-5 {
+                grid-column: 1 / span 1;
+                grid-row: auto;
+                height: 200px;
+            }
         }
 
         .item {
@@ -801,7 +915,7 @@
             margin-bottom: 1.5rem;
         }
 
-        /* FAQ SECTION - BACKGROUND ABU-ABU */
+        /* FAQ SECTION - DIPERBAIKI */
         .faq-contact-section {
             padding: 4rem 5%;
             background: #f8f9fa;
@@ -898,37 +1012,6 @@
             max-height: 500px;
         }
 
-        /* Mobile Layout - Tampil di bawah 768px */
-        .faq-contact-mobile {
-            display: block;
-        }
-
-        .faq-contact-desktop {
-            display: none;
-        }
-
-        .faq-contact-form-mobile {
-            background: #fff;
-            padding: 2rem;
-            border-radius: 10px;
-            margin-top: 2rem;
-        }
-
-        .faq-contact-form-mobile input,
-        .faq-contact-form-mobile textarea {
-            width: 100%;
-            border: 1px solid #ddd;
-            padding: 0.8rem;
-            margin-bottom: 1rem;
-            border-radius: 5px;
-            font-size: clamp(0.85rem, 2vw, 1rem);
-        }
-
-        .faq-contact-form-mobile textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
         /* FORUM SECTION - BACKGROUND ABU-ABU */
         .forum-section {
             padding: 4rem 5%;
@@ -945,8 +1028,14 @@
         .forum-card {
             background: #fff;
             padding: 2rem;
-            border-radius: 10px;
+            border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .forum-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
 
         .forum-header {
@@ -972,11 +1061,212 @@
 
         .forum-card h4 {
             font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+            margin-bottom: 0.3rem;
         }
 
-        .forum-card p {
+        .forum-institution {
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .forum-date {
+            color: #999;
+            font-size: 0.75rem;
+        }
+
+        .forum-message {
             font-size: clamp(0.85rem, 2vw, 0.95rem);
             line-height: 1.6;
+            color: #555;
+            margin: 1rem 0;
+            font-style: italic;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        /* REPLY SECTION STYLES */
+        .replies-section {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .replies-title {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .reply-item {
+            background: #f8f9fa;
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid #7cb342;
+        }
+
+        .reply-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .reply-avatar {
+            width: 25px;
+            height: 25px;
+            background: #7cb342;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: white;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .reply-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #333;
+        }
+
+        .reply-message {
+            font-size: 0.85rem;
+            color: #555;
+            margin: 0.5rem 0;
+            line-height: 1.5;
+        }
+
+        .reply-date {
+            color: #999;
+            font-size: 0.75rem;
+        }
+
+        /* REPLY FORM STYLES */
+        .reply-form {
+            margin-top: 1rem;
+        }
+
+        .reply-toggle-btn {
+            background: none;
+            border: none;
+            color: #7cb342;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.3rem 0;
+            transition: color 0.3s;
+        }
+
+        .reply-toggle-btn:hover {
+            color: #689f38;
+        }
+
+        .reply-form-container {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .reply-form-container.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reply-form-input {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .reply-form-input:focus {
+            outline: none;
+            border-color: #7cb342;
+        }
+
+        .reply-form-textarea {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            margin-bottom: 0.8rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .reply-form-textarea:focus {
+            outline: none;
+            border-color: #7cb342;
+        }
+
+        .reply-form-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .reply-submit-btn {
+            background: #7cb342;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.3s;
+        }
+
+        .reply-submit-btn:hover {
+            background: #689f38;
+        }
+
+        .reply-cancel-btn {
+            background: #ccc;
+            color: #333;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.3s;
+        }
+
+        .reply-cancel-btn:hover {
+            background: #bbb;
+        }
+
+        /* NO REPLIES STATE */
+        .no-replies {
+            text-align: center;
+            padding: 1rem;
+            color: #999;
+            font-size: 0.85rem;
+            font-style: italic;
         }
 
         .forum-cta {
@@ -1262,7 +1552,9 @@
             text-align: left;
         }
 
-        /* RESPONSIVE */
+        /* =========================================== */
+        /* RESPONSIVE STYLES DIPERBAIKI */
+        /* =========================================== */
         @media (max-width: 1024px) {
             .hero,
             .story-grid,
@@ -1317,8 +1609,23 @@
             }
 
             .hero {
-                padding: 2rem 3% 4rem;
+                padding: 2rem 3% 4rem !important;
                 gap: 2rem;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem !important;
+                line-height: 1.3;
+            }
+
+            .hero p {
+                font-size: 1rem !important;
+                line-height: 1.6;
+                margin-bottom: 1.5rem;
+            }
+
+            .board-placeholder {
+                margin-top: 1rem;
             }
 
             .stats,
@@ -1369,29 +1676,11 @@
                 gap: 2rem;
             }
 
-            /* Grid responsive untuk mobile */
-            .grid {
+            /* FAQ RESPONSIVE - MOBILE */
+            .faq-contact-grid {
                 grid-template-columns: 1fr;
-                grid-template-rows: repeat(6, auto);
-                gap: 12px;
+                gap: 2rem;
             }
-
-            .item-0,
-            .item-1,
-            .item-2,
-            .item-3,
-            .item-4,
-            .item-5 {
-                grid-column: 1 / span 1;
-                grid-row: auto;
-            }
-
-            .item-0 { grid-row: 1 / span 1; }
-            .item-1 { grid-row: 2 / span 1; }
-            .item-2 { grid-row: 3 / span 1; }
-            .item-3 { grid-row: 4 / span 1; }
-            .item-4 { grid-row: 5 / span 1; }
-            .item-5 { grid-row: 6 / span 1; }
 
             /* Send confirm actions responsive */
             .send-confirm-actions {
@@ -1401,15 +1690,6 @@
             .btn-send-email,
             .btn-send-whatsapp {
                 width: 100%;
-            }
-
-            /* Desktop Layout - Tampil di atas 768px */
-            .faq-contact-mobile {
-                display: none;
-            }
-
-            .faq-contact-desktop {
-                display: block;
             }
 
             /* Modal responsive */
@@ -1427,6 +1707,47 @@
             .send-confirm-modal {
                 padding: 1.5rem;
             }
+
+            /* Forum card responsive */
+            .forum-card {
+                padding: 1.5rem;
+            }
+
+            .reply-form-container {
+                padding: 0.8rem;
+            }
+
+            .reply-form-actions {
+                flex-direction: column;
+            }
+
+            .reply-submit-btn,
+            .reply-cancel-btn {
+                width: 100%;
+            }
+
+            /* Perbaikan section title untuk mobile */
+            .section-title {
+                font-size: 1.8rem !important;
+                margin-bottom: 0.8rem !important;
+                padding: 0 1rem;
+            }
+
+            .section-subtitle {
+                font-size: 0.95rem !important;
+                margin-bottom: 2rem !important;
+                padding: 0 1rem;
+                line-height: 1.5;
+            }
+
+            /* Perbaikan padding section untuk mobile */
+            #features {
+                padding: 2rem 5% !important;
+            }
+
+            #aktivitas {
+                padding: 2rem 5% !important;
+            }
         }
 
         @media (min-width: 768px) {
@@ -1434,6 +1755,8 @@
                 grid-template-columns: repeat(6, 1fr);
                 grid-template-rows: repeat(6, 1fr);
                 gap: 16px;
+                height: 80vh;
+                max-height: 800px;
             }
 
             .mobile-only {
@@ -1473,15 +1796,6 @@
                 grid-column: 5 / span 2;
                 grid-row: 5 / span 2;
             }
-
-            /* Mobile Layout - Tampil di bawah 768px */
-            .faq-contact-mobile {
-                display: none;
-            }
-
-            .faq-contact-desktop {
-                display: block;
-            }
         }
 
         @media (max-width: 480px) {
@@ -1494,7 +1808,15 @@
             }
 
             .hero {
-                padding: 1.5rem 3% 3rem;
+                padding: 1.5rem 3% 3rem !important;
+            }
+
+            .hero h1 {
+                font-size: 1.5rem !important;
+            }
+
+            .hero p {
+                font-size: 0.9rem !important;
             }
 
             .stats {
@@ -1524,8 +1846,7 @@
                 padding: 1.5rem;
             }
 
-            .faq-contact-form,
-            .faq-contact-form-mobile {
+            .faq-contact-form {
                 padding: 1.5rem;
             }
 
@@ -1553,13 +1874,22 @@
                 font-size: 0.9rem;
             }
 
-            /* Mobile Layout - Tampil di bawah 768px */
-            .faq-contact-mobile {
-                display: block;
+            /* Grid mobile kecil */
+            .grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(6, 200px);
+                gap: 8px;
             }
 
-            .faq-contact-desktop {
-                display: none;
+            .item-0,
+            .item-1,
+            .item-2,
+            .item-3,
+            .item-4,
+            .item-5 {
+                grid-column: 1 / span 1;
+                grid-row: auto;
+                height: 200px;
             }
         }
     </style>
@@ -1990,178 +2320,82 @@
         </div>
     </section>
 
-    <!-- BAGIAN FAQ DENGAN LAYOUT RESPONSIF -->
+    <!-- BAGIAN FAQ DENGAN LAYOUT RESPONSIF - DIPERBAIKI -->
     <section id="contact" class="faq-contact-section">
         <h2 class="section-title">Frequently Asked Questions</h2>
 
-        <!-- Mobile Layout (satu kolom) -->
-        <div class="faq-contact-mobile">
-            <div class="faq-accordion">
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div>
-                        <strong>Berlaku untuk siapa saja waluya land ini?</strong>
-                        <div class="faq-answer"
-                            style="display: none; margin-top: 0.5rem; color: #666; font-weight: normal;">
-                            Waluya Land dirancang untuk siswa SMA/SMK, mahasiswa, dan siapa saja yang ingin belajar
-                            kewirausahaan dengan cara yang menyenangkan dan interaktif.
-                        </div>
-                    </div>
-                </div>
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div>
-                        <strong>Adakah panduan bermain bagi kami?</strong>
-                        <div class="faq-answer"
-                            style="display: none; margin-top: 0.5rem; color: #666; font-weight: normal;">
-                            Ya, setiap paket Waluya Land dilengkapi dengan buku panduan lengkap yang menjelaskan aturan
-                            permainan dan cara bermain.
-                        </div>
-                    </div>
-                </div>
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div>
-                        <strong>Capaian pelajaran apa yang terpenuhi oleh Waluya Land?</strong>
-                        <div class="faq-answer"
-                            style="display: none; margin-top: 0.5rem; color: #666; font-weight: normal;">
-                            Waluya Land membantu mencapai kompetensi pemahaman kewirausahaan, problem solving, kerja
-                            tim, dan pengambilan keputusan bisnis.
-                        </div>
-                    </div>
-                </div>
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div>
-                        <strong>Apa waluya land ini?</strong>
-                        <div class="faq-answer"
-                            style="display: none; margin-top: 0.5rem; color: #666; font-weight: normal;">
-                            Waluya Land adalah board game edukatif yang mengajarkan konsep kewirausahaan dan bisnis
-                            melalui permainan interaktif.
-                        </div>
-                    </div>
-                </div>
-                <div class="faq-item" onclick="toggleFaq(this)">
-                    <div>
-                        <strong>Apakah berlaku untuk semua kejuruan?</strong>
-                        <div class="faq-answer"
-                            style="display: none; margin-top: 0.5rem; color: #666; font-weight: normal;">
-                            Ya, Waluya Land dirancang fleksibel dan dapat disesuaikan dengan berbagai kurikulum
-                            pendidikan dan kejuruan.
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="faq-contact-form-mobile">
-                <p style="margin-bottom: 1.5rem; color: #666; text-align: center;">Punya pertanyaan lain? silahkan cantumkan disini</p>
-                <form id="contactFormMobile" onsubmit="openSendConfirmModal('mobile'); return false;">
+        <div class="faq-contact-grid">
+            <!-- Form Kontak (Kiri) -->
+            <div class="faq-contact-form">
+                <p style="margin-bottom: 1.5rem; color: #666;">Punya pertanyaan lain? silahkan cantumkan disini!</p>
+                <form action="{{ route('contact.store') }}" method="POST" id="contactForm">
                     @csrf
                     <input type="hidden" name="type" value="forum">
+                    <!-- EMAIL FIELD DISEMBUNYIKAN DAN DIGENERATE OTOMATIS -->
+                    <input type="hidden" name="email" id="autoGeneratedEmail">
 
-                    <input type="text" name="name" placeholder="Nama Lengkap *" id="nameMobile" required>
+                    <input type="text" name="name" placeholder="Nama Lengkap *" required>
                     @error('name')
                         <span class="error-text">{{ $message }}</span>
                     @enderror
 
-                    <input type="text" name="institution" placeholder="Instansi (opsional)" id="institutionMobile">
+                    <input type="text" name="institution" placeholder="Instansi (opsional)">
                     @error('institution')
                         <span class="error-text">{{ $message }}</span>
                     @enderror
 
-                    <textarea name="message" placeholder="Pesan/Pertanyaan *" id="messageMobile" required></textarea>
+                    <textarea name="message" placeholder="Pesan/Pertanyaan *" required></textarea>
                     @error('message')
                         <span class="error-text">{{ $message }}</span>
                     @enderror
 
-                    <!-- TOMBOL "KIRIM" SAJA -->
+                    <!-- TOMBOL "KIRIM" LANGSUNG -->
                     <button type="submit" class="btn-submit">Kirim</button>
                 </form>
             </div>
-        </div>
 
-        <!-- Desktop Layout (2 kolom) -->
-        <div class="faq-contact-desktop">
-            <div class="faq-contact-grid">
-                <div class="faq-contact-form">
-                    <p style="margin-bottom: 1.5rem; color: #666;">Punya pertanyaan lain? silahkan cantumkan disini!</p>
-                    <form id="contactFormDesktop" onsubmit="openSendConfirmModal('desktop'); return false;">
-                        @csrf
-                        <input type="hidden" name="type" value="forum">
-
-                        <input type="text" name="name" placeholder="Nama Lengkap *" id="nameDesktop" required>
-                        @error('name')
-                            <span class="error-text">{{ $message }}</span>
-                        @enderror
-
-                        <input type="text" name="institution" placeholder="Instansi (opsional)" id="institutionDesktop">
-                        @error('institution')
-                            <span class="error-text">{{ $message }}</span>
-                        @enderror
-
-                        <textarea name="message" placeholder="Pesan/Pertanyaan *" id="messageDesktop" required></textarea>
-                        @error('message')
-                            <span class="error-text">{{ $message }}</span>
-                        @enderror
-
-                        <!-- TOMBOL "KIRIM" SAJA -->
-                        <button type="submit" class="btn-submit">Kirim</button>
-                    </form>
+            <!-- FAQ Accordion (Kanan) -->
+            <div class="faq-accordion">
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <strong>Berlaku untuk siapa saja waluya land ini?</strong>
+                    <div class="faq-answer">
+                        Waluya Land dirancang untuk siswa SMA/SMK, mahasiswa, dan siapa saja yang ingin belajar
+                        kewirausahaan dengan cara yang menyenangkan dan interaktif.
+                    </div>
                 </div>
-
-                <div class="faq-accordion">
-                    <div class="faq-item" onclick="toggleFaq(this)">
-                        <div>
-                            <strong>Berlaku untuk siapa saja waluya land ini?</strong>
-                            <div class="faq-answer"
-                                style="display: none; margin-top: 0.5rem; color: #666; font-weight: normal;">
-                                Waluya Land dirancang untuk siswa SMA/SMK, mahasiswa, dan siapa saja yang ingin belajar
-                                kewirausahaan dengan cara yang menyenangkan dan interaktif.
-                            </div>
-                        </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <strong>Adakah panduan bermain bagi kami?</strong>
+                    <div class="faq-answer">
+                        Ya, setiap paket Waluya Land dilengkapi dengan buku panduan lengkap yang menjelaskan aturan
+                        permainan dan cara bermain.
                     </div>
-                    <div class="faq-item" onclick="toggleFaq(this)">
-                        <div>
-                            <strong>Adakah panduan bermain bagi kami?</strong>
-                            <div class="faq-answer"
-                                style="display: none; margin-top: 0.5rem; color: #666; font-weight: normal;">
-                                Ya, setiap paket Waluya Land dilengkapi dengan buku panduan lengkap yang menjelaskan aturan
-                                permainan dan cara bermain.
-                            </div>
-                        </div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <strong>Capaian pelajaran apa yang terpenuhi oleh Waluya Land?</strong>
+                    <div class="faq-answer">
+                        Waluya Land membantu mencapai kompetensi pemahaman kewirausahaan, problem solving, kerja
+                        tim, dan pengambilan keputusan bisnis.
                     </div>
-                    <div class="faq-item" onclick="toggleFaq(this)">
-                        <div>
-                            <strong>Capaian pelajaran apa yang terpenuhi oleh Waluya Land?</strong>
-                            <div class="faq-answer"
-                                style="display: none; margin-top: 0.5rem; color: #666; font-weight: normal;">
-                                Waluya Land membantu mencapai kompetensi pemahaman kewirausahaan, problem solving, kerja
-                                tim, dan pengambilan keputusan bisnis.
-                            </div>
-                        </div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <strong>Apa waluya land ini?</strong>
+                    <div class="faq-answer">
+                        Waluya Land adalah board game edukatif yang mengajarkan konsep kewirausahaan dan bisnis
+                        melalui permainan interaktif.
                     </div>
-                    <div class="faq-item" onclick="toggleFaq(this)">
-                        <div>
-                            <strong>Apa waluya land ini?</strong>
-                            <div class="faq-answer"
-                                style="display: none; margin-top: 0.5rem; color: #666; font-weight: normal;">
-                                Waluya Land adalah board game edukatif yang mengajarkan konsep kewirausahaan dan bisnis
-                                melalui permainan interaktif.
-                            </div>
-                        </div>
-                    </div>
-                    <div class="faq-item" onclick="toggleFaq(this)">
-                        <div>
-                            <strong>Apakah berlaku untuk semua kejuruan?</strong>
-                            <div class="faq-answer"
-                                style="display: none; margin-top: 0.5rem; color: #666; font-weight: normal;">
-                                Ya, Waluya Land dirancang fleksibel dan dapat disesuaikan dengan berbagai kurikulum
-                                pendidikan dan kejuruan.
-                            </div>
-                        </div>
+                </div>
+                <div class="faq-item" onclick="toggleFaq(this)">
+                    <strong>Apakah berlaku untuk semua kejuruan?</strong>
+                    <div class="faq-answer">
+                        Ya, Waluya Land dirancang fleksibel dan dapat disesuaikan dengan berbagai kurikulum
+                        pendidikan dan kejuruan.
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- BAGIAN FORUM YANG DIPERBAIKI -->
+    <!-- BAGIAN FORUM DENGAN BALASAN -->
     <section class="forum-section">
         <span class="story-badge">Forum</span>
         <h2 class="section-title">Forum Terbuka untuk Tanya, Saran, dan Insight</h2>
@@ -2186,30 +2420,123 @@
                             </div>
                             <div>
                                 <h4>{{ $post->name }}</h4>
-                                <small style="color: #999;">
+                                <div class="forum-institution">
                                     {{ $post->institution ?? 'Pengguna' }}
-                                </small>
-                                <br>
-                                <small style="color: #999;">
-                                    {{ $post->email }}
-                                </small>
+                                </div>
+                                <div class="forum-date">
+                                    {{ $post->created_at->translatedFormat('d F Y, H:i') }}
+                                </div>
                             </div>
                         </div>
-                        <p>"{{ Str::limit($post->message, 120) }}"</p>
+
+                        <p class="forum-message">"{{ $post->message }}"</p>
+
+                        <!-- BALASAN YANG SUDAH DISETUJUI -->
+                        @if($post->replies->count() > 0)
+                            <div class="replies-section">
+                                <h5 class="replies-title">
+                                    <span>💬</span> {{ $post->replies->count() }} Balasan
+                                </h5>
+                                @foreach($post->replies as $reply)
+                                    <div class="reply-item">
+                                        <div class="reply-header">
+                                            <div class="reply-avatar">
+                                                @php
+                                                    $replyNames = explode(' ', $reply->name);
+                                                    $replyInitials = '';
+                                                    foreach($replyNames as $n) {
+                                                        if(!empty(trim($n))) {
+                                                            $replyInitials .= strtoupper(substr(trim($n), 0, 1));
+                                                        }
+                                                    }
+                                                    echo substr($replyInitials, 0, 2) ?: 'GU';
+                                                @endphp
+                                            </div>
+                                            <span class="reply-name">{{ $reply->name }}</span>
+                                        </div>
+                                        <p class="reply-message">{{ $reply->message }}</p>
+                                        <div class="reply-date">
+                                            {{ $reply->created_at->diffForHumans() }}
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="no-replies">
+                                Belum ada balasan. Jadilah yang pertama membalas!
+                            </div>
+                        @endif
+
+                        <!-- FORM UNTUK MEMBALAS -->
+                        <div class="reply-form">
+                            <button class="reply-toggle-btn" onclick="toggleReplyForm({{ $post->id }})">
+                                <span>💬</span> Balas
+                            </button>
+
+                            <div class="reply-form-container" id="replyForm{{ $post->id }}">
+                                <form onsubmit="submitReply(event, {{ $post->id }})">
+                                    @csrf
+                                    <input type="hidden" name="contact_id" value="{{ $post->id }}">
+
+                                    <div>
+                                        <input type="text"
+                                               name="name"
+                                               placeholder="Nama Anda *"
+                                               required
+                                               class="reply-form-input">
+                                    </div>
+
+                                    <div>
+                                        <input type="email"
+                                               name="email"
+                                               placeholder="Email *"
+                                               required
+                                               class="reply-form-input">
+                                    </div>
+
+                                    <div>
+                                        <textarea name="message"
+                                                  placeholder="Tulis balasan Anda... *"
+                                                  required
+                                                  rows="3"
+                                                  class="reply-form-textarea"></textarea>
+                                    </div>
+
+                                    <div class="reply-form-actions">
+                                        <button type="submit" class="reply-submit-btn">
+                                            Kirim Balasan
+                                        </button>
+                                        <button type="button"
+                                                onclick="toggleReplyForm({{ $post->id }})"
+                                                class="reply-cancel-btn">
+                                            Batal
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 @endforeach
             @else
+                <!-- Fallback jika tidak ada postingan forum -->
                 <div class="forum-card">
                     <div class="forum-header">
                         <div class="forum-avatar">WL</div>
                         <div>
                             <h4>Waluya Land Team</h4>
-                            <small style="color: #999;">Admin</small>
-                            <br>
-                            <small style="color: #999;">admin@waluyaland.com</small>
+                            <div class="forum-institution">Admin</div>
+                            <div class="forum-date">{{ now()->translatedFormat('d F Y, H:i') }}</div>
                         </div>
                     </div>
-                    <p>"Selamat datang di forum Waluya Land! Silakan ajukan pertanyaan atau saran Anda di sini."</p>
+                    <p class="forum-message">"Selamat datang di forum Waluya Land! Silakan ajukan pertanyaan atau saran Anda di sini."</p>
+                    <div class="no-replies">
+                        Belum ada balasan. Jadilah yang pertama membalas!
+                    </div>
+                    <div class="reply-form">
+                        <button class="reply-toggle-btn" onclick="showTestimonialForm()">
+                            <span>💬</span> Balas
+                        </button>
+                    </div>
                 </div>
             @endif
         </div>
@@ -2402,6 +2729,79 @@
             } else {
                 answer.style.display = 'none';
             }
+        }
+
+        // ===========================================
+        // FUNGSI UNTUK FORUM REPLIES
+        // ===========================================
+        function toggleReplyForm(contactId) {
+            const formContainer = document.getElementById(`replyForm${contactId}`);
+            if (formContainer) {
+                formContainer.classList.toggle('show');
+
+                // Scroll ke form jika ditampilkan
+                if (formContainer.classList.contains('show')) {
+                    setTimeout(() => {
+                        formContainer.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'nearest'
+                        });
+                    }, 100);
+                }
+            }
+        }
+
+        function submitReply(event, contactId) {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            // Tampilkan loading
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Mengirim...';
+            submitBtn.disabled = true;
+
+            fetch('{{ route("forum.reply.store") }}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Reset form
+                    form.reset();
+
+                    // Sembunyikan form
+                    const formContainer = document.getElementById(`replyForm${contactId}`);
+                    if (formContainer) {
+                        formContainer.classList.remove('show');
+                    }
+
+                    // Tampilkan pesan sukses
+                    showSuccessModal('Balasan Anda berhasil dikirim! Menunggu persetujuan admin.');
+
+                    // Refresh halaman setelah 2 detik untuk melihat balasan baru
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                } else {
+                    showErrorModal(data.message || 'Gagal mengirim balasan. Silakan coba lagi.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showErrorModal('Terjadi kesalahan. Silakan coba lagi.');
+            })
+            .finally(() => {
+                // Reset button
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            });
         }
 
         // ===========================================
@@ -2712,6 +3112,68 @@
                     console.log('Visitor tracking failed:', error);
                 });
         });
+
+        // ===========================================
+        // FUNGSI UNTUK GENERATE EMAIL OTOMATIS
+        // ===========================================
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactForm = document.getElementById('contactForm');
+            const autoEmailField = document.getElementById('autoGeneratedEmail');
+
+            if (contactForm && autoEmailField) {
+                contactForm.addEventListener('submit', function(e) {
+                    // Generate email otomatis dari nama
+                    const nameInput = this.querySelector('input[name="name"]');
+                    if (nameInput && nameInput.value.trim()) {
+                        autoEmailField.value = generateAutoEmail(nameInput.value);
+                    } else {
+                        autoEmailField.value = 'guest' + Date.now() + '@user.waluyaland.com';
+                    }
+
+                    // Validasi
+                    if (!nameInput.value.trim()) {
+                        e.preventDefault();
+                        showErrorModal('Harap isi Nama Lengkap');
+                        return;
+                    }
+
+                    const messageInput = this.querySelector('textarea[name="message"]');
+                    if (!messageInput.value.trim()) {
+                        e.preventDefault();
+                        showErrorModal('Harap isi Pesan/Pertanyaan');
+                        return;
+                    }
+
+                    // Tampilkan loading
+                    const submitBtn = this.querySelector('.btn-submit');
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = 'Mengirim...';
+                    submitBtn.disabled = true;
+
+                    // Form akan dikirim melalui normal POST ke server
+                    // Reset button setelah 3 detik (untuk simulasi)
+                    setTimeout(() => {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }, 3000);
+                });
+            }
+        });
+
+        function generateAutoEmail(name) {
+            // Bersihkan nama
+            let cleanName = name.toLowerCase()
+                .replace(/[^a-z0-9\s]/g, '')
+                .replace(/\s+/g, '.')
+                .trim();
+
+            // Jika nama terlalu pendek
+            if (cleanName.length < 3) {
+                cleanName += Math.floor(Math.random() * 1000);
+            }
+
+            return cleanName + '@user.waluyaland.com';
+        }
     </script>
 </body>
 </html>

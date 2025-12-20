@@ -10,11 +10,12 @@ use Illuminate\Support\Facades\Auth;
 class ContactController extends Controller
 {
     /**
-     * Tampilkan semua contact messages
+     * Tampilkan semua contact messages (HANYA FORUM)
      */
     public function index(Request $request)
     {
-        $query = Contact::with('approver')->latest();
+        // HANYA tampilkan type='forum'
+        $query = Contact::where('type', 'forum')->with('approver')->latest();
 
         // Filter berdasarkan status
         if ($request->has('status') && $request->status != 'all') {
@@ -34,33 +35,35 @@ class ContactController extends Controller
 
         $contacts = $query->paginate(15);
 
-        // Hitung statistik
+        // Hitung statistik HANYA untuk forum
         $stats = [
-            'total' => Contact::count(),
-            'pending' => Contact::pending()->count(),
-            'approved' => Contact::approved()->count(),
-            'rejected' => Contact::rejected()->count(),
+            'total' => Contact::where('type', 'forum')->count(),
+            'pending' => Contact::where('type', 'forum')->where('status', 'pending')->count(),
+            'approved' => Contact::where('type', 'forum')->where('status', 'approved')->count(),
+            'rejected' => Contact::where('type', 'forum')->where('status', 'rejected')->count(),
         ];
 
         return view('admin.contacts.index', compact('contacts', 'stats'));
     }
 
     /**
-     * Tampilkan detail contact
+     * Tampilkan detail contact (HANYA FORUM)
      */
     public function show($id)
     {
-        $contact = Contact::with('approver')->findOrFail($id);
+        // Pastikan hanya menampilkan type='forum'
+        $contact = Contact::where('type', 'forum')->with('approver')->findOrFail($id);
 
         return view('admin.contacts.show', compact('contact'));
     }
 
     /**
-     * Approve contact message
+     * Approve contact message (HANYA FORUM)
      */
     public function approve($id)
     {
-        $contact = Contact::findOrFail($id);
+        // Pastikan hanya untuk type='forum'
+        $contact = Contact::where('type', 'forum')->findOrFail($id);
 
         if ($contact->isApproved()) {
             return redirect()
@@ -76,15 +79,16 @@ class ContactController extends Controller
 
         return redirect()
             ->back()
-            ->with('success', 'Pesan berhasil disetujui!');
+            ->with('success', 'Pesan forum berhasil disetujui!');
     }
 
     /**
-     * Reject contact message
+     * Reject contact message (HANYA FORUM)
      */
     public function reject(Request $request, $id)
     {
-        $contact = Contact::findOrFail($id);
+        // Pastikan hanya untuk type='forum'
+        $contact = Contact::where('type', 'forum')->findOrFail($id);
 
         $contact->update([
             'status' => 'rejected',
@@ -95,11 +99,11 @@ class ContactController extends Controller
 
         return redirect()
             ->back()
-            ->with('success', 'Pesan berhasil ditolak.');
+            ->with('success', 'Pesan forum berhasil ditolak.');
     }
 
     /**
-     * Update admin notes
+     * Update admin notes (HANYA FORUM)
      */
     public function updateNotes(Request $request, $id)
     {
@@ -107,7 +111,8 @@ class ContactController extends Controller
             'admin_notes' => 'nullable|string|max:1000'
         ]);
 
-        $contact = Contact::findOrFail($id);
+        // Pastikan hanya untuk type='forum'
+        $contact = Contact::where('type', 'forum')->findOrFail($id);
 
         $contact->update([
             'admin_notes' => $request->admin_notes,
@@ -119,20 +124,21 @@ class ContactController extends Controller
     }
 
     /**
-     * Hapus contact message
+     * Hapus contact message (HANYA FORUM)
      */
     public function destroy($id)
     {
-        $contact = Contact::findOrFail($id);
+        // Pastikan hanya untuk type='forum'
+        $contact = Contact::where('type', 'forum')->findOrFail($id);
         $contact->delete();
 
         return redirect()
             ->route('admin.contacts.index')
-            ->with('success', 'Pesan berhasil dihapus.');
+            ->with('success', 'Pesan forum berhasil dihapus.');
     }
 
     /**
-     * Bulk approve
+     * Bulk approve (HANYA FORUM)
      */
     public function bulkApprove(Request $request)
     {
@@ -141,7 +147,9 @@ class ContactController extends Controller
             'ids.*' => 'exists:contacts,id'
         ]);
 
+        // Pastikan hanya approve contact dengan type='forum'
         Contact::whereIn('id', $request->ids)
+            ->where('type', 'forum')
             ->update([
                 'status' => 'approved',
                 'approved_at' => now(),
@@ -150,11 +158,11 @@ class ContactController extends Controller
 
         return redirect()
             ->back()
-            ->with('success', count($request->ids) . ' pesan berhasil disetujui.');
+            ->with('success', count($request->ids) . ' pesan forum berhasil disetujui.');
     }
 
     /**
-     * Bulk reject
+     * Bulk reject (HANYA FORUM)
      */
     public function bulkReject(Request $request)
     {
@@ -163,7 +171,9 @@ class ContactController extends Controller
             'ids.*' => 'exists:contacts,id'
         ]);
 
+        // Pastikan hanya reject contact dengan type='forum'
         Contact::whereIn('id', $request->ids)
+            ->where('type', 'forum')
             ->update([
                 'status' => 'rejected',
                 'approved_at' => now(),
@@ -172,34 +182,11 @@ class ContactController extends Controller
 
         return redirect()
             ->back()
-            ->with('success', count($request->ids) . ' pesan berhasil ditolak.');
+            ->with('success', count($request->ids) . ' pesan forum berhasil ditolak.');
     }
-
-    public function store(StoreContactRequest $request)
-{
-    try {
-        Contact::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'institution' => $request->input('institution'),
-            'message' => $request->input('message'),
-            'status' => 'pending',
-        ]);
-
-        return redirect()
-            ->back()
-            ->with('success', 'Terima kasih! Pesan Anda telah terkirim dan akan ditinjau oleh admin.');
-
-    } catch (\Exception $e) {
-        return redirect()
-            ->back()
-            ->withInput()
-            ->with('error', 'Maaf, terjadi kesalahan. Silakan coba lagi.');
-    }
-}
 
     /**
-     * Bulk delete
+     * Bulk delete (HANYA FORUM)
      */
     public function bulkDelete(Request $request)
     {
@@ -208,10 +195,13 @@ class ContactController extends Controller
             'ids.*' => 'exists:contacts,id'
         ]);
 
-        Contact::whereIn('id', $request->ids)->delete();
+        // Pastikan hanya delete contact dengan type='forum'
+        Contact::whereIn('id', $request->ids)
+            ->where('type', 'forum')
+            ->delete();
 
         return redirect()
             ->back()
-            ->with('success', count($request->ids) . ' pesan berhasil dihapus.');
+            ->with('success', count($request->ids) . ' pesan forum berhasil dihapus.');
     }
 }

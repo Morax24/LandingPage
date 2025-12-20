@@ -874,77 +874,84 @@
                 const previewId = `preview${itemNumber}`;
                 const fileInfoId = `fileInfo${itemNumber}`;
 
-                const itemHTML = `
-                    <div class="upload-item" id="${itemId}">
-                        <div class="upload-item-header">
-                            <div class="upload-item-title">${getItemTitle(section, i)}</div>
-                            <div class="upload-item-index">${itemNumber}</div>
-                        </div>
+                // Di dalam fungsi updateSectionForm(), UBAH bagian Description agar selalu ada untuk semua section:
 
-                        <div class="upload-item-content">
-                            <!-- Type Selection -->
-                            <div class="form-group">
-                                <label for="type${itemNumber}">Tipe Media *</label>
-                                <select name="items[${i}][type]" id="type${itemNumber}" class="item-type" required onchange="updateFileAccept(this, '${fileInputId}')">
-                                    <option value="">-- Pilih Tipe --</option>
-                                    <option value="image">Image</option>
-                                    <option value="video" ${section === 'products' ? 'disabled' : ''}>Video</option>
-                                </select>
-                                <small class="form-help">Format: JPEG, PNG, JPG, WEBP | Max: 5MB</small>
-                            </div>
+const itemHTML = `
+    <div class="upload-item" id="${itemId}">
+        <div class="upload-item-header">
+            <div class="upload-item-title">${getItemTitle(section, i)}</div>
+            <div class="upload-item-index">${itemNumber}</div>
+        </div>
 
-                            <!-- File Upload -->
-                            <div class="form-group">
-                                <label>File *</label>
-                                <div class="file-upload-area-small" id="uploadArea${itemNumber}" onclick="document.getElementById('${fileInputId}').click()">
-                                    <div class="file-upload-icon-small">📁</div>
-                                    <div class="file-upload-text-small">Klik atau drag & drop</div>
-                                    <small class="form-help">Max 10MB</small>
-                                </div>
-                                <input type="file" name="items[${i}][file]" id="${fileInputId}" class="item-file" accept="image/*" style="display: none;" onchange="handleFileSelect(event, '${previewId}', '${fileInfoId}', 'type${itemNumber}', 'uploadArea${itemNumber}')">
+        <div class="upload-item-content">
+            <!-- Type Selection -->
+            <div class="form-group">
+                <label for="type${itemNumber}">Tipe Media *</label>
+                <select name="items[${i}][type]" id="type${itemNumber}" class="item-type" required onchange="updateFileAccept(this, '${fileInputId}')">
+                    <option value="">-- Pilih Tipe --</option>
+                    <option value="image">Image</option>
+                    <option value="video" ${section === 'products' ? 'disabled' : ''}>Video</option>
+                </select>
+                <small class="form-help">Format: JPEG, PNG, JPG, WEBP | Max: 5MB</small>
+            </div>
 
-                                <!-- File Preview -->
-                                <div class="file-preview-small" id="${previewId}">
-                                    <div class="preview-container-small" id="previewContainer${itemNumber}"></div>
-                                    <div class="file-info-small" id="${fileInfoId}"></div>
-                                </div>
-                            </div>
+            <!-- File Upload -->
+            <div class="form-group">
+                <label>File *</label>
+                <div class="file-upload-area-small" id="uploadArea${itemNumber}" onclick="document.getElementById('${fileInputId}').click()">
+                    <div class="file-upload-icon-small">📁</div>
+                    <div class="file-upload-text-small">Klik atau drag & drop</div>
+                    <small class="form-help">Max 10MB</small>
+                </div>
+                <input type="file" name="items[${i}][file]" id="${fileInputId}" class="item-file" accept="image/*" style="display: none;" onchange="handleFileSelect(event, '${previewId}', '${fileInfoId}', 'type${itemNumber}', 'uploadArea${itemNumber}')">
 
-                            <!-- Title -->
-                            <div class="form-group">
-                                <label for="title${itemNumber}">Judul *</label>
-                                <input type="text" name="items[${i}][title]" id="title${itemNumber}" class="item-title" required placeholder="Masukkan judul">
-                            </div>
+                <!-- File Preview -->
+                <div class="file-preview-small" id="${previewId}">
+                    <div class="preview-container-small" id="previewContainer${itemNumber}"></div>
+                    <div class="file-info-small" id="${fileInfoId}"></div>
+                </div>
+            </div>
 
-                            <!-- Description -->
-                            <div class="form-group">
-                                <label for="description${itemNumber}">Deskripsi</label>
-                                <textarea name="items[${i}][description]" id="description${itemNumber}" class="item-description" placeholder="Deskripsi (opsional)" rows="3"></textarea>
-                            </div>
+            <!-- Title -->
+            <div class="form-group">
+                <label for="title${itemNumber}">Judul *</label>
+                <input type="text" name="items[${i}][title]" id="title${itemNumber}" class="item-title" required placeholder="Masukkan judul">
+            </div>
 
-                            ${section === 'products' ? `
-                            <!-- Price Field (hanya untuk products) -->
-                            <div class="form-group">
-                                <label for="price${itemNumber}">Harga Produk (Rp) *</label>
-                                <input type="number"
-                                       name="items[${i}][price]"
-                                       id="price${itemNumber}"
-                                       class="item-price"
-                                       required
-                                       min="0"
-                                       max="9999999999.99"
-                                       step="0.01"
-                                       placeholder="Contoh: 300000">
-                                <small class="form-help">Harga maksimal: Rp 9.999.999.999,99</small>
-                            </div>
-                            ` : ''}
+            <!-- Description - SELALU ADA UNTUK SEMUA SECTION -->
+            <div class="form-group">
+                <label for="description${itemNumber}">Deskripsi</label>
+                <textarea name="items[${i}][description]"
+                          id="description${itemNumber}"
+                          class="item-description"
+                          placeholder="Masukkan deskripsi (akan ditampilkan di website)"
+                          rows="3">{{ old(`items.${i}.description`) }}</textarea>
+                <small class="form-help">Deskripsi akan ditampilkan di landing page</small>
+            </div>
 
-                            <!-- Hidden section field -->
-                            <input type="hidden" name="items[${i}][section]" value="${section}">
-                            <input type="hidden" name="items[${i}][order]" value="${i}">
-                        </div>
-                    </div>
-                `;
+            ${section === 'products' ? `
+            <!-- Price Field (hanya untuk products) -->
+            <div class="form-group">
+                <label for="price${itemNumber}">Harga Produk (Rp) *</label>
+                <input type="number"
+                       name="items[${i}][price]"
+                       id="price${itemNumber}"
+                       class="item-price"
+                       required
+                       min="0"
+                       max="9999999999.99"
+                       step="0.01"
+                       placeholder="Contoh: 300000">
+                <small class="form-help">Harga maksimal: Rp 9.999.999.999,99</small>
+            </div>
+            ` : ''}
+
+            <!-- Hidden section field -->
+            <input type="hidden" name="items[${i}][section]" value="${section}">
+            <input type="hidden" name="items[${i}][order]" value="${i}">
+        </div>
+    </div>
+`;
 
                 container.innerHTML += itemHTML;
 

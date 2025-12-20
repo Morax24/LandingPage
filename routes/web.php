@@ -3,7 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
-use App\Http\Controllers\Admin\TestimonialController; // TAMBAH INI
+use App\Http\Controllers\Admin\TestimonialController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ForumReplyController;
 use App\Http\Controllers\Admin\ForumReplyController as AdminForumReplyController;
@@ -111,7 +111,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/forum-replies/bulk-delete', [AdminForumReplyController::class, 'bulkDelete'])->name('forum-replies.bulk-delete');
 
     // ============================================
-    // TESTIMONIAL ROUTES - TAMBAHKAN DI SINI
+    // TESTIMONIAL ROUTES - FIXED
     // ============================================
     Route::prefix('testimonials')->name('testimonials.')->group(function () {
         Route::get('/', [TestimonialController::class, 'index'])->name('index');
@@ -119,5 +119,16 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::post('/{id}/approve', [TestimonialController::class, 'approve'])->name('approve');
         Route::post('/{id}/reject', [TestimonialController::class, 'reject'])->name('reject');
         Route::delete('/{id}', [TestimonialController::class, 'destroy'])->name('destroy');
+
+        // BULK ACTIONS - PERBAIKAN METHOD
+        Route::post('/bulk-delete', [TestimonialController::class, 'bulkDelete'])->name('bulk.delete');
+        Route::post('/bulk-approve', [TestimonialController::class, 'bulkApprove'])->name('bulk.approve');
+        Route::post('/bulk-reject', [TestimonialController::class, 'bulkReject'])->name('bulk.reject');
     });
+    // ============================================
+// FORUM REPLIES
+// ============================================
+Route::post('/forum/reply', [ForumReplyController::class, 'store'])->name('forum.reply.store');
+// TAMBAHKAN ROUTE INI:
+Route::get('/forum/{contactId}/replies', [ForumReplyController::class, 'getReplies'])->name('forum.replies.get');
 });

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Kelola Testimoni</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
         /* ===== RESET & BASE STYLES ===== */
         * {
@@ -310,6 +311,63 @@
             min-width: 200px;
         }
 
+        /* ===== BULK ACTIONS ===== */
+        .bulk-actions {
+            background: #fff;
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .bulk-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-right: 1rem;
+            padding: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .bulk-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .bulk-checkbox label {
+            font-weight: 500;
+            color: #495057;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .bulk-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        .selected-count {
+            background: #3498db;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-left: auto;
+        }
+
         /* ===== TABLE CONTAINER ===== */
         .table-container {
             background: #fff;
@@ -347,6 +405,23 @@
 
         tr:hover td {
             background: #F7FCF9;
+        }
+
+        tr.selected td {
+            background: #E8F5EC;
+        }
+
+        /* Checkbox styling */
+        .checkbox-cell {
+            width: 50px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .checkbox-cell input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
         }
 
         /* ===== BADGES ===== */
@@ -399,6 +474,18 @@
             background: #E8F4F8;
             color: #3498db;
             border: 2px solid #3498db;
+        }
+
+        .alert-error {
+            background: #FFE8E1;
+            color: #D96F4A;
+            border: 2px solid #FF8A5B;
+        }
+
+        .alert-warning {
+            background: #FFF3CD;
+            color: #856404;
+            border: 2px solid #F9D56E;
         }
 
         /* ===== MODAL TAMBAH TESTIMONI ===== */
@@ -475,68 +562,6 @@
         .form-group textarea {
             min-height: 120px;
             resize: vertical;
-        }
-
-        /* Style untuk email generation */
-        .email-generation {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 0.8rem;
-            margin-top: 0.5rem;
-            border: 1px dashed #ddd;
-        }
-
-        .email-generation p {
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 0.5rem;
-        }
-
-        .generated-email-display {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-
-        .generated-email-display input {
-            flex: 1;
-            padding: 0.5rem;
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-family: monospace;
-            font-size: 0.9rem;
-        }
-
-        .btn-copy-email {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 0.5rem 0.8rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s;
-        }
-
-        .btn-copy-email:hover {
-            background: #5a6268;
-        }
-
-        .btn-copy-email.copied {
-            background: #28a745;
-        }
-
-        .copy-status {
-            color: #28a745;
-            font-size: 0.8rem;
-            margin-top: 0.3rem;
-            display: none;
-        }
-
-        .copy-status.show {
-            display: block;
         }
 
         .modal-actions {
@@ -684,6 +709,24 @@
                 min-width: auto;
             }
 
+            .bulk-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .bulk-checkbox {
+                align-self: flex-start;
+            }
+
+            .bulk-buttons {
+                width: 100%;
+            }
+
+            .selected-count {
+                align-self: flex-start;
+                margin-left: 0;
+            }
+
             .pagination {
                 flex-wrap: wrap;
                 justify-content: center;
@@ -766,13 +809,12 @@
                 font-size: 0.85rem;
             }
 
-            .email-generation {
-                padding: 0.6rem;
+            .bulk-buttons {
+                flex-direction: column;
             }
 
-            .generated-email-display {
-                flex-direction: column;
-                align-items: stretch;
+            .bulk-buttons .btn {
+                width: 100%;
             }
         }
 
@@ -834,6 +876,15 @@
 
             .modal-form h2 {
                 font-size: 1.3rem;
+            }
+
+            .checkbox-cell {
+                width: 40px;
+            }
+
+            .checkbox-cell input[type="checkbox"] {
+                width: 16px;
+                height: 16px;
             }
         }
 
@@ -941,8 +992,16 @@
                 <div class="alert alert-success">✓ {{ session('success') }}</div>
             @endif
 
+            @if(session('error'))
+                <div class="alert alert-error">✗ {{ session('error') }}</div>
+            @endif
+
             @if(session('info'))
                 <div class="alert alert-info">ℹ {{ session('info') }}</div>
+            @endif
+
+            @if(session('warning'))
+                <div class="alert alert-warning">⚠ {{ session('warning') }}</div>
             @endif
 
             <!-- Stats Cards -->
@@ -979,11 +1038,48 @@
                 </form>
             </div>
 
+            <!-- Bulk Actions -->
+            <div class="bulk-actions" id="bulkActions" style="display: none;">
+                <div class="bulk-checkbox">
+                    <input type="checkbox" id="selectAllCheckbox">
+                    <label for="selectAllCheckbox">Pilih Semua</label>
+                </div>
+
+                <div class="bulk-buttons">
+                    <button type="button" class="btn btn-success btn-sm" onclick="handleBulkAction('approve')">✓ Setujui</button>
+                    <button type="button" class="btn btn-warning btn-sm" onclick="handleBulkAction('reject')">✕ Tolak</button>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="handleBulkAction('delete')">🗑️ Hapus</button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="clearSelection()">✖ Batalkan Pilihan</button>
+                </div>
+
+                <div class="selected-count" id="selectedCount">0 dipilih</div>
+            </div>
+
+            <!-- Form untuk Bulk Actions (HIDDEN) -->
+            <form id="bulkApproveForm" action="{{ route('admin.testimonials.bulk.approve') }}" method="POST" style="display: none;">
+                @csrf
+                <input type="hidden" name="selected_ids" id="bulkApproveIds">
+            </form>
+
+            <form id="bulkRejectForm" action="{{ route('admin.testimonials.bulk.reject') }}" method="POST" style="display: none;">
+                @csrf
+                <input type="hidden" name="selected_ids" id="bulkRejectIds">
+            </form>
+
+            <form id="bulkDeleteForm" action="{{ route('admin.testimonials.bulk.delete') }}" method="POST" style="display: none;">
+                @csrf
+                @method('DELETE')
+                <input type="hidden" name="selected_ids" id="bulkDeleteIds">
+            </form>
+
             <!-- Table -->
             <div class="table-container">
                 <table>
                     <thead>
                         <tr>
+                            <th class="checkbox-cell">
+                                <input type="checkbox" id="masterCheckbox">
+                            </th>
                             <th>Nama</th>
                             <th>Email</th>
                             <th>Type</th>
@@ -996,7 +1092,10 @@
                     </thead>
                     <tbody>
                         @forelse($testimonials as $testimonial)
-                        <tr>
+                        <tr id="row-{{ $testimonial->id }}" class="{{ $testimonial->status == 'approved' ? 'selected' : '' }}">
+                            <td class="checkbox-cell">
+                                <input type="checkbox" class="item-checkbox" value="{{ $testimonial->id }}" data-status="{{ $testimonial->status }}">
+                            </td>
                             <td><strong>{{ $testimonial->name }}</strong></td>
                             <td>{{ $testimonial->email }}</td>
                             <td>
@@ -1008,7 +1107,7 @@
                                 <span class="badge badge-{{ $testimonial->status }}">
                                     @if($testimonial->status == 'approved')
                                         Disetujui
-                                    @else
+                                    @elseif($testimonial->status == 'rejected')
                                         Ditolak
                                     @endif
                                 </span>
@@ -1040,7 +1139,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" style="text-align: center; padding: 2rem; color: #999;">
+                            <td colspan="9" style="text-align: center; padding: 2rem; color: #999;">
                                 Belum ada testimoni
                             </td>
                         </tr>
@@ -1077,7 +1176,7 @@
         </main>
     </div>
 
-    <!-- Modal Tambah Testimoni -->
+    <!-- Modal Tambah Testimoni (EMAIL DINONAKTIFKAN) -->
     <div class="modal-overlay" id="addModal">
         <div class="modal-form">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
@@ -1091,26 +1190,7 @@
                 <div class="form-group">
                     <label for="name">Nama Lengkap *</label>
                     <input type="text" id="name" name="name" required
-                           oninput="generateEmailFromName()"
                            placeholder="Contoh: Yoga Pratama">
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email *</label>
-                    <input type="email" id="email" name="email" required
-                           placeholder="Email akan digenerate otomatis">
-
-                    <!-- Email Generation Section -->
-                    <div class="email-generation" id="emailGenerationSection" style="display: none;">
-                        <p><strong>Email otomatis dari nama:</strong></p>
-                        <div class="generated-email-display">
-                            <input type="text" id="generatedEmail" readonly>
-                            <button type="button" class="btn-copy-email" onclick="copyGeneratedEmail()" id="copyEmailBtn">
-                                📋 Copy
-                            </button>
-                        </div>
-                        <div class="copy-status" id="copyStatus">✓ Email berhasil disalin!</div>
-                    </div>
                 </div>
 
                 <div class="form-group">
@@ -1133,6 +1213,8 @@
                     </select>
                 </div>
 
+                <!-- EMAIL TIDAK WAJIB - OPSIONAL SAJA -->
+                <input type="hidden" name="email" value="admin@testimoni.com">
                 <input type="hidden" name="type" value="testimonial">
 
                 <div class="modal-actions">
@@ -1168,8 +1250,6 @@
 
             // Reset form saat modal dibuka
             document.getElementById('testimoniForm').reset();
-            document.getElementById('emailGenerationSection').style.display = 'none';
-            document.getElementById('copyStatus').classList.remove('show');
 
             // Set default status to "approved"
             document.getElementById('status').value = 'approved';
@@ -1199,76 +1279,7 @@
             }
         });
 
-        // ===== EMAIL GENERATION FUNCTIONS =====
-        function generateEmailFromName() {
-            const nameInput = document.getElementById('name');
-            const emailInput = document.getElementById('email');
-            const generatedEmailInput = document.getElementById('generatedEmail');
-            const emailGenerationSection = document.getElementById('emailGenerationSection');
-
-            const name = nameInput.value.trim();
-
-            if (name.length >= 2) {
-                // Clean the name
-                let cleanName = name.toLowerCase()
-                    .replace(/[^a-z0-9\s]/g, '') // Remove special characters
-                    .replace(/\s+/g, ' ') // Normalize spaces
-                    .trim();
-
-                // Replace spaces with dots
-                let emailName = cleanName.replace(/\s+/g, '.');
-
-                // If name is too short, add random number
-                if (emailName.length < 3) {
-                    emailName += Math.floor(Math.random() * 100);
-                }
-
-                // Add @gmail.com domain
-                const generatedEmail = emailName + '@gmail.com';
-
-                // Update both email fields
-                emailInput.value = generatedEmail;
-                generatedEmailInput.value = generatedEmail;
-
-                // Show email generation section
-                emailGenerationSection.style.display = 'block';
-            } else {
-                // Hide email generation section if name is too short
-                emailGenerationSection.style.display = 'none';
-                emailInput.value = '';
-            }
-        }
-
-        function copyGeneratedEmail() {
-            const generatedEmailInput = document.getElementById('generatedEmail');
-            const copyBtn = document.getElementById('copyEmailBtn');
-            const copyStatus = document.getElementById('copyStatus');
-
-            generatedEmailInput.select();
-            generatedEmailInput.setSelectionRange(0, 99999); // For mobile devices
-
-            navigator.clipboard.writeText(generatedEmailInput.value)
-                .then(() => {
-                    // Update button appearance
-                    copyBtn.textContent = '✓ Disalin!';
-                    copyBtn.classList.add('copied');
-
-                    // Show success message
-                    copyStatus.classList.add('show');
-
-                    // Reset button after 2 seconds
-                    setTimeout(() => {
-                        copyBtn.textContent = '📋 Copy';
-                        copyBtn.classList.remove('copied');
-                        copyStatus.classList.remove('show');
-                    }, 2000);
-                })
-                .catch(err => {
-                    console.error('Failed to copy: ', err);
-                    alert('Gagal menyalin email ke clipboard');
-                });
-        }
-
+        // ===== RANDOM DATA FILLING =====
         function fillRandomData() {
             // List of random names
             const randomNames = [
@@ -1299,17 +1310,15 @@
             ];
 
             // Get random items
-            const randomName = randomNames[Math.floor(Math.random() * randomNames.length)];
+            const randomIndex = Math.floor(Math.random() * randomNames.length);
+            const randomName = randomNames[randomIndex];
             const randomInstitution = randomInstitutions[Math.floor(Math.random() * randomInstitutions.length)];
             const randomTestimonial = randomTestimonials[Math.floor(Math.random() * randomTestimonials.length)];
 
-            // Fill the form
+            // Fill the form (EMAIL TIDAK DIPERLUKAN)
             document.getElementById('name').value = randomName;
             document.getElementById('institution').value = randomInstitution;
             document.getElementById('message').value = randomTestimonial;
-
-            // Generate email from random name
-            generateEmailFromName();
 
             // Set status to approved (default)
             document.getElementById('status').value = 'approved';
@@ -1321,37 +1330,15 @@
         // ===== FORM VALIDATION =====
         document.getElementById('testimoniForm').addEventListener('submit', function(e) {
             const name = this.name.value.trim();
-            const email = this.email.value.trim();
             const message = this.message.value.trim();
 
-            if(!name || !email || !message) {
+            if(!name || !message) {
                 e.preventDefault();
-                alert('Harap isi semua field yang wajib (Nama, Email, Testimoni)!');
-                return false;
-            }
-
-            // Validate email format
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                e.preventDefault();
-                alert('Format email tidak valid!');
+                alert('Harap isi Nama dan Testimoni!');
                 return false;
             }
 
             return true;
-        });
-
-        // Auto-generate email when name input loses focus
-        document.getElementById('name').addEventListener('blur', function() {
-            if (this.value.trim().length >= 2) {
-                generateEmailFromName();
-            }
-        });
-
-        // Allow manual email editing without overriding
-        document.getElementById('email').addEventListener('input', function() {
-            const emailGenerationSection = document.getElementById('emailGenerationSection');
-            emailGenerationSection.style.display = 'none';
         });
 
         // ===== RESPONSIVE HANDLING =====
@@ -1380,14 +1367,211 @@
             }
         });
 
-        // ===== INITIALIZATION =====
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if there are validation errors
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('error')) {
-                // If there's an error, open the modal to show the form again
-                openAddModal();
+        // ===== BULK ACTIONS HANDLER - VERSI SIMPLE =====
+        function handleBulkAction(action) {
+            const ids = getSelectedIds();
+
+            console.log('Bulk action triggered:', action);
+            console.log('Selected IDs:', ids);
+
+            if (!ids) {
+                alert('Tidak ada testimoni yang dipilih!');
+                return false;
             }
+
+            let message = '';
+            let url = '';
+            let method = 'POST';
+
+            switch(action) {
+                case 'approve':
+                    message = 'Setujui ' + getSelectedCount() + ' testimoni yang dipilih?';
+                    url = '{{ route("admin.testimonials.bulk.approve") }}';
+                    break;
+                case 'reject':
+                    message = 'Tolak ' + getSelectedCount() + ' testimoni yang dipilih?';
+                    url = '{{ route("admin.testimonials.bulk.reject") }}';
+                    break;
+                case 'delete':
+                    message = 'Hapus ' + getSelectedCount() + ' testimoni yang dipilih? Tindakan ini tidak dapat dibatalkan!';
+                    url = '{{ route("admin.testimonials.bulk.delete") }}';
+                    method = 'DELETE';
+                    break;
+                default:
+                    console.error('Action tidak dikenali:', action);
+                    return false;
+            }
+
+            if (confirm(message)) {
+                // Buat form sementara
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = url;
+                form.style.display = 'none';
+
+                // Tambahkan CSRF token
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = '_token';
+                csrfInput.value = csrfToken;
+                form.appendChild(csrfInput);
+
+                // Tambahkan selected_ids
+                const idsInput = document.createElement('input');
+                idsInput.type = 'hidden';
+                idsInput.name = 'selected_ids';
+                idsInput.value = ids;
+                form.appendChild(idsInput);
+
+                // Untuk DELETE, tambahkan method spoofing
+                if (method === 'DELETE') {
+                    const methodInput = document.createElement('input');
+                    methodInput.type = 'hidden';
+                    methodInput.name = '_method';
+                    methodInput.value = 'DELETE';
+                    form.appendChild(methodInput);
+                }
+
+                // Tambahkan form ke body dan submit
+                document.body.appendChild(form);
+                form.submit();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        // ===== GET SELECTED IDs =====
+        function getSelectedIds() {
+            const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+            if (checkboxes.length === 0) return '';
+
+            const ids = Array.from(checkboxes).map(checkbox => checkbox.value).filter(id => id);
+            return ids.join(',');
+        }
+
+        // ===== GET SELECTED COUNT =====
+        function getSelectedCount() {
+            const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+            return checkboxes.length;
+        }
+
+        // ===== CLEAR SELECTION =====
+        function clearSelection() {
+            const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+                toggleRowSelection(checkbox);
+            });
+            updateSelectedCount();
+        }
+
+        // ===== TOGGLE ROW SELECTION =====
+        function toggleRowSelection(checkbox) {
+            const row = checkbox.closest('tr');
+            if (checkbox.checked) {
+                row.classList.add('selected');
+            } else {
+                row.classList.remove('selected');
+            }
+        }
+
+        // ===== UPDATE SELECTED COUNT =====
+        function updateSelectedCount() {
+            const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+            const count = checkboxes.length;
+            const selectedCountElement = document.getElementById('selectedCount');
+
+            if (selectedCountElement) {
+                selectedCountElement.textContent = count + ' dipilih';
+            }
+
+            // Show/hide bulk actions panel
+            const bulkActions = document.getElementById('bulkActions');
+            if (count > 0) {
+                bulkActions.style.display = 'flex';
+            } else {
+                bulkActions.style.display = 'none';
+            }
+
+            // Update master checkbox state
+            const totalCheckboxes = document.querySelectorAll('.item-checkbox').length;
+            const masterCheckbox = document.getElementById('masterCheckbox');
+            const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+
+            if (count === totalCheckboxes && totalCheckboxes > 0) {
+                if (masterCheckbox) {
+                    masterCheckbox.checked = true;
+                    masterCheckbox.indeterminate = false;
+                }
+                if (selectAllCheckbox) {
+                    selectAllCheckbox.checked = true;
+                    selectAllCheckbox.indeterminate = false;
+                }
+            } else if (count > 0) {
+                if (masterCheckbox) {
+                    masterCheckbox.checked = false;
+                    masterCheckbox.indeterminate = true;
+                }
+                if (selectAllCheckbox) {
+                    selectAllCheckbox.checked = false;
+                    selectAllCheckbox.indeterminate = true;
+                }
+            } else {
+                if (masterCheckbox) {
+                    masterCheckbox.checked = false;
+                    masterCheckbox.indeterminate = false;
+                }
+                if (selectAllCheckbox) {
+                    selectAllCheckbox.checked = false;
+                    selectAllCheckbox.indeterminate = false;
+                }
+            }
+        }
+
+        // ===== INITIALIZE EVENT LISTENERS =====
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing bulk actions...');
+
+            // Master checkbox
+            const masterCheckbox = document.getElementById('masterCheckbox');
+            if (masterCheckbox) {
+                masterCheckbox.addEventListener('change', function() {
+                    const checkboxes = document.querySelectorAll('.item-checkbox');
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = this.checked;
+                        toggleRowSelection(checkbox);
+                    });
+                    updateSelectedCount();
+                });
+            }
+
+            // Select all checkbox
+            const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+            if (selectAllCheckbox) {
+                selectAllCheckbox.addEventListener('change', function() {
+                    const checkboxes = document.querySelectorAll('.item-checkbox');
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = this.checked;
+                        toggleRowSelection(checkbox);
+                    });
+                    updateSelectedCount();
+                });
+            }
+
+            // Individual checkbox click
+            document.addEventListener('change', function(e) {
+                if (e.target.classList.contains('item-checkbox')) {
+                    console.log('Checkbox changed:', e.target.value, e.target.checked);
+                    toggleRowSelection(e.target);
+                    updateSelectedCount();
+                }
+            });
+
+            // Initialize count
+            updateSelectedCount();
         });
     </script>
 </body>

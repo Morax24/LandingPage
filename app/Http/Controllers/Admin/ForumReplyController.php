@@ -5,135 +5,141 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ForumReply;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ForumReplyController extends Controller
 {
     /**
-     * Tampilkan semua replies
+     * Display a listing of the forum replies.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $query = ForumReply::with(['contact', 'approver'])->latest();
+        $replies = ForumReply::with(['contact', 'approver'])
+            ->latest()
+            ->paginate(20);
 
-        // Filter by status
-        if ($request->has('status') && $request->status != 'all') {
-            $query->where('status', $request->status);
-        }
-
-        // Search
-        if ($request->has('search') && $request->search) {
-            $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('message', 'like', "%{$search}%");
-            });
-        }
-
-        $replies = $query->paginate(15);
-
-        // Stats
-        $stats = [
-            'total' => ForumReply::count(),
-            'pending' => ForumReply::pending()->count(),
-            'approved' => ForumReply::approved()->count(),
-        ];
-
-        return view('admin.forum-replies.index', compact('replies', 'stats'));
+        return view('admin.forum-replies.index', compact('replies'));
     }
 
     /**
-     * Approve reply
+     * Approve a forum reply.
      */
     public function approve($id)
     {
-        $reply = ForumReply::findOrFail($id);
+        try {
+            $reply = ForumReply::findOrFail($id);
 
-        if ($reply->isApproved()) {
+            $reply->update([
+                'status' => 'approved',
+                'approved_at' => now(),
+                'approved_by' => auth()->id(),
+            ]);
+
             return redirect()
-                ->back()
-                ->with('info', 'Reply ini sudah disetujui sebelumnya.');
+                ->route('admin.forum-replies.index')
+                ->with('success', 'Balasan forum berhasil disetujui.');
+
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('admin.forum-replies.index')
+                ->with('error', 'Gagal menyetujui balasan forum: ' . $e->getMessage());
         }
-
-        $reply->update([
-            'status' => 'approved',
-            'approved_at' => now(),
-            'approved_by' => Auth::id(),
-        ]);
-
-        return redirect()
-            ->back()
-            ->with('success', 'Reply berhasil disetujui!');
     }
 
     /**
-     * Reject reply
+     * Reject a forum reply.
      */
     public function reject($id)
     {
-        $reply = ForumReply::findOrFail($id);
+        try {
+            $reply = ForumReply::findOrFail($id);
 
-        $reply->update([
-            'status' => 'rejected',
-            'approved_at' => now(),
-            'approved_by' => Auth::id(),
-        ]);
+            $reply->update([
+                'status' => 'rejected',
+                'approved_at' => now(),
+                'approved_by' => auth()->id(),
+            ]);
 
-        return redirect()
-            ->back()
-            ->with('success', 'Reply berhasil ditolak.');
+            return redirect()
+                ->route('admin.forum-replies.index')
+                ->with('success', 'Balasan forum berhasil ditolak.');
+
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('admin.forum-replies.index')
+                ->with('error', 'Gagal menolak balasan forum: ' . $e->getMessage());
+        }
     }
 
     /**
-     * Delete reply
+     * Delete a forum reply.
      */
     public function destroy($id)
     {
-        $reply = ForumReply::findOrFail($id);
-        $reply->delete();
+        try {
+            $reply = ForumReply::findOrFail($id);
+            $reply->delete();
 
-        return redirect()
-            ->back()
-            ->with('success', 'Reply berhasil dihapus.');
+            return redirect()
+                ->route('admin.forum-replies.index')
+                ->with('success', 'Balasan forum berhasil dihapus.');
+
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('admin.forum-replies.index')
+                ->with('error', 'Gagal menghapus balasan forum: ' . $e->getMessage());
+        }
     }
 
     /**
-     * Bulk approve
+     * Bulk approve forum replies.
      */
     public function bulkApprove(Request $request)
     {
         $request->validate([
             'ids' => 'required|array',
-            'ids.*' => 'exists:forum_replies,id'
+            'ids.*' => 'exists:forum_replies,id',
         ]);
 
-        ForumReply::whereIn('id', $request->ids)
-            ->update([
-                'status' => 'approved',
-                'approved_at' => now(),
-                'approved_by' => Auth::id(),
-            ]);
+        try {
+            ForumReply::whereIn('id', $request->ids)
+                ->update([
+                    'status' => 'approved',
+                    'approved_at' => now(),
+                    'approved_by' => auth()->id(),
+                ]);
 
-        return redirect()
-            ->back()
-            ->with('success', count($request->ids) . ' reply berhasil disetujui.');
+            return redirect()
+                ->route('admin.forum-replies.index')
+                ->with('success', count($request->ids) . ' balasan forum berhasil disetujui.');
+
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('admin.forum-replies.index')
+                ->with('error', 'Gagal menyetujui balasan forum: ' . $e->getMessage());
+        }
     }
 
     /**
-     * Bulk delete
+     * Bulk delete forum replies.
      */
     public function bulkDelete(Request $request)
     {
         $request->validate([
             'ids' => 'required|array',
-            'ids.*' => 'exists:forum_replies,id'
+            'ids.*' => 'exists:forum_replies,id',
         ]);
 
-        ForumReply::whereIn('id', $request->ids)->delete();
+        try {
+            ForumReply::whereIn('id', $request->ids)->delete();
 
-        return redirect()
-            ->back()
-            ->with('success', count($request->ids) . ' reply berhasil dihapus.');
+            return redirect()
+                ->route('admin.forum-replies.index')
+                ->with('success', count($request->ids) . ' balasan forum berhasil dihapus.');
+
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('admin.forum-replies.index')
+                ->with('error', 'Gagal menghapus balasan forum: ' . $e->getMessage());
+        }
     }
 }

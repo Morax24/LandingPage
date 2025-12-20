@@ -28,9 +28,12 @@ class LandingController extends Controller
             ->get();
 
         // ==================== FORUM POSTS ====================
-        // HANYA yang type = 'forum'
+        // HANYA yang type = 'forum' DENGAN SEMUA BALASAN (TANPA FILTER STATUS)
         $forumPosts = Contact::forum()
             ->approved()
+            ->with(['replies' => function($query) {
+                $query->orderBy('created_at', 'asc'); // Tampilkan semua balasan
+            }])
             ->orderBy('created_at', 'desc')
             ->limit(6)
             ->get();
@@ -54,6 +57,20 @@ class LandingController extends Controller
                 'products_count' => $productsMedia->count(),
                 'testimonials_count' => $testimonials->count(),
                 'forum_posts_count' => $forumPosts->count(),
+                'forum_posts_with_replies' => $forumPosts->map(function($post) {
+                    return [
+                        'id' => $post->id,
+                        'title' => $post->message,
+                        'replies_count' => $post->replies->count(),
+                        'replies' => $post->replies->map(function($reply) {
+                            return [
+                                'id' => $reply->id,
+                                'message' => $reply->message,
+                                'status' => $reply->status
+                            ];
+                        })
+                    ];
+                })
             ]);
         }
 

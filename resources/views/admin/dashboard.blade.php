@@ -262,6 +262,15 @@ if ($testimonial_result->num_rows > 0) {
     $total_testimonials = $row['total'] ?? 0;
 }
 
+// 16. Testimoni Ditolak (GANTI DARI "Hari Terbanyak")
+$rejected_testimonials_sql = "SELECT COUNT(*) as rejected FROM contacts WHERE type = 'testimonial' AND status = 'rejected'";
+$rejected_testimonials_result = $conn->query($rejected_testimonials_sql);
+$rejected_testimonials = 0;
+if ($rejected_testimonials_result->num_rows > 0) {
+    $row = $rejected_testimonials_result->fetch_assoc();
+    $rejected_testimonials = $row['rejected'] ?? 0;
+}
+
 // Data untuk Chart (15 data)
 $chart_data = [
     $total_size_mb,          // 1. Total Size Media
@@ -276,12 +285,12 @@ $chart_data = [
     $total_visitors,         // 10. Total Kumulatif
     $yesterday_visitors,     // 11. Kemarin
     $history_days,           // 12. Histori Pengunjung
-    $total_testimonials,     // 13. Total Testimoni (GANTI!)
+    $total_testimonials,     // 13. Total Testimoni
     $avg_visitors,           // 14. Rata-rata per Hari
-    $max_visitors_count      // 15. Hari Terbanyak (jumlah)
+    $rejected_testimonials   // 15. Testimoni Ditolak (GANTI DARI Hari Terbanyak)
 ];
 
-// 16. Data Tabel Pengunjung (5 hari terakhir)
+// 17. Data Tabel Pengunjung (5 hari terakhir)
 $visitor_table_sql = "SELECT date, count, DAYNAME(date) as day_name FROM visitor_counter ORDER BY date DESC LIMIT 5";
 $visitor_table_result = $conn->query($visitor_table_sql);
 $visitor_data = [];
@@ -291,7 +300,7 @@ if ($visitor_table_result->num_rows > 0) {
     }
 }
 
-// 17. Aktivitas Terbaru
+// 18. Aktivitas Terbaru
 $activities = [];
 
 // Aktivitas dari media
@@ -345,7 +354,7 @@ usort($activities, function($a, $b) {
     return strtotime($b['timestamp']) - strtotime($a['timestamp']);
 });
 
-// 18. Pesan Terbaru
+// 19. Pesan Terbaru
 $recent_messages_sql = "SELECT name, email, status, created_at
                        FROM contacts
                        ORDER BY created_at DESC
@@ -358,7 +367,7 @@ if ($recent_messages_result->num_rows > 0) {
     }
 }
 
-// 19. Media Terbaru (DENGAN FILE_PATH)
+// 20. Media Terbaru (DENGAN FILE_PATH)
 $recent_media_sql = "SELECT title, type, section, file_path, created_at
                     FROM media
                     ORDER BY created_at DESC
@@ -750,7 +759,7 @@ $conn->close();
         .stat-card:nth-child(12) { border-top-color: #9b59b6; }
         .stat-card:nth-child(13) { border-top-color: #F9D56E; } /* Emas untuk Testimoni */
         .stat-card:nth-child(14) { border-top-color: #2ecc71; }
-        .stat-card:nth-child(15) { border-top-color: #e74c3c; }
+        .stat-card:nth-child(15) { border-top-color: #e74c3c; } /* Merah untuk Testimoni Ditolak */
 
         /* Dashboard Grid */
         .dashboard-grid {
@@ -1605,14 +1614,6 @@ $conn->close();
                     <div class="stat-label">Histori Pengunjung</div>
                 </div>
 
-                <!-- Total Testimoni (GANTI DARI "Hari Paling Sepi") -->
-                <a href="{{ route('admin.contacts.index', ['type' => 'testimonial']) }}" class="stat-link">
-                    <div class="stat-card" id="testimonialCard">
-                        <span class="stat-icon">⭐</span>
-                        <div class="stat-number"><?php echo $total_testimonials; ?></div>
-                        <div class="stat-label">Total Testimoni</div>
-                    </div>
-                </a>
 
                 <div class="stat-card">
                     <span class="stat-icon">📉</span>
@@ -1620,12 +1621,23 @@ $conn->close();
                     <div class="stat-label">Rata-rata per Hari</div>
                 </div>
 
-                <div class="stat-card">
-                    <span class="stat-icon">🤩</span>
-                    <div class="day-name"><?php echo $max_visitors_day; ?></div>
-                    <div class="stat-label">Kunjungan Tertinggi</div>
-                    <div class="day-count">(<?php echo $max_visitors_count; ?> pengunjung)</div>
-                </div>
+                <!-- Total Testimoni -->
+                <a href="{{ route('admin.testimonials.index') }}" class="stat-link">
+                    <div class="stat-card" id="testimonialCard">
+                        <span class="stat-icon">⭐</span>
+                        <div class="stat-number"><?php echo $total_testimonials; ?></div>
+                        <div class="stat-label">Total Testimoni</div>
+                    </div>
+                </a>
+                
+                <!-- Testimoni Ditolak (GANTI DARI "Kunjungan Tertinggi") -->
+                <a href="{{ route('admin.testimonials.index') }}" class="stat-link">
+                    <div class="stat-card">
+                        <span class="stat-icon">🚫</span>
+                        <div class="stat-number"><?php echo $rejected_testimonials; ?></div>
+                        <div class="stat-label">Testimoni Ditolak</div>
+                    </div>
+                </a>
             </div>
 
             <!-- Dashboard 3 Kolom -->
@@ -1879,7 +1891,7 @@ $conn->close();
         const chartLabels = [
             'Total Size Media', 'Total Pesan', 'Pesan Pending', 'Pesan Disetujui', 'Pesan Ditolak',
             'Total Media', 'Media Aktif', 'Media Nonaktif', 'Hari Ini', 'Total Kumulatif',
-            'Kemarin', 'Histori Pengunjung', '⭐ Total Testimoni', 'Rata-rata per Hari', 'Hari Terbanyak'
+            'Kemarin', 'Histori Pengunjung', '⭐ Total Testimoni', 'Rata-rata per Hari', '🚫 Testimoni Ditolak'
         ];
 
         const chartDataValues = <?php echo json_encode($chart_data); ?>;
@@ -1935,12 +1947,12 @@ $conn->close();
                 backgroundColor: [
                     '#4CAF50', '#2196F3', '#FFC107', '#4CAF50', '#F44336',
                     '#9C27B0', '#4CAF50', '#FF9800', '#FFA726', '#3498db',
-                    '#8BC34A', '#9b59b6', '#F9D56E', '#2ecc71', '#e74c3c'  // #F9D56E untuk Testimoni
+                    '#8BC34A', '#9b59b6', '#F9D56E', '#2ecc71', '#e74c3c'  // #e74c3c untuk Testimoni Ditolak
                 ],
                 borderColor: [
                     '#2E7D32', '#1565C0', '#FF8F00', '#2E7D32', '#C62828',
                     '#7B1FA2', '#2E7D32', '#EF6C00', '#F57C00', '#1a5276',
-                    '#558B2F', '#8e44ad', '#FFC107', '#27ae60', '#c0392b'  // #FFC107 untuk Testimoni
+                    '#558B2F', '#8e44ad', '#FFC107', '#27ae60', '#c0392b'  // #c0392b untuk Testimoni Ditolak
                 ],
                 borderWidth: 1.5,
                 borderRadius: 4,
@@ -1987,7 +1999,9 @@ $conn->close();
                                             label = context.parsed.y.toFixed(1) + ' MB';
                                         } else if (context.dataIndex === 12) {
                                             label = '⭐ ' + context.parsed.y + ' testimoni';
-                                        } else if ([8,9,10,11,13,14].includes(context.dataIndex)) {
+                                        } else if (context.dataIndex === 14) {
+                                            label = '🚫 ' + context.parsed.y + ' testimoni ditolak';
+                                        } else if ([8,9,10,11,13].includes(context.dataIndex)) {
                                             label = context.parsed.y + ' pengunjung';
                                         } else {
                                             label = context.parsed.y;
@@ -2115,55 +2129,6 @@ $conn->close();
             });
 
             historiCard.style.cursor = 'pointer';
-        }
-
-        // ======================
-        // ⭐ TESTIMONI CARD CLICK FUNCTION
-        // ======================
-        const testimonialCard = document.getElementById('testimonialCard');
-        if (testimonialCard) {
-            testimonialCard.addEventListener('click', function(e) {
-                e.stopPropagation();
-
-                // Animasi
-                this.style.transform = 'translateY(-3px) scale(1.02)';
-                this.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
-
-                setTimeout(() => {
-                    this.style.transform = '';
-                    this.style.boxShadow = '';
-                }, 300);
-
-                // Info testimoni dari PHP
-                const testimonialCount = <?php echo $total_testimonials; ?>;
-                const totalContacts = <?php echo $total_contacts; ?>;
-                const pendingContacts = <?php echo $pending_contacts; ?>;
-                const approvedContacts = <?php echo $approved_contacts; ?>;
-                const rejectedContacts = <?php echo $rejected_contacts; ?>;
-
-                let message = '⭐ STATISTIK TESTIMONI\n\n';
-                message += `• Total Testimoni: ${testimonialCount}\n`;
-
-                if (testimonialCount > 0) {
-                    const percentage = (testimonialCount / totalContacts * 100).toFixed(1);
-                    message += `• Persentase: ${percentage}% dari total pesan\n`;
-                }
-
-                message += '\n📊 PERBANDINGAN:\n';
-                message += `• Total Pesan: ${totalContacts}\n`;
-                message += `• Pending: ${pendingContacts}\n`;
-                message += `• Approved: ${approvedContacts}\n`;
-                message += `• Rejected: ${rejectedContacts}\n\n`;
-
-                message += '💡 INFO:\n';
-                message += '• Testimoni adalah pesan khusus tipe "testimonial"\n';
-                message += '• Dapat dilihat di halaman Kelola Pesan\n';
-                message += '• Gunakan filter tipe untuk melihat testimoni saja';
-
-                alert(message);
-            });
-
-            testimonialCard.style.cursor = 'pointer';
         }
 
         // ======================
