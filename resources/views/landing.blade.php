@@ -819,6 +819,97 @@
             min-height: 200px;
         }
 
+        /* =========================================== */
+        /* TESTIMONIAL CAROUSEL STYLES - FIXED */
+        /* =========================================== */
+        .testimonial-carousel-container {
+            position: relative;
+            overflow: hidden;
+            margin: 2rem 0;
+            min-height: 500px;
+        }
+
+        .testimonial-carousel {
+            width: 100%;
+            position: relative;
+        }
+
+        .carousel-slide {
+            width: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+            display: block;
+            position: relative;
+        }
+
+        /* Carousel Navigation Buttons */
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(124, 179, 66, 0.9);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .carousel-btn:hover {
+            background: rgba(124, 179, 66, 1);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-btn.prev-btn {
+            left: 10px;
+        }
+
+        .carousel-btn.next-btn {
+            right: 10px;
+        }
+
+        /* Dots Indicator */
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 2rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #7cb342;
+            transform: scale(1.2);
+        }
+
+        .dot:hover {
+            background: #aaa;
+        }
+
         /* TESTIMONIAL SECTION */
         .testimonial-section {
             padding: 4rem 5%;
@@ -829,7 +920,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            margin-top: 2rem;
         }
 
         .testimonial-card {
@@ -914,101 +1004,93 @@
             margin-bottom: 1.5rem;
         }
 
-        /* FAQ SECTION */
-        .faq-contact-section {
-            padding: 4rem 5%;
-            background: #f8f9fa;
+        /* =========================================== */
+        /* FORUM CAROUSEL STYLES - FIXED */
+        /* =========================================== */
+        .forum-carousel-container {
+            position: relative;
+            overflow: hidden;
+            margin: 2rem 0;
+            min-height: 600px;
         }
 
-        .faq-contact-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
+        .forum-carousel {
+            width: 100%;
+            position: relative;
+        }
+
+        .forum-slide {
+            width: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .forum-slide.active {
+            opacity: 1;
+            display: block;
+            position: relative;
+        }
+
+        .forum-carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(243, 156, 18, 0.9);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .forum-carousel-btn:hover {
+            background: rgba(243, 156, 18, 1);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .forum-carousel-btn.prev-btn {
+            left: 10px;
+        }
+
+        .forum-carousel-btn.next-btn {
+            right: 10px;
+        }
+
+        .forum-carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
             margin-top: 2rem;
         }
 
-        .faq-contact-form {
-            background: #fff;
-            padding: 2rem;
-            border-radius: 10px;
+        .forum-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .faq-contact-form input,
-        .faq-contact-form textarea {
-            width: 100%;
-            border: 1px solid #ddd;
-            padding: 0.8rem;
-            margin-bottom: 1rem;
-            border-radius: 5px;
-            font-size: clamp(0.85rem, 2vw, 1rem);
-        }
-
-        .faq-contact-form textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .btn-submit {
+        .forum-dot.active {
             background: #f39c12;
-            color: #fff;
-            padding: 0.8rem 2rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            width: 100%;
-            font-size: clamp(0.9rem, 2vw, 1rem);
-            margin-bottom: 1rem;
-            transition: all 0.3s ease;
+            transform: scale(1.2);
         }
 
-        .btn-submit:hover {
-            background: #e67e22;
-            transform: translateY(-2px);
-        }
-
-        .faq-accordion {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .faq-item {
-            background: #fff;
-            padding: 1.5rem 2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .faq-item:hover {
-            background: #f8f9fa;
-        }
-
-        .faq-item strong {
-            font-size: clamp(0.9rem, 2vw, 1rem);
-        }
-
-        .faq-item::after {
-            content: "▼";
-            float: right;
-            transition: transform 0.3s;
-            font-size: 0.8rem;
-        }
-
-        .faq-item.active::after {
-            transform: rotate(180deg);
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            font-size: clamp(0.85rem, 2vw, 0.95rem);
-        }
-
-        .faq-item.active .faq-answer {
-            max-height: 500px;
+        .forum-dot:hover {
+            background: #aaa;
         }
 
         /* FORUM SECTION */
@@ -1021,7 +1103,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
-            margin-top: 2rem;
         }
 
         .forum-card {
@@ -1328,6 +1409,103 @@
             color: #666;
             margin-bottom: 2rem;
             font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        /* FAQ SECTION */
+        .faq-contact-section {
+            padding: 4rem 5%;
+            background: #f8f9fa;
+        }
+
+        .faq-contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .faq-contact-form {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+        }
+
+        .faq-contact-form input,
+        .faq-contact-form textarea {
+            width: 100%;
+            border: 1px solid #ddd;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            font-size: clamp(0.85rem, 2vw, 1rem);
+        }
+
+        .faq-contact-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn-submit {
+            background: #f39c12;
+            color: #fff;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+        }
+
+        .faq-accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .faq-item {
+            background: #fff;
+            padding: 1.5rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            background: #f8f9fa;
+        }
+
+        .faq-item strong {
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        .faq-item::after {
+            content: "▼";
+            float: right;
+            transition: transform 0.3s;
+            font-size: 0.8rem;
+        }
+
+        .faq-item.active::after {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            font-size: clamp(0.85rem, 2vw, 0.95rem);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
         }
 
         /* FOOTER */
@@ -1878,6 +2056,11 @@
             .skills-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .testimonial-grid,
+            .forum-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
         }
 
         @media (max-width: 768px) {
@@ -1935,8 +2118,6 @@
 
             .stats,
             .pricing-grid,
-            .testimonial-grid,
-            .forum-grid,
             .skills-grid {
                 grid-template-columns: 1fr;
                 padding: 2rem 3%;
@@ -2031,6 +2212,35 @@
                 width: 100%;
             }
 
+            /* Carousel buttons responsive */
+            .carousel-btn,
+            .forum-carousel-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .carousel-btn.prev-btn,
+            .forum-carousel-btn.prev-btn {
+                left: 5px;
+            }
+
+            .carousel-btn.next-btn,
+            .forum-carousel-btn.next-btn {
+                right: 5px;
+            }
+
+            .carousel-dots,
+            .forum-carousel-dots {
+                margin-top: 1.5rem;
+            }
+
+            .dot,
+            .forum-dot {
+                width: 10px;
+                height: 10px;
+            }
+
             /* Perbaikan section title untuk mobile */
             .section-title {
                 font-size: 1.8rem !important;
@@ -2052,6 +2262,12 @@
 
             #aktivitas {
                 padding: 2rem 5% !important;
+            }
+
+            /* Testimonial & Forum card responsive */
+            .testimonial-card,
+            .forum-card {
+                padding: 1.5rem;
             }
         }
 
@@ -2195,6 +2411,14 @@
                 grid-column: 1 / span 1;
                 grid-row: auto;
                 height: 200px;
+            }
+
+            /* Carousel untuk mobile kecil */
+            .carousel-btn,
+            .forum-carousel-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
             }
         }
     </style>
@@ -2518,7 +2742,7 @@
                     </div>
                 @endforeach
             @else
-                <!-- Fallback jika tidak ada produk di database
+                <!-- Fallback jika tidak ada produk di database -->
                 <div class="pricing-card product-basic">
                     <div class="product-image-container">
                         <div style="width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; color: #999;">
@@ -2566,52 +2790,88 @@
                        class="btn-primary"
                        style="display: block; text-align: center; margin-top: 1.5rem; background: linear-gradient(135deg, #f7e92b 0%, #ffc107 100%); color: #333;"
                        target="_blank">🛒 Dapatkan Sekarang</a>
-                </div>-->
+                </div>
             @endif
         </div>
     </section>
 
-    <!-- BAGIAN TESTIMONIAL -->
+    <!-- BAGIAN TESTIMONIAL DENGAN CAROUSEL -->
     <section id="testimonial" class="testimonial-section">
         <span class="story-badge">Testimoni</span>
         <h2 class="section-title">Apa yang Dikatakan Para Pemain</h2>
         <p class="section-subtitle">Feedback dan manfaat dari siswa</p>
 
-        <div class="testimonial-grid">
-            @if(isset($testimonials) && $testimonials->count() > 0)
-                @foreach($testimonials->take(5) as $testimonial)
-                    <div class="testimonial-card">
-                        <div class="testimonial-header">
-                            <div class="testimonial-avatar">
-                                @php
-                                    $names = explode(' ', $testimonial->name);
-                                    $initials = '';
-                                    foreach($names as $n) {
-                                        if(!empty(trim($n))) {
-                                            $initials .= strtoupper(substr(trim($n), 0, 1));
-                                        }
-                                    }
-                                    echo substr($initials, 0, 2) ?: 'GU';
-                                @endphp
-                            </div>
-                            <div class="testimonial-info">
-                                <h4>{{ $testimonial->name }}</h4>
-                                <div class="testimonial-institution">
-                                    {{ $testimonial->institution ?? 'Pengguna' }}
-                                </div>
-                                <div class="testimonial-date">
-                                    {{ $testimonial->created_at->translatedFormat('d F Y') }}
-                                </div>
+        <!-- Carousel Container -->
+        <div class="testimonial-carousel-container">
+            <!-- Carousel Wrapper -->
+            <div class="testimonial-carousel" id="testimonialCarousel">
+                @if(isset($testimonials) && $testimonials->count() > 0)
+                    @php
+                        // Hitung jumlah slide yang dibutuhkan
+                        $itemsPerSlide = 5;
+                        $totalItems = $testimonials->count();
+                        $totalSlides = ceil($totalItems / $itemsPerSlide);
+                    @endphp
+
+                    @for($slide = 0; $slide < $totalSlides; $slide++)
+                        <div class="carousel-slide @if($slide === 0) active @endif" data-slide="{{ $slide }}">
+                            <div class="testimonial-grid">
+                                @foreach($testimonials->slice($slide * $itemsPerSlide, $itemsPerSlide) as $testimonial)
+                                    <div class="testimonial-card">
+                                        <div class="testimonial-header">
+                                            <div class="testimonial-avatar">
+                                                @php
+                                                    $names = explode(' ', $testimonial->name);
+                                                    $initials = '';
+                                                    foreach($names as $n) {
+                                                        if(!empty(trim($n))) {
+                                                            $initials .= strtoupper(substr(trim($n), 0, 1));
+                                                        }
+                                                    }
+                                                    echo substr($initials, 0, 2) ?: 'GU';
+                                                @endphp
+                                            </div>
+                                            <div class="testimonial-info">
+                                                <h4>{{ $testimonial->name }}</h4>
+                                                <div class="testimonial-institution">
+                                                    {{ $testimonial->institution ?? 'Pengguna' }}
+                                                </div>
+                                                <div class="testimonial-date">
+                                                    {{ $testimonial->created_at->translatedFormat('d F Y') }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="testimonial-message">"{{ $testimonial->message }}"</p>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
-                        <p class="testimonial-message">"{{ $testimonial->message }}"</p>
+                    @endfor
+                @else
+                    <div class="carousel-slide active">
+                        <div class="no-testimonials">
+                            <h3>Belum ada testimoni</h3>
+                            <p>Jadilah yang pertama memberikan testimoni tentang pengalaman Anda!</p>
+                            <button onclick="showTestimonialForm()" class="btn-primary">⭐ Berikan Testimoni</button>
+                        </div>
                     </div>
-                @endforeach
-            @else
-                <div class="no-testimonials">
-                    <h3>Belum ada testimoni</h3>
-                    <p>Jadilah yang pertama memberikan testimoni tentang pengalaman Anda!</p>
-                    <button onclick="showTestimonialForm()" class="btn-primary">⭐ Berikan Testimoni</button>
+                @endif
+            </div>
+
+            <!-- Navigation Buttons -->
+            @if(isset($testimonials) && $testimonials->count() > 5)
+                <button class="carousel-btn prev-btn" onclick="prevTestimonialSlide()">
+                    <span>‹</span>
+                </button>
+                <button class="carousel-btn next-btn" onclick="nextTestimonialSlide()">
+                    <span>›</span>
+                </button>
+
+                <!-- Dots Indicator -->
+                <div class="carousel-dots" id="testimonialDots">
+                    @for($i = 0; $i < $totalSlides; $i++)
+                        <span class="dot @if($i === 0) active @endif" onclick="goToTestimonialSlide({{ $i }})"></span>
+                    @endfor
                 </div>
             @endif
         </div>
@@ -2692,152 +2952,188 @@
         </div>
     </section>
 
-    <!-- BAGIAN FORUM DENGAN FITUR "LIHAT SEMUA BALASAN" -->
+    <!-- BAGIAN FORUM DENGAN CAROUSEL -->
     <section class="forum-section">
         <span class="story-badge">Forum</span>
         <h2 class="section-title">Forum Terbuka untuk Tanya, Saran, dan Insight</h2>
         <p class="section-subtitle">Punya ide, saran, atau pertanyaan untuk kami? ajukan pertanyaan langsung pada tim kami</p>
 
-        <div class="forum-grid">
-            @if(isset($forumPosts) && $forumPosts->count() > 0)
-                @foreach($forumPosts->take(5) as $post)
-                    <div class="forum-card">
-                        <div class="forum-header">
-                            <div class="forum-avatar">
-                                @php
-                                    $names = explode(' ', $post->name);
-                                    $initials = '';
-                                    foreach($names as $n) {
-                                        if(!empty(trim($n))) {
-                                            $initials .= strtoupper(substr(trim($n), 0, 1));
-                                        }
-                                    }
-                                    echo substr($initials, 0, 2) ?: 'GU';
-                                @endphp
-                            </div>
-                            <div>
-                                <h4>{{ $post->name }}</h4>
-                                <div class="forum-institution">
-                                    {{ $post->institution ?? 'Pengguna' }}
-                                </div>
-                                <div class="forum-date">
-                                    {{ $post->created_at->translatedFormat('d F Y, H:i') }}
-                                </div>
-                            </div>
-                        </div>
+        <!-- Forum Carousel Container -->
+        <div class="forum-carousel-container">
+            <!-- Carousel Wrapper -->
+            <div class="forum-carousel" id="forumCarousel">
+                @if(isset($forumPosts) && $forumPosts->count() > 0)
+                    @php
+                        // Hitung jumlah slide yang dibutuhkan
+                        $forumItemsPerSlide = 5;
+                        $forumTotalItems = $forumPosts->count();
+                        $forumTotalSlides = ceil($forumTotalItems / $forumItemsPerSlide);
+                    @endphp
 
-                        <p class="forum-message">"{{ $post->message }}"</p>
-
-                        <!-- BALASAN YANG SUDAH DISETUJUI -->
-                        @if($post->replies->count() > 0)
-                            <div class="replies-section" id="repliesSection{{ $post->id }}">
-                                <h5 class="replies-title">
-                                    <span>💬</span> {{ $post->replies->count() }} Balasan
-                                </h5>
-
-                                <!-- TAMPILKAN HANYA 1 KOMENTAR PERTAMA -->
-                                @foreach($post->replies as $index => $reply)
-                                    <div class="reply-item {{ $index >= 1 ? 'hidden-reply' : '' }}">
-                                        <div class="reply-header">
-                                            <div class="reply-avatar">
+                    @for($slide = 0; $slide < $forumTotalSlides; $slide++)
+                        <div class="forum-slide @if($slide === 0) active @endif" data-slide="{{ $slide }}">
+                            <div class="forum-grid">
+                                @foreach($forumPosts->slice($slide * $forumItemsPerSlide, $forumItemsPerSlide) as $post)
+                                    <div class="forum-card">
+                                        <div class="forum-header">
+                                            <div class="forum-avatar">
                                                 @php
-                                                    $replyNames = explode(' ', $reply->name);
-                                                    $replyInitials = '';
-                                                    foreach($replyNames as $n) {
+                                                    $names = explode(' ', $post->name);
+                                                    $initials = '';
+                                                    foreach($names as $n) {
                                                         if(!empty(trim($n))) {
-                                                            $replyInitials .= strtoupper(substr(trim($n), 0, 1));
+                                                            $initials .= strtoupper(substr(trim($n), 0, 1));
                                                         }
                                                     }
-                                                    echo substr($replyInitials, 0, 2) ?: 'GU';
+                                                    echo substr($initials, 0, 2) ?: 'GU';
                                                 @endphp
                                             </div>
-                                            <span class="reply-name">{{ $reply->name }}</span>
+                                            <div>
+                                                <h4>{{ $post->name }}</h4>
+                                                <div class="forum-institution">
+                                                    {{ $post->institution ?? 'Pengguna' }}
+                                                </div>
+                                                <div class="forum-date">
+                                                    {{ $post->created_at->translatedFormat('d F Y, H:i') }}
+                                                </div>
+                                            </div>
                                         </div>
-                                        <p class="reply-message">{{ $reply->message }}</p>
-                                        <div class="reply-date">
-                                            {{ $reply->created_at->diffForHumans() }}
+
+                                        <p class="forum-message">"{{ $post->message }}"</p>
+
+                                        <!-- BALASAN YANG SUDAH DISETUJUI -->
+                                        @if($post->replies->count() > 0)
+                                            <div class="replies-section" id="repliesSection{{ $post->id }}">
+                                                <h5 class="replies-title">
+                                                    <span>💬</span> {{ $post->replies->count() }} Balasan
+                                                </h5>
+
+                                                <!-- TAMPILKAN HANYA 1 KOMENTAR PERTAMA -->
+                                                @foreach($post->replies as $index => $reply)
+                                                    <div class="reply-item {{ $index >= 1 ? 'hidden-reply' : '' }}">
+                                                        <div class="reply-header">
+                                                            <div class="reply-avatar">
+                                                                @php
+                                                                    $replyNames = explode(' ', $reply->name);
+                                                                    $replyInitials = '';
+                                                                    foreach($replyNames as $n) {
+                                                                        if(!empty(trim($n))) {
+                                                                            $replyInitials .= strtoupper(substr(trim($n), 0, 1));
+                                                                        }
+                                                                    }
+                                                                    echo substr($replyInitials, 0, 2) ?: 'GU';
+                                                                @endphp
+                                                            </div>
+                                                            <span class="reply-name">{{ $reply->name }}</span>
+                                                        </div>
+                                                        <p class="reply-message">{{ $reply->message }}</p>
+                                                        <div class="reply-date">
+                                                            {{ $reply->created_at->diffForHumans() }}
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+
+                                                <!-- TOMBOL "LIHAT SEMUA BALASAN" - SEKARANG BUKA MODAL -->
+                                                @if($post->replies->count() > 0)
+                                                    <button class="show-all-replies-btn" onclick="openCommentsModal({{ $post->id }})">
+                                                        <i>💬</i> Lihat {{ $post->replies->count() }} Balasan
+                                                    </button>
+                                                @endif
+                                            </div>
+                                        @else
+                                            <div class="no-replies">
+                                                Belum ada balasan. Jadilah yang pertama membalas!
+                                            </div>
+                                        @endif
+
+                                        <!-- FORM UNTUK MEMBALAS -->
+                                        <div class="reply-form">
+                                            <button class="reply-toggle-btn" onclick="toggleReplyForm({{ $post->id }})">
+                                                <span>💬</span> Balas
+                                            </button>
+
+                                            <div class="reply-form-container" id="replyForm{{ $post->id }}">
+                                                <form onsubmit="submitReply(event, {{ $post->id }})">
+                                                    @csrf
+                                                    <input type="hidden" name="contact_id" value="{{ $post->id }}">
+                                                    <input type="hidden" name="email" id="replyEmail{{ $post->id }}" value="guest@waluyaland.com">
+
+                                                    <div>
+                                                        <input type="text"
+                                                               name="name"
+                                                               placeholder="Nama Anda *"
+                                                               required
+                                                               class="reply-form-input"
+                                                               id="replyName{{ $post->id }}">
+                                                    </div>
+
+                                                    <div>
+                                                        <textarea name="message"
+                                                                  placeholder="Tulis balasan Anda... *"
+                                                                  required
+                                                                  rows="3"
+                                                                  class="reply-form-textarea"
+                                                                  id="replyMessage{{ $post->id }}"></textarea>
+                                                    </div>
+
+                                                    <div class="reply-form-actions">
+                                                        <button type="submit" class="reply-submit-btn">
+                                                            Kirim Balasan
+                                                        </button>
+                                                        <button type="button"
+                                                                onclick="toggleReplyForm({{ $post->id }})"
+                                                                class="reply-cancel-btn">
+                                                            Batal
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
                                 @endforeach
-
-                                <!-- TOMBOL "LIHAT SEMUA BALASAN" - SEKARANG BUKA MODAL -->
-                                @if($post->replies->count() > 0)
-                                    <button class="show-all-replies-btn" onclick="openCommentsModal({{ $post->id }})">
-                                        <i>💬</i> Lihat {{ $post->replies->count() }} Balasan
-                                    </button>
-                                @endif
                             </div>
-                        @else
+                        </div>
+                    @endfor
+                @else
+                    <!-- Fallback jika tidak ada postingan forum -->
+                    <div class="forum-slide active">
+                        <div class="forum-card">
+                            <div class="forum-header">
+                                <div class="forum-avatar">WL</div>
+                                <div>
+                                    <h4>Waluya Land Team</h4>
+                                    <div class="forum-institution">Admin</div>
+                                    <div class="forum-date">{{ now()->translatedFormat('d F Y, H:i') }}</div>
+                                </div>
+                            </div>
+                            <p class="forum-message">"Selamat datang di forum Waluya Land! Silakan ajukan pertanyaan atau saran Anda di sini."</p>
                             <div class="no-replies">
                                 Belum ada balasan. Jadilah yang pertama membalas!
                             </div>
-                        @endif
-
-                        <!-- FORM UNTUK MEMBALAS -->
-                        <div class="reply-form">
-                            <button class="reply-toggle-btn" onclick="toggleReplyForm({{ $post->id }})">
-                                <span>💬</span> Balas
-                            </button>
-
-                            <div class="reply-form-container" id="replyForm{{ $post->id }}">
-                                <form onsubmit="submitReply(event, {{ $post->id }})">
-                                    @csrf
-                                    <input type="hidden" name="contact_id" value="{{ $post->id }}">
-                                    <input type="hidden" name="email" id="replyEmail{{ $post->id }}" value="guest@waluyaland.com">
-
-                                    <div>
-                                        <input type="text"
-                                               name="name"
-                                               placeholder="Nama Anda *"
-                                               required
-                                               class="reply-form-input"
-                                               id="replyName{{ $post->id }}">
-                                    </div>
-
-                                    <div>
-                                        <textarea name="message"
-                                                  placeholder="Tulis balasan Anda... *"
-                                                  required
-                                                  rows="3"
-                                                  class="reply-form-textarea"
-                                                  id="replyMessage{{ $post->id }}"></textarea>
-                                    </div>
-
-                                    <div class="reply-form-actions">
-                                        <button type="submit" class="reply-submit-btn">
-                                            Kirim Balasan
-                                        </button>
-                                        <button type="button"
-                                                onclick="toggleReplyForm({{ $post->id }})"
-                                                class="reply-cancel-btn">
-                                            Batal
-                                        </button>
-                                    </div>
-                                </form>
+                            <div class="reply-form">
+                                <button class="reply-toggle-btn" onclick="showTestimonialForm()">
+                                    <span>💬</span> Balas
+                                </button>
                             </div>
                         </div>
                     </div>
-                @endforeach
-            @else
-                <!-- Fallback jika tidak ada postingan forum -->
-                <div class="forum-card">
-                    <div class="forum-header">
-                        <div class="forum-avatar">WL</div>
-                        <div>
-                            <h4>Waluya Land Team</h4>
-                            <div class="forum-institution">Admin</div>
-                            <div class="forum-date">{{ now()->translatedFormat('d F Y, H:i') }}</div>
-                        </div>
-                    </div>
-                    <p class="forum-message">"Selamat datang di forum Waluya Land! Silakan ajukan pertanyaan atau saran Anda di sini."</p>
-                    <div class="no-replies">
-                        Belum ada balasan. Jadilah yang pertama membalas!
-                    </div>
-                    <div class="reply-form">
-                        <button class="reply-toggle-btn" onclick="showTestimonialForm()">
-                            <span>💬</span> Balas
-                        </button>
-                    </div>
+                @endif
+            </div>
+
+            <!-- Navigation Buttons -->
+            @if(isset($forumPosts) && $forumPosts->count() > 5)
+                <button class="forum-carousel-btn prev-btn" onclick="prevForumSlide()">
+                    <span>‹</span>
+                </button>
+                <button class="forum-carousel-btn next-btn" onclick="nextForumSlide()">
+                    <span>›</span>
+                </button>
+
+                <!-- Dots Indicator -->
+                <div class="forum-carousel-dots" id="forumDots">
+                    @for($i = 0; $i < $forumTotalSlides; $i++)
+                        <span class="forum-dot @if($i === 0) active @endif" onclick="goToForumSlide({{ $i }})"></span>
+                    @endfor
                 </div>
             @endif
         </div>
@@ -2898,14 +3194,6 @@
             <!-- Modal Body - Scrollable -->
             <div class="comments-modal-body" id="commentsModalBody">
                 <!-- Komentar akan dimuat di sini via JavaScript -->
-            </div>
-
-            <!-- Modal Footer (opsional untuk reply)
-            <div class="comments-modal-footer">
-                <div class="reply-form-mini">
-                    <input type="text" placeholder="Tambahkan balasan..." id="modalReplyInput">
-                    <button onclick="submitModalReply()">Kirim</button>
-                </div>-->
             </div>
         </div>
     </div>
@@ -3060,6 +3348,227 @@
     }
 
     // ===========================================
+    // TESTIMONIAL CAROUSEL FUNCTIONALITY - SIMPLE VERSION
+    // ===========================================
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Initializing carousels...');
+
+        // Testimonial Carousel
+        const testimonialSlides = document.querySelectorAll('.testimonial-carousel .carousel-slide');
+        const testimonialDots = document.querySelectorAll('#testimonialDots .dot');
+
+        console.log('Testimonial slides:', testimonialSlides.length);
+        console.log('Testimonial dots:', testimonialDots.length);
+
+        if (testimonialSlides.length > 1) {
+            let testimonialIndex = 0;
+
+            // Show first slide
+            testimonialSlides[0].classList.add('active');
+            testimonialSlides[0].style.display = 'block';
+
+            // Auto slide function
+            function testimonialNextSlide() {
+                console.log('Next testimonial slide, current:', testimonialIndex);
+
+                testimonialSlides[testimonialIndex].classList.remove('active');
+                testimonialSlides[testimonialIndex].style.display = 'none';
+
+                testimonialIndex = (testimonialIndex + 1) % testimonialSlides.length;
+
+                testimonialSlides[testimonialIndex].classList.add('active');
+                testimonialSlides[testimonialIndex].style.display = 'block';
+
+                // Update dots
+                testimonialDots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === testimonialIndex);
+                });
+            }
+
+            // Start auto slide
+            let testimonialInterval = setInterval(testimonialNextSlide, 5000);
+
+            // Pause on hover
+            const testimonialContainer = document.querySelector('.testimonial-carousel-container');
+            if (testimonialContainer) {
+                testimonialContainer.addEventListener('mouseenter', () => {
+                    console.log('Pausing testimonial carousel');
+                    clearInterval(testimonialInterval);
+                });
+
+                testimonialContainer.addEventListener('mouseleave', () => {
+                    console.log('Resuming testimonial carousel');
+                    testimonialInterval = setInterval(testimonialNextSlide, 5000);
+                });
+            }
+
+            // Dot click events
+            testimonialDots.forEach((dot, i) => {
+                dot.addEventListener('click', () => {
+                    console.log('Clicked testimonial dot:', i);
+                    clearInterval(testimonialInterval);
+
+                    testimonialSlides[testimonialIndex].classList.remove('active');
+                    testimonialSlides[testimonialIndex].style.display = 'none';
+
+                    testimonialIndex = i;
+
+                    testimonialSlides[testimonialIndex].classList.add('active');
+                    testimonialSlides[testimonialIndex].style.display = 'block';
+
+                    // Update dots
+                    testimonialDots.forEach((d, idx) => {
+                        d.classList.toggle('active', idx === testimonialIndex);
+                    });
+
+                    // Restart interval
+                    testimonialInterval = setInterval(testimonialNextSlide, 5000);
+                });
+            });
+
+            // Prev/Next button events
+            const testimonialPrevBtn = document.querySelector('.testimonial-carousel-container .carousel-btn.prev-btn');
+            const testimonialNextBtn = document.querySelector('.testimonial-carousel-container .carousel-btn.next-btn');
+
+            if (testimonialPrevBtn) {
+                testimonialPrevBtn.addEventListener('click', () => {
+                    clearInterval(testimonialInterval);
+
+                    testimonialSlides[testimonialIndex].classList.remove('active');
+                    testimonialSlides[testimonialIndex].style.display = 'none';
+
+                    testimonialIndex = (testimonialIndex - 1 + testimonialSlides.length) % testimonialSlides.length;
+
+                    testimonialSlides[testimonialIndex].classList.add('active');
+                    testimonialSlides[testimonialIndex].style.display = 'block';
+
+                    // Update dots
+                    testimonialDots.forEach((d, idx) => {
+                        d.classList.toggle('active', idx === testimonialIndex);
+                    });
+
+                    testimonialInterval = setInterval(testimonialNextSlide, 5000);
+                });
+            }
+
+            if (testimonialNextBtn) {
+                testimonialNextBtn.addEventListener('click', () => {
+                    clearInterval(testimonialInterval);
+                    testimonialNextSlide();
+                    testimonialInterval = setInterval(testimonialNextSlide, 5000);
+                });
+            }
+        }
+
+        // Forum Carousel
+        const forumSlides = document.querySelectorAll('.forum-carousel .forum-slide');
+        const forumDots = document.querySelectorAll('#forumDots .forum-dot');
+
+        console.log('Forum slides:', forumSlides.length);
+        console.log('Forum dots:', forumDots.length);
+
+        if (forumSlides.length > 1) {
+            let forumIndex = 0;
+
+            // Show first slide
+            forumSlides[0].classList.add('active');
+            forumSlides[0].style.display = 'block';
+
+            // Auto slide function
+            function forumNextSlide() {
+                console.log('Next forum slide, current:', forumIndex);
+
+                forumSlides[forumIndex].classList.remove('active');
+                forumSlides[forumIndex].style.display = 'none';
+
+                forumIndex = (forumIndex + 1) % forumSlides.length;
+
+                forumSlides[forumIndex].classList.add('active');
+                forumSlides[forumIndex].style.display = 'block';
+
+                // Update dots
+                forumDots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === forumIndex);
+                });
+            }
+
+            // Start auto slide
+            let forumInterval = setInterval(forumNextSlide, 6000);
+
+            // Pause on hover
+            const forumContainer = document.querySelector('.forum-carousel-container');
+            if (forumContainer) {
+                forumContainer.addEventListener('mouseenter', () => {
+                    console.log('Pausing forum carousel');
+                    clearInterval(forumInterval);
+                });
+
+                forumContainer.addEventListener('mouseleave', () => {
+                    console.log('Resuming forum carousel');
+                    forumInterval = setInterval(forumNextSlide, 6000);
+                });
+            }
+
+            // Dot click events
+            forumDots.forEach((dot, i) => {
+                dot.addEventListener('click', () => {
+                    console.log('Clicked forum dot:', i);
+                    clearInterval(forumInterval);
+
+                    forumSlides[forumIndex].classList.remove('active');
+                    forumSlides[forumIndex].style.display = 'none';
+
+                    forumIndex = i;
+
+                    forumSlides[forumIndex].classList.add('active');
+                    forumSlides[forumIndex].style.display = 'block';
+
+                    // Update dots
+                    forumDots.forEach((d, idx) => {
+                        d.classList.toggle('active', idx === forumIndex);
+                    });
+
+                    // Restart interval
+                    forumInterval = setInterval(forumNextSlide, 6000);
+                });
+            });
+
+            // Prev/Next button events
+            const forumPrevBtn = document.querySelector('.forum-carousel-container .forum-carousel-btn.prev-btn');
+            const forumNextBtn = document.querySelector('.forum-carousel-container .forum-carousel-btn.next-btn');
+
+            if (forumPrevBtn) {
+                forumPrevBtn.addEventListener('click', () => {
+                    clearInterval(forumInterval);
+
+                    forumSlides[forumIndex].classList.remove('active');
+                    forumSlides[forumIndex].style.display = 'none';
+
+                    forumIndex = (forumIndex - 1 + forumSlides.length) % forumSlides.length;
+
+                    forumSlides[forumIndex].classList.add('active');
+                    forumSlides[forumIndex].style.display = 'block';
+
+                    // Update dots
+                    forumDots.forEach((d, idx) => {
+                        d.classList.toggle('active', idx === forumIndex);
+                    });
+
+                    forumInterval = setInterval(forumNextSlide, 6000);
+                });
+            }
+
+            if (forumNextBtn) {
+                forumNextBtn.addEventListener('click', () => {
+                    clearInterval(forumInterval);
+                    forumNextSlide();
+                    forumInterval = setInterval(forumNextSlide, 6000);
+                });
+            }
+        }
+    });
+
+    // ===========================================
     // MODAL KOMENTAR INSTAGRAM STYLE
     // ===========================================
     let currentContactId = null;
@@ -3165,71 +3674,6 @@
         currentContactId = null;
         currentPostData = null;
     }
-
-    function submitModalReply() {
-        if (!currentContactId) return;
-
-        const input = document.getElementById('modalReplyInput');
-        const message = input.value.trim();
-
-        if (!message) {
-            alert('Harap isi balasan');
-            return;
-        }
-
-        // Simulasi pengiriman balasan (bisa diintegrasikan dengan backend)
-        const newReply = {
-            name: 'Anda',
-            message: message,
-            created_at: 'Baru saja'
-        };
-
-        // Tambahkan ke modal
-        const modalBody = document.getElementById('commentsModalBody');
-        const newCommentHTML = `
-            <div class="modal-comment-item" style="background: #f0f9ff; border-left-color: #2196f3;">
-                <div class="modal-comment-header">
-                    <div class="modal-comment-avatar" style="background: #2196f3;">
-                        A
-                    </div>
-                    <div class="modal-comment-info">
-                        <div class="modal-comment-name">Anda</div>
-                        <div class="modal-comment-date">Baru saja</div>
-                    </div>
-                </div>
-                <div class="modal-comment-message">
-                    ${message}
-                </div>
-            </div>
-        `;
-
-        modalBody.insertAdjacentHTML('beforeend', newCommentHTML);
-
-        // Clear input
-        input.value = '';
-
-        // Scroll ke komentar baru
-        modalBody.scrollTop = modalBody.scrollHeight;
-
-        // Tampilkan notifikasi
-        setTimeout(() => {
-            alert('Balasan berhasil dikirim! (Simulasi)');
-        }, 300);
-    }
-
-    // Close modal dengan ESC
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeCommentsModal();
-        }
-    });
-
-    // Close modal dengan klik di luar
-    document.getElementById('commentsModal')?.addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeCommentsModal();
-        }
-    });
 
     // ===========================================
     // FUNGSI UNTUK FORUM REPLIES
