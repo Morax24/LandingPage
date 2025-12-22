@@ -66,7 +66,7 @@
             display: block;
         }
 
-        /* HEADER - TETAP SAMA */
+        /* HEADER */
         header {
             background: #d4f1f4;
             padding: 1rem 5%;
@@ -157,7 +157,7 @@
             background: #e67e22;
         }
 
-        /* HERO SECTION - BACKGROUND ABU-ABU */
+        /* HERO SECTION */
         .hero {
             background: #f8f9fa;
             padding: 4rem 5% 8rem;
@@ -223,7 +223,7 @@
             overflow: hidden;
         }
 
-        /* STATS SECTION - BACKGROUND ABU-ABU */
+        /* STATS SECTION */
         .stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -260,7 +260,7 @@
             font-size: clamp(0.85rem, 2vw, 1rem);
         }
 
-        /* STORY SECTION - BACKGROUND ABU-ABU */
+        /* STORY SECTION */
         .story-section {
             padding: 4rem 5%;
             background: #f8f9fa;
@@ -357,7 +357,7 @@
             padding: 0 1rem;
         }
 
-        /* WHY LEARN SECTIONS - BACKGROUND ABU-ABU */
+        /* WHY LEARN SECTIONS */
         .why-learn-section {
             padding: 4rem 5%;
             background: #f8f9fa;
@@ -412,7 +412,7 @@
             margin: 0;
         }
 
-        /* KETERAMPILAN YANG AKAN DIDAPATKAN - DARI CODE 1 */
+        /* KETERAMPILAN YANG AKAN DIDAPATKAN */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -466,7 +466,7 @@
             font-size: clamp(0.85rem, 2vw, 1rem);
         }
 
-        /* NEW FEATURES GRID - ZIGZAG LAYOUT - DENGAN TINGGI TETAP YANG DIINGINKAN */
+        /* NEW FEATURES GRID - ZIGZAG LAYOUT */
         .features-zigzag {
             display: flex;
             flex-direction: column;
@@ -532,7 +532,7 @@
             }
         }
 
-        /* Responsive untuk mobile - TINGGI DIUBAH */
+        /* Responsive untuk mobile */
         @media (max-width: 767px) {
             .features-zigzag {
                 gap: 2rem;
@@ -543,11 +543,11 @@
             }
 
             .feature-media-box {
-                height: 400px; /* Lebih pendek di mobile */
+                height: 400px;
             }
 
             .feature-text-box {
-                height: auto; /* Auto height di mobile */
+                height: auto;
                 padding: 1rem 0;
                 min-height: auto;
             }
@@ -584,7 +584,7 @@
             }
         }
 
-        /* NEW GRID LAYOUT FOR AKTIVITAS - DIPERBAIKI UNTUK RESPONSIF */
+        /* NEW GRID LAYOUT FOR AKTIVITAS */
         .grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
@@ -629,7 +629,6 @@
                 height: 180px;
             }
 
-            /* Atur layout untuk 6 item di mobile */
             .item-1 { grid-area: 2 / 1 / span 1 / span 1; }
             .item-2 { grid-area: 2 / 2 / span 1 / span 1; }
             .item-3 { grid-area: 3 / 1 / span 1 / span 1; }
@@ -710,7 +709,7 @@
             grid-row: 5 / span 2;
         }
 
-        /* PRICING SECTION - BACKGROUND ABU-ABU - DIPERBAIKI */
+        /* PRICING SECTION */
         .pricing-section {
             padding: 4rem 5%;
             background: #f8f9fa;
@@ -820,7 +819,7 @@
             min-height: 200px;
         }
 
-        /* TESTIMONIAL SECTION - YANG DIPERBAIKI */
+        /* TESTIMONIAL SECTION */
         .testimonial-section {
             padding: 4rem 5%;
             background: #f8f9fa;
@@ -915,7 +914,7 @@
             margin-bottom: 1.5rem;
         }
 
-        /* FAQ SECTION - DIPERBAIKI */
+        /* FAQ SECTION */
         .faq-contact-section {
             padding: 4rem 5%;
             background: #f8f9fa;
@@ -1012,7 +1011,7 @@
             max-height: 500px;
         }
 
-        /* FORUM SECTION - BACKGROUND ABU-ABU */
+        /* FORUM SECTION */
         .forum-section {
             padding: 4rem 5%;
             background: #f8f9fa;
@@ -1109,6 +1108,21 @@
             border-left: 3px solid #7cb342;
         }
 
+        /* TAMBAHAN: STYLE UNTUK BALASAN YANG DISEMBUNYIKAN */
+        .reply-item.hidden-reply {
+            display: none;
+        }
+
+        .replies-section.all-visible .reply-item.hidden-reply {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .reply-header {
             display: flex;
             align-items: center;
@@ -1146,6 +1160,37 @@
         .reply-date {
             color: #999;
             font-size: 0.75rem;
+        }
+
+        /* TOMBOL LIHAT SEMUA BALASAN */
+        .show-all-replies-btn {
+            background: none;
+            border: none;
+            color: #7cb342;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.5rem 0;
+            margin-top: 0.5rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .show-all-replies-btn:hover {
+            color: #689f38;
+            text-decoration: underline;
+        }
+
+        .show-all-replies-btn i {
+            font-size: 0.8rem;
+            transition: transform 0.3s;
+            display: inline-block;
+        }
+
+        .show-all-replies-btn.show-all i {
+            transform: rotate(180deg);
         }
 
         /* REPLY FORM STYLES */
@@ -1285,7 +1330,7 @@
             font-size: clamp(0.9rem, 2vw, 1rem);
         }
 
-        /* FOOTER - BACKGROUND ABU-ABU SEDIKIT LEBIH GELAP */
+        /* FOOTER */
         footer {
             background: #d4f1f4;
             color: #333;
@@ -1355,7 +1400,7 @@
             transform-origin: center;
         }
 
-        /* MODAL SEND CONFIRMATION - DIUBAH: TIDAK ADA EMAIL FIELD */
+        /* MODAL SEND CONFIRMATION */
         .send-confirm-modal {
             background: #fff;
             padding: 2.5rem;
@@ -1553,7 +1598,267 @@
         }
 
         /* =========================================== */
-        /* RESPONSIVE STYLES DIPERBAIKI */
+        /* MODAL KOMENTAR INSTAGRAM STYLE */
+        /* =========================================== */
+        .comments-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+            padding: 1rem;
+        }
+
+        .comments-modal-overlay.show {
+            display: flex;
+        }
+
+        .comments-modal {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            animation: modalSlideUp 0.4s ease;
+        }
+
+        .comments-modal-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .comments-modal-header h3 {
+            font-size: 1.1rem;
+            color: #333;
+            margin: 0;
+            flex: 1;
+            text-align: center;
+        }
+
+        .close-modal-btn {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: #666;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .close-modal-btn:hover {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .comments-modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background: #fafafa;
+        }
+
+        /* Scrollbar styling */
+        .comments-modal-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .comments-modal-body::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .comments-modal-body::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 3px;
+        }
+
+        .comments-modal-body::-webkit-scrollbar-thumb:hover {
+            background: #aaa;
+        }
+
+        /* Original post in modal */
+        .modal-original-post {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #f39c12;
+        }
+
+        /* Item komentar dalam modal */
+        .modal-comment-item {
+            background: white;
+            border-radius: 10px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-left: 3px solid #7cb342;
+        }
+
+        .modal-comment-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .modal-comment-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #7cb342 0%, #689f38 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .modal-comment-info {
+            flex: 1;
+        }
+
+        .modal-comment-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .modal-comment-date {
+            color: #999;
+            font-size: 0.75rem;
+            margin-top: 0.2rem;
+        }
+
+        .modal-comment-message {
+            color: #555;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            padding-left: 0.5rem;
+        }
+
+        .comments-modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #eee;
+            background: white;
+        }
+
+        .reply-form-mini {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .reply-form-mini input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        .reply-form-mini input:focus {
+            border-color: #7cb342;
+        }
+
+        .reply-form-mini button {
+            background: #7cb342;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+            white-space: nowrap;
+        }
+
+        .reply-form-mini button:hover {
+            background: #689f38;
+        }
+
+        /* Animation for modal */
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Responsive modal */
+        @media (max-width: 768px) {
+            .comments-modal {
+                width: 95%;
+                max-height: 90vh;
+                border-radius: 8px;
+            }
+
+            .comments-modal-header {
+                padding: 0.8rem 1rem;
+            }
+
+            .comments-modal-body {
+                padding: 1rem;
+            }
+
+            .modal-comment-item {
+                padding: 1rem;
+            }
+
+            .reply-form-mini input {
+                padding: 0.7rem 0.9rem;
+                font-size: 0.85rem;
+            }
+
+            .reply-form-mini button {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .comments-modal {
+                width: 100%;
+                height: 100vh;
+                max-height: 100vh;
+                border-radius: 0;
+            }
+        }
+
+        /* =========================================== */
+        /* RESPONSIVE STYLES */
         /* =========================================== */
         @media (max-width: 1024px) {
             .hero,
@@ -1914,6 +2219,7 @@
         </nav>
     </header>
 
+    <!-- HERO SECTION -->
     <section class="hero">
         <div class="hero-content">
             <h1>Belajar Kewirausahaan Dengan Bermain</h1>
@@ -1944,6 +2250,7 @@
         </div>
     </section>
 
+    <!-- STATS SECTION -->
     <section id="home" class="stats">
         <div class="stat-card">
             <h3>85%</h3>
@@ -1963,6 +2270,7 @@
         </div>
     </section>
 
+    <!-- STORY SECTION -->
     <section class="story-section">
         <div class="story-grid">
             <div class="story-image">
@@ -2006,7 +2314,7 @@
         </div>
     </section>
 
-    <!-- BAGIAN MENGAPA BELAJAR KEWIRAUSAHAAN YANG DIPERBAIKI -->
+    <!-- BAGIAN MENGAPA BELAJAR KEWIRAUSAHAAN -->
     <section class="why-learn-section">
         <div class="why-learn-grid">
             <div class="why-learn-media">
@@ -2070,7 +2378,7 @@
         </div>
     </section>
 
-    <!-- BAGIAN FITUR UNGGULAN DENGAN LAYOUT ZIGZAG -->
+    <!-- BAGIAN FITUR UNGGULAN -->
     <section id="features" style="padding:4rem 5%; background:#f8f9fa;">
         <span class="story-badge">Features</span>
         <h2 class="section-title">Fitur Unggulan</h2>
@@ -2119,7 +2427,7 @@
         </div>
     </section>
 
-    <!-- BAGIAN AKTIVITAS DENGAN GRID LAYOUT BARU -->
+    <!-- BAGIAN AKTIVITAS -->
     <section id="aktivitas" style="padding:4rem 5%;background:#f8f9fa;">
         <h2 class="section-title">Aktivitas Terbaru & Tutorial</h2>
         <p class="section-subtitle">Kumpulan aktivitas bermain GameBoard & bagaimana kita menggunakannya</p>
@@ -2153,7 +2461,7 @@
         </div>
     </section>
 
-    <!-- BAGIAN PRICING SECTION YANG DIPERBAIKI -->
+    <!-- BAGIAN PRICING -->
     <section id="pricing" class="pricing-section">
         <span class="pricing-badge">Product</span>
         <h2 class="section-title">Main Sekaligus Belajar, Semua Dimulai dari Sini!</h2>
@@ -2188,9 +2496,7 @@
 
                         <!-- FITUR PRODUK -->
                         <ul>
-                            <!-- Gunakan deskripsi dari database jika ada, jika tidak gunakan default -->
                             @if($product->description && strpos($product->description, "\n") !== false)
-                                <!-- Jika ada deskripsi panjang di database, pecah menjadi list -->
                                 @php
                                     $features = explode("\n", $product->description);
                                     foreach($features as $feature) {
@@ -2199,11 +2505,6 @@
                                         }
                                     }
                                 @endphp
-                            @else
-                                <!-- Default features -->
-                                @if($index == 0)
-                                @else
-                                @endif
                             @endif
                         </ul>
 
@@ -2217,8 +2518,7 @@
                     </div>
                 @endforeach
             @else
-                <!-- Fallback jika tidak ada produk di database -->
-                <!-- Produk Basic -->
+                <!-- Fallback jika tidak ada produk di database
                 <div class="pricing-card product-basic">
                     <div class="product-image-container">
                         <div style="width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; color: #999;">
@@ -2243,7 +2543,6 @@
                        target="_blank">🛒 Dapatkan Sekarang</a>
                 </div>
 
-                <!-- Produk Premium -->
                 <div class="pricing-card product-premium">
                     <div class="product-image-container">
                         <div style="width: 100%; height: 200px; display: flex; align-items: center; justify-content: center; color: #666;">
@@ -2267,14 +2566,12 @@
                        class="btn-primary"
                        style="display: block; text-align: center; margin-top: 1.5rem; background: linear-gradient(135deg, #f7e92b 0%, #ffc107 100%); color: #333;"
                        target="_blank">🛒 Dapatkan Sekarang</a>
-                </div>
+                </div>-->
             @endif
         </div>
     </section>
 
-    <!-- =========================================== -->
-    <!-- BAGIAN TESTIMONIAL YANG SUDAH DIPERBAIKI -->
-    <!-- =========================================== -->
+    <!-- BAGIAN TESTIMONIAL -->
     <section id="testimonial" class="testimonial-section">
         <span class="story-badge">Testimoni</span>
         <h2 class="section-title">Apa yang Dikatakan Para Pemain</h2>
@@ -2320,7 +2617,7 @@
         </div>
     </section>
 
-    <!-- BAGIAN FAQ DENGAN LAYOUT RESPONSIF - DIPERBAIKI -->
+    <!-- BAGIAN FAQ -->
     <section id="contact" class="faq-contact-section">
         <h2 class="section-title">Frequently Asked Questions</h2>
 
@@ -2395,7 +2692,7 @@
         </div>
     </section>
 
-    <!-- BAGIAN FORUM DENGAN BALASAN -->
+    <!-- BAGIAN FORUM DENGAN FITUR "LIHAT SEMUA BALASAN" -->
     <section class="forum-section">
         <span class="story-badge">Forum</span>
         <h2 class="section-title">Forum Terbuka untuk Tanya, Saran, dan Insight</h2>
@@ -2403,7 +2700,7 @@
 
         <div class="forum-grid">
             @if(isset($forumPosts) && $forumPosts->count() > 0)
-                @foreach($forumPosts as $post)
+                @foreach($forumPosts->take(5) as $post)
                     <div class="forum-card">
                         <div class="forum-header">
                             <div class="forum-avatar">
@@ -2433,12 +2730,14 @@
 
                         <!-- BALASAN YANG SUDAH DISETUJUI -->
                         @if($post->replies->count() > 0)
-                            <div class="replies-section">
+                            <div class="replies-section" id="repliesSection{{ $post->id }}">
                                 <h5 class="replies-title">
                                     <span>💬</span> {{ $post->replies->count() }} Balasan
                                 </h5>
-                                @foreach($post->replies as $reply)
-                                    <div class="reply-item">
+
+                                <!-- TAMPILKAN HANYA 1 KOMENTAR PERTAMA -->
+                                @foreach($post->replies as $index => $reply)
+                                    <div class="reply-item {{ $index >= 1 ? 'hidden-reply' : '' }}">
                                         <div class="reply-header">
                                             <div class="reply-avatar">
                                                 @php
@@ -2460,6 +2759,13 @@
                                         </div>
                                     </div>
                                 @endforeach
+
+                                <!-- TOMBOL "LIHAT SEMUA BALASAN" - SEKARANG BUKA MODAL -->
+                                @if($post->replies->count() > 0)
+                                    <button class="show-all-replies-btn" onclick="openCommentsModal({{ $post->id }})">
+                                        <i>💬</i> Lihat {{ $post->replies->count() }} Balasan
+                                    </button>
+                                @endif
                             </div>
                         @else
                             <div class="no-replies">
@@ -2477,21 +2783,15 @@
                                 <form onsubmit="submitReply(event, {{ $post->id }})">
                                     @csrf
                                     <input type="hidden" name="contact_id" value="{{ $post->id }}">
+                                    <input type="hidden" name="email" id="replyEmail{{ $post->id }}" value="guest@waluyaland.com">
 
                                     <div>
                                         <input type="text"
                                                name="name"
                                                placeholder="Nama Anda *"
                                                required
-                                               class="reply-form-input">
-                                    </div>
-
-                                    <div>
-                                        <input type="email"
-                                               name="email"
-                                               placeholder="Email *"
-                                               required
-                                               class="reply-form-input">
+                                               class="reply-form-input"
+                                               id="replyName{{ $post->id }}">
                                     </div>
 
                                     <div>
@@ -2499,7 +2799,8 @@
                                                   placeholder="Tulis balasan Anda... *"
                                                   required
                                                   rows="3"
-                                                  class="reply-form-textarea"></textarea>
+                                                  class="reply-form-textarea"
+                                                  id="replyMessage{{ $post->id }}"></textarea>
                                     </div>
 
                                     <div class="reply-form-actions">
@@ -2585,7 +2886,31 @@
         </div>
     </footer>
 
-    <!-- MODAL KONFIRMASI PENGIRIMAN - TANPA EMAIL FIELD -->
+    <!-- MODAL KOMENTAR INSTAGRAM STYLE -->
+    <div class="comments-modal-overlay" id="commentsModal">
+        <div class="comments-modal">
+            <!-- Modal Header -->
+            <div class="comments-modal-header">
+                <button class="close-modal-btn" onclick="closeCommentsModal()">×</button>
+                <h3>Semua Balasan</h3>
+            </div>
+
+            <!-- Modal Body - Scrollable -->
+            <div class="comments-modal-body" id="commentsModalBody">
+                <!-- Komentar akan dimuat di sini via JavaScript -->
+            </div>
+
+            <!-- Modal Footer (opsional untuk reply)
+            <div class="comments-modal-footer">
+                <div class="reply-form-mini">
+                    <input type="text" placeholder="Tambahkan balasan..." id="modalReplyInput">
+                    <button onclick="submitModalReply()">Kirim</button>
+                </div>-->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL KONFIRMASI PENGIRIMAN -->
     <div class="modal-overlay" id="sendConfirmModal">
         <div class="send-confirm-modal">
             <div class="send-confirm-icon">📧</div>
@@ -2694,486 +3019,768 @@
     </div>
 
     <script>
-        const hamburger = document.getElementById('hamburger');
-        const navMenu = document.getElementById('navMenu');
+    // ===========================================
+    // FUNGSI UTAMA
+    // ===========================================
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('navMenu');
 
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navMenu.classList.toggle('active');
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+
+    navMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
         });
+    });
 
-        navMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
-            });
-        });
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
-        function toggleFaq(element) {
-            element.classList.toggle('active');
-            const answer = element.querySelector('.faq-answer');
-            if (element.classList.contains('active')) {
-                answer.style.display = 'block';
-            } else {
-                answer.style.display = 'none';
-            }
-        }
-
-        // ===========================================
-        // FUNGSI UNTUK FORUM REPLIES
-        // ===========================================
-        function toggleReplyForm(contactId) {
-            const formContainer = document.getElementById(`replyForm${contactId}`);
-            if (formContainer) {
-                formContainer.classList.toggle('show');
-
-                // Scroll ke form jika ditampilkan
-                if (formContainer.classList.contains('show')) {
-                    setTimeout(() => {
-                        formContainer.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'nearest'
-                        });
-                    }, 100);
-                }
-            }
-        }
-
-        function submitReply(event, contactId) {
-            event.preventDefault();
-
-            const form = event.target;
-            const formData = new FormData(form);
-
-            // Tampilkan loading
-            const submitBtn = form.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Mengirim...';
-            submitBtn.disabled = true;
-
-            fetch('{{ route("forum.reply.store") }}', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Reset form
-                    form.reset();
-
-                    // Sembunyikan form
-                    const formContainer = document.getElementById(`replyForm${contactId}`);
-                    if (formContainer) {
-                        formContainer.classList.remove('show');
-                    }
-
-                    // Tampilkan pesan sukses
-                    showSuccessModal('Balasan Anda berhasil dikirim! Menunggu persetujuan admin.');
-
-                    // Refresh halaman setelah 2 detik untuk melihat balasan baru
-                    setTimeout(() => {
-                        location.reload();
-                    }, 2000);
-                } else {
-                    showErrorModal(data.message || 'Gagal mengirim balasan. Silakan coba lagi.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showErrorModal('Terjadi kesalahan. Silakan coba lagi.');
-            })
-            .finally(() => {
-                // Reset button
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-            });
-        }
-
-        // ===========================================
-        // FUNGSI UNTUK MODAL KONFIRMASI PENGIRIMAN
-        // ===========================================
-        let currentFormType = '';
-        let formDataToSend = {};
-
-        function openSendConfirmModal(formType) {
-            currentFormType = formType;
-
-            // Ambil nilai dari form yang sesuai
-            let nameInput, institutionInput, messageInput;
-
-            if (formType === 'mobile') {
-                nameInput = document.getElementById('nameMobile');
-                institutionInput = document.getElementById('institutionMobile');
-                messageInput = document.getElementById('messageMobile');
-            } else {
-                nameInput = document.getElementById('nameDesktop');
-                institutionInput = document.getElementById('institutionDesktop');
-                messageInput = document.getElementById('messageDesktop');
-            }
-
-            const name = nameInput.value.trim();
-            const institution = institutionInput.value.trim();
-            const message = messageInput.value.trim();
-
-            // Validasi
-            if (!name) {
-                showErrorModal('Harap isi Nama Lengkap');
-                return;
-            }
-
-            if (!message) {
-                showErrorModal('Harap isi Pesan/Pertanyaan');
-                return;
-            }
-
-            // Simpan data untuk dikirim nanti
-            formDataToSend = {
-                name: name,
-                institution: institution,
-                message: message,
-                formType: formType
-            };
-
-            // Generate email otomatis (untuk backend)
-            let generatedEmail = generateEmailFromName(name);
-
-            // Update form dengan email yang digenerate (field tersembunyi)
-            if (formType === 'mobile') {
-                // Tambahkan field email tersembunyi di form mobile
-                let hiddenEmailField = document.querySelector('#contactFormMobile input[name="email"]');
-                if (!hiddenEmailField) {
-                    hiddenEmailField = document.createElement('input');
-                    hiddenEmailField.type = 'hidden';
-                    hiddenEmailField.name = 'email';
-                    hiddenEmailField.id = 'hiddenEmailMobile';
-                    document.getElementById('contactFormMobile').appendChild(hiddenEmailField);
-                }
-                hiddenEmailField.value = generatedEmail;
-            } else {
-                // Tambahkan field email tersembunyi di form desktop
-                let hiddenEmailField = document.querySelector('#contactFormDesktop input[name="email"]');
-                if (!hiddenEmailField) {
-                    hiddenEmailField = document.createElement('input');
-                    hiddenEmailField.type = 'hidden';
-                    hiddenEmailField.name = 'email';
-                    hiddenEmailField.id = 'hiddenEmailDesktop';
-                    document.getElementById('contactFormDesktop').appendChild(hiddenEmailField);
-                }
-                hiddenEmailField.value = generatedEmail;
-            }
-
-            // Tampilkan data di modal konfirmasi
-            document.getElementById('confirmName').textContent = name;
-            document.getElementById('confirmInstitution').textContent = institution || '-';
-            document.getElementById('confirmMessage').textContent = message;
-
-            // Tampilkan modal
-            document.getElementById('sendConfirmModal').classList.add('show');
-        }
-
-        function generateEmailFromName(name) {
-            // Bersihkan nama dari karakter khusus
-            let cleanName = name.toLowerCase()
-                .replace(/[^a-z0-9\s]/g, '') // Hapus karakter khusus
-                .replace(/\s+/g, ' ') // Normalisasi spasi
-                .trim();
-
-            // Ganti spasi dengan titik
-            let emailName = cleanName.replace(/\s+/g, '.');
-
-            // Jika nama terlalu pendek, tambahkan angka acak
-            if (emailName.length < 3) {
-                emailName += Math.floor(Math.random() * 100);
-            }
-
-            // Tambahkan domain @gmail.com
-            return emailName + '@gmail.com';
-        }
-
-        function sendFormData() {
-            // Kirim data ke server
-            const formData = new FormData();
-            formData.append('_token', '{{ csrf_token() }}');
-            formData.append('type', 'forum');
-            formData.append('name', formDataToSend.name);
-
-            // Gunakan email yang telah digenerate (dari field tersembunyi)
-            let emailField;
-            if (currentFormType === 'mobile') {
-                emailField = document.getElementById('hiddenEmailMobile');
-            } else {
-                emailField = document.getElementById('hiddenEmailDesktop');
-            }
-            formData.append('email', emailField.value);
-
-            formData.append('institution', formDataToSend.institution || '');
-            formData.append('message', formDataToSend.message);
-
-            // Tampilkan loading
-            const sendBtn = document.querySelector('.btn-send-email');
-            const originalText = sendBtn.innerHTML;
-            sendBtn.innerHTML = 'Mengirim...';
-            sendBtn.disabled = true;
-
-            fetch('{{ route("contact.store") }}', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Reset form
-                    if (currentFormType === 'mobile') {
-                        document.getElementById('contactFormMobile').reset();
-                    } else {
-                        document.getElementById('contactFormDesktop').reset();
-                    }
-
-                    // Tutup modal konfirmasi
-                    closeSendConfirmModal();
-
-                    // Tampilkan modal sukses
-                    showSuccessModal('Pesan berhasil dikirim! Kami akan menghubungi Anda melalui email.');
-
-                    // Scroll ke atas
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
-                } else {
-                    showErrorModal(data.message || 'Terjadi kesalahan saat mengirim pesan.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showErrorModal('Koneksi bermasalah. Silakan coba lagi.');
-            })
-            .finally(() => {
-                // Reset button
-                sendBtn.innerHTML = originalText;
-                sendBtn.disabled = false;
-            });
-        }
-
-        function sendWhatsAppMessage() {
-            // Format pesan untuk WhatsApp
-            const name = formDataToSend.name;
-            const institution = formDataToSend.institution;
-            const message = formDataToSend.message;
-
-            let whatsappMessage = `Halo Waluya Land!\n\n`;
-            whatsappMessage += `Saya ingin bertanya mengenai produk Waluya Land:\n\n`;
-            whatsappMessage += `Nama: ${name}\n`;
-            if (institution) {
-                whatsappMessage += `Instansi: ${institution}\n`;
-            }
-            whatsappMessage += `Pertanyaan/Pesan: ${message}\n\n`;
-            whatsappMessage += `Mohon informasi lebih lanjut. Terima kasih!`;
-
-            // Encode pesan untuk URL
-            const encodedMessage = encodeURIComponent(whatsappMessage);
-
-            // Nomor WhatsApp
-            const phoneNumber = '628986908167';
-
-            // Buat URL WhatsApp
-            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-
-            // Buka WhatsApp di tab baru
-            window.open(whatsappUrl, '_blank');
-
-            // Tutup modal konfirmasi
-            closeSendConfirmModal();
-
-            // Tampilkan konfirmasi
-            showSuccessModal('WhatsApp akan terbuka. Silakan kirim pesan Anda!');
-        }
-
-        function closeSendConfirmModal() {
-            document.getElementById('sendConfirmModal').classList.remove('show');
-        }
-
-        // ===========================================
-        // FUNGSI MODAL LAINNYA
-        // ===========================================
-        function showSuccessModal(message) {
-            if (message) {
-                document.getElementById('successMessage').textContent = message;
-            }
-            document.getElementById('successModal').classList.add('show');
-            // Auto close after 5 seconds
-            setTimeout(() => {
-                closeModal();
-            }, 5000);
-        }
-
-        function showErrorModal(message) {
-            if (message) {
-                document.getElementById('errorMessage').textContent = message;
-            }
-            document.getElementById('errorModal').classList.add('show');
-        }
-
-        function closeModal() {
-            document.getElementById('successModal').classList.remove('show');
-            document.getElementById('errorModal').classList.remove('show');
-        }
-
-        // Fungsi untuk testimonial modal
-        function showTestimonialForm() {
-            document.getElementById('testimonialModal').classList.add('show');
-        }
-
-        function closeTestimonialModal() {
-            document.getElementById('testimonialModal').classList.remove('show');
-        }
-
-        // Close modal when clicking outside
-        document.querySelectorAll('.modal-overlay').forEach(modal => {
-            modal.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    if (this.id === 'sendConfirmModal') {
-                        closeSendConfirmModal();
-                    } else if (this.id === 'testimonialModal') {
-                        closeTestimonialModal();
-                    } else {
-                        closeModal();
-                    }
-                }
-            });
-        });
-
-        // Handle broken images
-        document.addEventListener('DOMContentLoaded', function() {
-            const images = document.querySelectorAll('img');
-            images.forEach(img => {
-                img.addEventListener('error', function() {
-                    if (this.classList.contains('product-image-original')) {
-                        this.src = 'https://via.placeholder.com/800x600/7cb342/ffffff?text=Waluya+Land';
-                    } else {
-                        this.src = 'https://via.placeholder.com/800x600/f8f9fa/333333?text=Image+Not+Found';
-                    }
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth'
                 });
+            }
+        });
+    });
+
+    function toggleFaq(element) {
+        element.classList.toggle('active');
+        const answer = element.querySelector('.faq-answer');
+        if (element.classList.contains('active')) {
+            answer.style.display = 'block';
+        } else {
+            answer.style.display = 'none';
+        }
+    }
+
+    // ===========================================
+    // MODAL KOMENTAR INSTAGRAM STYLE
+    // ===========================================
+    let currentContactId = null;
+    let currentPostData = null;
+
+    // Fungsi untuk membuka modal komentar
+    function openCommentsModal(contactId) {
+        const modal = document.getElementById('commentsModal');
+        const modalBody = document.getElementById('commentsModalBody');
+        const postCard = document.querySelector(`#repliesSection${contactId}`)?.closest('.forum-card');
+
+        if (!postCard) return;
+
+        // Simpan data
+        currentContactId = contactId;
+        currentPostData = {
+            name: postCard.querySelector('h4').textContent,
+            institution: postCard.querySelector('.forum-institution')?.textContent || '',
+            date: postCard.querySelector('.forum-date')?.textContent || '',
+            message: postCard.querySelector('.forum-message')?.textContent || ''
+        };
+
+        // Ambil semua balasan
+        const repliesSection = document.getElementById(`repliesSection${contactId}`);
+        const replies = repliesSection ? repliesSection.querySelectorAll('.reply-item') : [];
+
+        // Buat konten modal
+        let modalContent = '';
+
+        // Tampilkan postingan asli
+        modalContent += `
+            <div class="modal-original-post">
+                <div class="modal-comment-header">
+                    <div class="modal-comment-avatar">
+                        ${getInitials(currentPostData.name)}
+                    </div>
+                    <div class="modal-comment-info">
+                        <div class="modal-comment-name">${currentPostData.name}</div>
+                        ${currentPostData.institution ? `<div style="color:#666;font-size:0.8rem;">${currentPostData.institution}</div>` : ''}
+                        <div class="modal-comment-date">${currentPostData.date}</div>
+                    </div>
+                </div>
+                <div class="modal-comment-message">
+                    ${currentPostData.message}
+                </div>
+            </div>
+            <hr style="margin: 1.5rem 0; border: none; border-top: 1px solid #eee;">
+        `;
+
+        // Tampilkan semua balasan
+        if (replies.length > 0) {
+            replies.forEach((reply, index) => {
+                const name = reply.querySelector('.reply-name')?.textContent || 'Pengguna';
+                const message = reply.querySelector('.reply-message')?.textContent || '';
+                const date = reply.querySelector('.reply-date')?.textContent || '';
+
+                modalContent += `
+                    <div class="modal-comment-item">
+                        <div class="modal-comment-header">
+                            <div class="modal-comment-avatar">
+                                ${getInitials(name)}
+                            </div>
+                            <div class="modal-comment-info">
+                                <div class="modal-comment-name">${name}</div>
+                                <div class="modal-comment-date">${date}</div>
+                            </div>
+                        </div>
+                        <div class="modal-comment-message">
+                            ${message}
+                        </div>
+                    </div>
+                `;
             });
-        });
+        } else {
+            // Jika tidak ada balasan
+            modalContent += `
+                <div style="text-align: center; padding: 3rem; color: #999;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">💬</div>
+                    <p>Belum ada balasan</p>
+                    <p style="font-size: 0.9rem; margin-top: 1rem;">Jadilah yang pertama memberikan balasan!</p>
+                </div>
+            `;
+        }
 
-        // Check if there's a success message from server-side validation
-        @if(session('success'))
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(() => {
-                showSuccessModal('{{ session('success') }}');
-            }, 500);
-        });
-        @endif
+        modalBody.innerHTML = modalContent;
+        modal.classList.add('show');
 
-        @if($errors->any())
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(() => {
-                showErrorModal('{{ $errors->first() }}');
-            }, 500);
-        });
-        @endif
+        // Scroll ke atas modal
+        modalBody.scrollTop = 0;
 
-        // Press ESC to close modal
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeModal();
-                closeTestimonialModal();
+        // Disable scroll pada body utama
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeCommentsModal() {
+        const modal = document.getElementById('commentsModal');
+        modal.classList.remove('show');
+
+        // Enable scroll pada body utama
+        document.body.style.overflow = 'auto';
+
+        // Reset data
+        currentContactId = null;
+        currentPostData = null;
+    }
+
+    function submitModalReply() {
+        if (!currentContactId) return;
+
+        const input = document.getElementById('modalReplyInput');
+        const message = input.value.trim();
+
+        if (!message) {
+            alert('Harap isi balasan');
+            return;
+        }
+
+        // Simulasi pengiriman balasan (bisa diintegrasikan dengan backend)
+        const newReply = {
+            name: 'Anda',
+            message: message,
+            created_at: 'Baru saja'
+        };
+
+        // Tambahkan ke modal
+        const modalBody = document.getElementById('commentsModalBody');
+        const newCommentHTML = `
+            <div class="modal-comment-item" style="background: #f0f9ff; border-left-color: #2196f3;">
+                <div class="modal-comment-header">
+                    <div class="modal-comment-avatar" style="background: #2196f3;">
+                        A
+                    </div>
+                    <div class="modal-comment-info">
+                        <div class="modal-comment-name">Anda</div>
+                        <div class="modal-comment-date">Baru saja</div>
+                    </div>
+                </div>
+                <div class="modal-comment-message">
+                    ${message}
+                </div>
+            </div>
+        `;
+
+        modalBody.insertAdjacentHTML('beforeend', newCommentHTML);
+
+        // Clear input
+        input.value = '';
+
+        // Scroll ke komentar baru
+        modalBody.scrollTop = modalBody.scrollHeight;
+
+        // Tampilkan notifikasi
+        setTimeout(() => {
+            alert('Balasan berhasil dikirim! (Simulasi)');
+        }, 300);
+    }
+
+    // Close modal dengan ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeCommentsModal();
+        }
+    });
+
+    // Close modal dengan klik di luar
+    document.getElementById('commentsModal')?.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeCommentsModal();
+        }
+    });
+
+    // ===========================================
+    // FUNGSI UNTUK FORUM REPLIES
+    // ===========================================
+    function toggleReplyForm(contactId) {
+        const formContainer = document.getElementById(`replyForm${contactId}`);
+        if (formContainer) {
+            formContainer.classList.toggle('show');
+
+            // Scroll ke form jika ditampilkan
+            if (formContainer.classList.contains('show')) {
+                setTimeout(() => {
+                    formContainer.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                }, 100);
+            }
+        }
+    }
+
+    // Fungsi untuk mendapatkan inisial dari nama
+    function getInitials(name) {
+        const names = name.split(' ');
+        let initials = '';
+        names.forEach(n => {
+            if (n.trim()) {
+                initials += n.trim().charAt(0).toUpperCase();
+            }
+        });
+        return initials.substring(0, 2) || 'GU';
+    }
+
+    function submitReply(event, contactId) {
+        event.preventDefault();
+
+        // Ambil nilai dari input
+        const name = document.getElementById(`replyName${contactId}`).value.trim();
+        const message = document.getElementById(`replyMessage${contactId}`).value.trim();
+
+        // Validasi
+        if (!name) {
+            showErrorModal('Harap isi Nama Lengkap');
+            return;
+        }
+
+        if (!message) {
+            showErrorModal('Harap isi Pesan/Pertanyaan');
+            return;
+        }
+
+        // Buat FormData
+        const formData = new FormData();
+        formData.append('_token', document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}');
+        formData.append('contact_id', contactId);
+        formData.append('name', name);
+        formData.append('message', message);
+        formData.append('email', 'guest@waluyaland.com'); // Email default
+
+        // Tampilkan loading
+        const submitBtn = event.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Mengirim...';
+        submitBtn.disabled = true;
+
+        fetch('{{ route("forum.reply.store") }}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Reset form
+                event.target.reset();
+
+                // Sembunyikan form
+                const formContainer = document.getElementById(`replyForm${contactId}`);
+                if (formContainer) {
+                    formContainer.classList.remove('show');
+                }
+
+                // Tampilkan balasan langsung di forum card
+                if (data.reply) {
+                    addReplyToDOM(contactId, data.reply);
+                }
+
+                // Tampilkan pesan sukses
+                showSuccessModal('Balasan Anda berhasil dikirim!');
+            } else {
+                showErrorModal(data.message || 'Gagal mengirim balasan. Silakan coba lagi.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showErrorModal('Terjadi kesalahan. Silakan coba lagi.');
+        })
+        .finally(() => {
+            // Reset button
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        });
+    }
+
+    // Fungsi untuk menambahkan balasan ke DOM
+    function addReplyToDOM(contactId, replyData) {
+        const forumCard = document.querySelector(`#replyForm${contactId}`).closest('.forum-card');
+
+        // Cari atau buat section replies
+        let repliesSection = forumCard.querySelector('.replies-section');
+        const noReplies = forumCard.querySelector('.no-replies');
+
+        // Hapus "no replies" message jika ada
+        if (noReplies) {
+            noReplies.remove();
+        }
+
+        // Jika belum ada replies section, buat baru
+        if (!repliesSection) {
+            repliesSection = document.createElement('div');
+            repliesSection.className = 'replies-section';
+            repliesSection.id = `repliesSection${contactId}`;
+            repliesSection.innerHTML = `
+                <h5 class="replies-title">
+                    <span>💬</span> <span class="reply-count">1</span> Balasan
+                </h5>
+            `;
+
+            // Tempatkan setelah forum-message
+            const forumMessage = forumCard.querySelector('.forum-message');
+            if (forumMessage.nextElementSibling && forumMessage.nextElementSibling.classList.contains('reply-form')) {
+                forumMessage.nextElementSibling.before(repliesSection);
+            } else {
+                forumMessage.after(repliesSection);
+            }
+        }
+
+        // Update jumlah balasan
+        const replyCountElement = repliesSection.querySelector('.reply-count');
+        const totalReplies = repliesSection.querySelectorAll('.reply-item').length + 1;
+
+        if (replyCountElement) {
+            replyCountElement.textContent = totalReplies;
+        } else {
+            // Jika elemen count belum ada, buat ulang title
+            const repliesTitle = repliesSection.querySelector('.replies-title');
+            repliesTitle.innerHTML = `<span>💬</span> ${totalReplies} Balasan`;
+        }
+
+        // Update tombol "Lihat Semua Balasan"
+        const showAllButton = repliesSection.querySelector('.show-all-replies-btn');
+        if (showAllButton) {
+            showAllButton.innerHTML = `<i>💬</i> Lihat ${totalReplies} Balasan`;
+        } else {
+            // Tambahkan tombol baru jika belum ada
+            const newButton = document.createElement('button');
+            newButton.className = 'show-all-replies-btn';
+            newButton.innerHTML = `<i>💬</i> Lihat ${totalReplies} Balasan`;
+            newButton.onclick = function() { openCommentsModal(contactId); };
+
+            // Hapus tombol lama jika ada
+            const oldButton = repliesSection.querySelector('.show-all-replies-btn');
+            if (oldButton) {
+                oldButton.remove();
+            }
+
+            repliesSection.appendChild(newButton);
+        }
+    }
+
+    // ===========================================
+    // FUNGSI UNTUK MODAL KONFIRMASI PENGIRIMAN
+    // ===========================================
+    let currentFormType = '';
+    let formDataToSend = {};
+
+    function openSendConfirmModal(formType) {
+        currentFormType = formType;
+
+        // Ambil nilai dari form yang sesuai
+        let nameInput, institutionInput, messageInput;
+
+        if (formType === 'mobile') {
+            nameInput = document.getElementById('nameMobile');
+            institutionInput = document.getElementById('institutionMobile');
+            messageInput = document.getElementById('messageMobile');
+        } else {
+            nameInput = document.getElementById('nameDesktop');
+            institutionInput = document.getElementById('institutionDesktop');
+            messageInput = document.getElementById('messageDesktop');
+        }
+
+        const name = nameInput.value.trim();
+        const institution = institutionInput.value.trim();
+        const message = messageInput.value.trim();
+
+        // Validasi
+        if (!name) {
+            showErrorModal('Harap isi Nama Lengkap');
+            return;
+        }
+
+        if (!message) {
+            showErrorModal('Harap isi Pesan/Pertanyaan');
+            return;
+        }
+
+        // Simpan data untuk dikirim nanti
+        formDataToSend = {
+            name: name,
+            institution: institution,
+            message: message,
+            formType: formType
+        };
+
+        // Generate email otomatis (untuk backend)
+        let generatedEmail = generateEmailFromName(name);
+
+        // Update form dengan email yang digenerate (field tersembunyi)
+        if (formType === 'mobile') {
+            // Tambahkan field email tersembunyi di form mobile
+            let hiddenEmailField = document.querySelector('#contactFormMobile input[name="email"]');
+            if (!hiddenEmailField) {
+                hiddenEmailField = document.createElement('input');
+                hiddenEmailField.type = 'hidden';
+                hiddenEmailField.name = 'email';
+                hiddenEmailField.id = 'hiddenEmailMobile';
+                document.getElementById('contactFormMobile').appendChild(hiddenEmailField);
+            }
+            hiddenEmailField.value = generatedEmail;
+        } else {
+            // Tambahkan field email tersembunyi di form desktop
+            let hiddenEmailField = document.querySelector('#contactFormDesktop input[name="email"]');
+            if (!hiddenEmailField) {
+                hiddenEmailField = document.createElement('input');
+                hiddenEmailField.type = 'hidden';
+                hiddenEmailField.name = 'email';
+                hiddenEmailField.id = 'hiddenEmailDesktop';
+                document.getElementById('contactFormDesktop').appendChild(hiddenEmailField);
+            }
+            hiddenEmailField.value = generatedEmail;
+        }
+
+        // Tampilkan data di modal konfirmasi
+        document.getElementById('confirmName').textContent = name;
+        document.getElementById('confirmInstitution').textContent = institution || '-';
+        document.getElementById('confirmMessage').textContent = message;
+
+        // Tampilkan modal
+        document.getElementById('sendConfirmModal').classList.add('show');
+    }
+
+    function generateEmailFromName(name) {
+        // Bersihkan nama dari karakter khusus
+        let cleanName = name.toLowerCase()
+            .replace(/[^a-z0-9\s]/g, '') // Hapus karakter khusus
+            .replace(/\s+/g, ' ') // Normalisasi spasi
+            .trim();
+
+        // Ganti spasi dengan titik
+        let emailName = cleanName.replace(/\s+/g, '.');
+
+        // Jika nama terlalu pendek, tambahkan angka acak
+        if (emailName.length < 3) {
+            emailName += Math.floor(Math.random() * 100);
+        }
+
+        // Tambahkan domain @gmail.com
+        return emailName + '@gmail.com';
+    }
+
+    function sendFormData() {
+        // Kirim data ke server
+        const formData = new FormData();
+        formData.append('_token', '{{ csrf_token() }}');
+        formData.append('type', 'forum');
+        formData.append('name', formDataToSend.name);
+
+        // Gunakan email yang telah digenerate (dari field tersembunyi)
+        let emailField;
+        if (currentFormType === 'mobile') {
+            emailField = document.getElementById('hiddenEmailMobile');
+        } else {
+            emailField = document.getElementById('hiddenEmailDesktop');
+        }
+        formData.append('email', emailField.value);
+
+        formData.append('institution', formDataToSend.institution || '');
+        formData.append('message', formDataToSend.message);
+
+        // Tampilkan loading
+        const sendBtn = document.querySelector('.btn-send-email');
+        const originalText = sendBtn.innerHTML;
+        sendBtn.innerHTML = 'Mengirim...';
+        sendBtn.disabled = true;
+
+        fetch('{{ route("contact.store") }}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Reset form
+                if (currentFormType === 'mobile') {
+                    document.getElementById('contactFormMobile').reset();
+                } else {
+                    document.getElementById('contactFormDesktop').reset();
+                }
+
+                // Tutup modal konfirmasi
                 closeSendConfirmModal();
-            }
-        });
 
-        // VISITOR TRACKING
-        document.addEventListener('DOMContentLoaded', function() {
-            fetch('/track-visitor')
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Visitor tracked successfully');
-                })
-                .catch(error => {
-                    console.log('Visitor tracking failed:', error);
+                // Tampilkan modal sukses
+                showSuccessModal('Pesan berhasil dikirim! Kami akan menghubungi Anda melalui email.');
+
+                // Scroll ke atas
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
                 });
-        });
-
-        // ===========================================
-        // FUNGSI UNTUK GENERATE EMAIL OTOMATIS
-        // ===========================================
-        document.addEventListener('DOMContentLoaded', function() {
-            const contactForm = document.getElementById('contactForm');
-            const autoEmailField = document.getElementById('autoGeneratedEmail');
-
-            if (contactForm && autoEmailField) {
-                contactForm.addEventListener('submit', function(e) {
-                    // Generate email otomatis dari nama
-                    const nameInput = this.querySelector('input[name="name"]');
-                    if (nameInput && nameInput.value.trim()) {
-                        autoEmailField.value = generateAutoEmail(nameInput.value);
-                    } else {
-                        autoEmailField.value = 'guest' + Date.now() + '@user.waluyaland.com';
-                    }
-
-                    // Validasi
-                    if (!nameInput.value.trim()) {
-                        e.preventDefault();
-                        showErrorModal('Harap isi Nama Lengkap');
-                        return;
-                    }
-
-                    const messageInput = this.querySelector('textarea[name="message"]');
-                    if (!messageInput.value.trim()) {
-                        e.preventDefault();
-                        showErrorModal('Harap isi Pesan/Pertanyaan');
-                        return;
-                    }
-
-                    // Tampilkan loading
-                    const submitBtn = this.querySelector('.btn-submit');
-                    const originalText = submitBtn.innerHTML;
-                    submitBtn.innerHTML = 'Mengirim...';
-                    submitBtn.disabled = true;
-
-                    // Form akan dikirim melalui normal POST ke server
-                    // Reset button setelah 3 detik (untuk simulasi)
-                    setTimeout(() => {
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                    }, 3000);
-                });
+            } else {
+                showErrorModal(data.message || 'Terjadi kesalahan saat mengirim pesan.');
             }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showErrorModal('Koneksi bermasalah. Silakan coba lagi.');
+        })
+        .finally(() => {
+            // Reset button
+            sendBtn.innerHTML = originalText;
+            sendBtn.disabled = false;
         });
+    }
 
-        function generateAutoEmail(name) {
-            // Bersihkan nama
-            let cleanName = name.toLowerCase()
-                .replace(/[^a-z0-9\s]/g, '')
-                .replace(/\s+/g, '.')
-                .trim();
+    function sendWhatsAppMessage() {
+        // Format pesan untuk WhatsApp
+        const name = formDataToSend.name;
+        const institution = formDataToSend.institution;
+        const message = formDataToSend.message;
 
-            // Jika nama terlalu pendek
-            if (cleanName.length < 3) {
-                cleanName += Math.floor(Math.random() * 1000);
-            }
-
-            return cleanName + '@user.waluyaland.com';
+        let whatsappMessage = `Halo Waluya Land!\n\n`;
+        whatsappMessage += `Saya ingin bertanya mengenai produk Waluya Land:\n\n`;
+        whatsappMessage += `Nama: ${name}\n`;
+        if (institution) {
+            whatsappMessage += `Instansi: ${institution}\n`;
         }
+        whatsappMessage += `Pertanyaan/Pesan: ${message}\n\n`;
+        whatsappMessage += `Mohon informasi lebih lanjut. Terima kasih!`;
+
+        // Encode pesan untuk URL
+        const encodedMessage = encodeURIComponent(whatsappMessage);
+
+        // Nomor WhatsApp
+        const phoneNumber = '628986908167';
+
+        // Buat URL WhatsApp
+        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+        // Buka WhatsApp di tab baru
+        window.open(whatsappUrl, '_blank');
+
+        // Tutup modal konfirmasi
+        closeSendConfirmModal();
+
+        // Tampilkan konfirmasi
+        showSuccessModal('WhatsApp akan terbuka. Silakan kirim pesan Anda!');
+    }
+
+    function closeSendConfirmModal() {
+        document.getElementById('sendConfirmModal').classList.remove('show');
+    }
+
+    // ===========================================
+    // FUNGSI MODAL LAINNYA
+    // ===========================================
+    function showSuccessModal(message) {
+        if (message) {
+            document.getElementById('successMessage').textContent = message;
+        }
+        document.getElementById('successModal').classList.add('show');
+        // Auto close after 5 seconds
+        setTimeout(() => {
+            closeModal();
+        }, 5000);
+    }
+
+    function showErrorModal(message) {
+        if (message) {
+            document.getElementById('errorMessage').textContent = message;
+        }
+        document.getElementById('errorModal').classList.add('show');
+    }
+
+    function closeModal() {
+        document.getElementById('successModal').classList.remove('show');
+        document.getElementById('errorModal').classList.remove('show');
+    }
+
+    // Fungsi untuk testimonial modal
+    function showTestimonialForm() {
+        document.getElementById('testimonialModal').classList.add('show');
+    }
+
+    function closeTestimonialModal() {
+        document.getElementById('testimonialModal').classList.remove('show');
+    }
+
+    // Close modal when clicking outside
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                if (this.id === 'sendConfirmModal') {
+                    closeSendConfirmModal();
+                } else if (this.id === 'testimonialModal') {
+                    closeTestimonialModal();
+                } else if (this.id === 'commentsModal') {
+                    closeCommentsModal();
+                } else {
+                    closeModal();
+                }
+            }
+        });
+    });
+
+    // Handle broken images
+    document.addEventListener('DOMContentLoaded', function() {
+        const images = document.querySelectorAll('img');
+        images.forEach(img => {
+            img.addEventListener('error', function() {
+                if (this.classList.contains('product-image-original')) {
+                    this.src = 'https://via.placeholder.com/800x600/7cb342/ffffff?text=Waluya+Land';
+                } else {
+                    this.src = 'https://via.placeholder.com/800x600/f8f9fa/333333?text=Image+Not+Found';
+                }
+            });
+        });
+    });
+
+    // Check if there's a success message from server-side validation
+    @if(session('success'))
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(() => {
+            showSuccessModal('{{ session('success') }}');
+        }, 500);
+    });
+    @endif
+
+    @if($errors->any())
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(() => {
+            showErrorModal('{{ $errors->first() }}');
+        }, 500);
+    });
+    @endif
+
+    // Press ESC to close modal
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+            closeTestimonialModal();
+            closeSendConfirmModal();
+            closeCommentsModal();
+        }
+    });
+
+    // VISITOR TRACKING
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('/track-visitor')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Visitor tracked successfully');
+            })
+            .catch(error => {
+                console.log('Visitor tracking failed:', error);
+            });
+    });
+
+    // ===========================================
+    // FUNGSI UNTUK GENERATE EMAIL OTOMATIS
+    // ===========================================
+    document.addEventListener('DOMContentLoaded', function() {
+        const contactForm = document.getElementById('contactForm');
+        const autoEmailField = document.getElementById('autoGeneratedEmail');
+
+        if (contactForm && autoEmailField) {
+            contactForm.addEventListener('submit', function(e) {
+                // Generate email otomatis dari nama
+                const nameInput = this.querySelector('input[name="name"]');
+                if (nameInput && nameInput.value.trim()) {
+                    autoEmailField.value = generateAutoEmail(nameInput.value);
+                } else {
+                    autoEmailField.value = 'guest' + Date.now() + '@user.waluyaland.com';
+                }
+
+                // Validasi
+                if (!nameInput.value.trim()) {
+                    e.preventDefault();
+                    showErrorModal('Harap isi Nama Lengkap');
+                    return;
+                }
+
+                const messageInput = this.querySelector('textarea[name="message"]');
+                if (!messageInput.value.trim()) {
+                    e.preventDefault();
+                    showErrorModal('Harap isi Pesan/Pertanyaan');
+                    return;
+                }
+
+                // Tampilkan loading
+                const submitBtn = this.querySelector('.btn-submit');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = 'Mengirim...';
+                submitBtn.disabled = true;
+
+                // Form akan dikirim melalui normal POST ke server
+                // Reset button setelah 3 detik (untuk simulasi)
+                setTimeout(() => {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }, 3000);
+            });
+        }
+    });
+
+    function generateAutoEmail(name) {
+        // Bersihkan nama
+        let cleanName = name.toLowerCase()
+            .replace(/[^a-z0-9\s]/g, '')
+            .replace(/\s+/g, '.')
+            .trim();
+
+        // Jika nama terlalu pendek
+        if (cleanName.length < 3) {
+            cleanName += Math.floor(Math.random() * 1000);
+        }
+
+        return cleanName + '@user.waluyaland.com';
+    }
     </script>
 </body>
 </html>

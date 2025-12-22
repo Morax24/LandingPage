@@ -12,7 +12,7 @@ class ForumReply extends Model
     protected $fillable = [
         'contact_id',
         'name',
-        'email', // Tetap ada untuk database, tapi tidak diinput user
+        'email',
         'message',
         'status',
         'approved_at',

@@ -24,6 +24,7 @@ return new class extends Migration
 
             $table->index('contact_id');
             $table->index('status');
+            $table->index(['contact_id', 'status']);
         });
     }
 

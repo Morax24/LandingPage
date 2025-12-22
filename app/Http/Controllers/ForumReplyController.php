@@ -4,17 +4,41 @@ namespace App\Http\Controllers;
 
 use App\Models\ForumReply;
 use App\Models\Contact;
-use App\Http\Requests\StoreForumReplyRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class ForumReplyController extends Controller
 {
     /**
      * Simpan reply baru
      */
-    public function store(StoreForumReplyRequest $request)
+    public function store(Request $request)
     {
         try {
+            // Validasi custom (tanpa email required)
+            $validator = Validator::make($request->all(), [
+                'contact_id' => 'required|exists:contacts,id',
+                'name' => 'required|string|max:255|min:3',
+                'message' => 'required|string|min:5|max:500',
+            ], [
+                'contact_id.required' => 'ID kontak diperlukan',
+                'contact_id.exists' => 'Postingan forum tidak ditemukan',
+                'name.required' => 'Nama wajib diisi',
+                'name.min' => 'Nama minimal 3 karakter',
+                'name.max' => 'Nama maksimal 255 karakter',
+                'message.required' => 'Komentar wajib diisi',
+                'message.min' => 'Komentar minimal 5 karakter',
+                'message.max' => 'Komentar maksimal 500 karakter',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->errors()->first()
+                ], 422);
+            }
+
             // Validasi bahwa contact_id ada dan post forum ada
             $contact = Contact::findOrFail($request->contact_id);
 
@@ -26,37 +50,45 @@ class ForumReplyController extends Controller
                 ], 404);
             }
 
-            // Simpan reply
+            // Simpan reply langsung approved tanpa email validasi
             $reply = ForumReply::create([
                 'contact_id' => $request->contact_id,
-                'name' => $request->name,
-                'email' => $request->email,
-                'message' => $request->message,
-                'status' => 'pending', // Default pending, perlu approval admin
+                'name' => trim($request->name),
+                'email' => 'guest@waluyaland.com', // Email default
+                'message' => trim($request->message),
+                'status' => 'approved', // Langsung approved
+                'approved_at' => now(),
             ]);
 
-            // Log success
-            \Log::info('Forum reply created', [
+            Log::info('Forum reply created successfully', [
                 'reply_id' => $reply->id,
                 'contact_id' => $request->contact_id,
                 'name' => $request->name,
-                'email' => $request->email,
             ]);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Balasan Anda berhasil dikirim dan menunggu persetujuan admin.'
+                'message' => 'Balasan Anda berhasil dikirim!',
+                'reply' => [
+                    'id' => $reply->id,
+                    'name' => $reply->name,
+                    'message' => $reply->message,
+                    'created_at' => $reply->created_at->diffForHumans(),
+                    'avatar_initials' => $this->getInitials($reply->name),
+                ]
             ]);
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            Log::warning('Contact not found for reply', ['contact_id' => $request->contact_id ?? 'null']);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Postingan forum tidak ditemukan.'
             ], 404);
 
         } catch (\Exception $e) {
-            \Log::error('Forum Reply Store Error: ' . $e->getMessage());
-            \Log::error('Stack trace: ' . $e->getTraceAsString());
+            Log::error('Forum Reply Store Error: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
 
             return response()->json([
                 'success' => false,
@@ -80,7 +112,7 @@ class ForumReplyController extends Controller
 
             $replies = ForumReply::where('contact_id', $contactId)
                                  ->where('status', 'approved')
-                                 ->orderBy('created_at', 'asc') // Tampilkan yang lama dulu
+                                 ->orderBy('created_at', 'asc')
                                  ->get();
 
             // Format data untuk response
@@ -88,7 +120,6 @@ class ForumReplyController extends Controller
                 return [
                     'id' => $reply->id,
                     'name' => $reply->name,
-                    'email' => $reply->email,
                     'message' => $reply->message,
                     'created_at' => $reply->created_at->diffForHumans(),
                     'avatar_initials' => $this->getInitials($reply->name),
@@ -102,7 +133,7 @@ class ForumReplyController extends Controller
             ]);
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            \Log::warning('Contact not found for replies', ['contact_id' => $contactId]);
+            Log::warning('Contact not found for replies', ['contact_id' => $contactId]);
 
             return response()->json([
                 'success' => false,
@@ -112,8 +143,8 @@ class ForumReplyController extends Controller
             ], 404);
 
         } catch (\Exception $e) {
-            \Log::error('Get Replies Error: ' . $e->getMessage());
-            \Log::error('Stack trace: ' . $e->getTraceAsString());
+            Log::error('Get Replies Error: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
 
             return response()->json([
                 'success' => false,

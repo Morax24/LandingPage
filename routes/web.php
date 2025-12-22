@@ -44,7 +44,7 @@ Route::get('/', [LandingController::class, 'index'])->name('home');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 // ============================================
-// FORUM REPLIES
+// FORUM REPLIES - PENTING!
 // ============================================
 Route::post('/forum/reply', [ForumReplyController::class, 'store'])->name('forum.reply.store');
 Route::get('/forum/{contactId}/replies', [ForumReplyController::class, 'getReplies'])->name('forum.replies.get');
@@ -102,7 +102,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::post('/bulk-toggle-active', [MediaController::class, 'bulkToggleActive'])->name('bulk-toggle-active');
     });
 
-    // Forum Replies
+    // Forum Replies (Admin)
     Route::get('/forum-replies', [AdminForumReplyController::class, 'index'])->name('forum-replies.index');
     Route::post('/forum-replies/{id}/approve', [AdminForumReplyController::class, 'approve'])->name('forum-replies.approve');
     Route::post('/forum-replies/{id}/reject', [AdminForumReplyController::class, 'reject'])->name('forum-replies.reject');
@@ -110,9 +110,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/forum-replies/bulk-approve', [AdminForumReplyController::class, 'bulkApprove'])->name('forum-replies.bulk-approve');
     Route::post('/forum-replies/bulk-delete', [AdminForumReplyController::class, 'bulkDelete'])->name('forum-replies.bulk-delete');
 
-    // ============================================
-    // TESTIMONIAL ROUTES - FIXED
-    // ============================================
+    // Testimonials
     Route::prefix('testimonials')->name('testimonials.')->group(function () {
         Route::get('/', [TestimonialController::class, 'index'])->name('index');
         Route::post('/', [TestimonialController::class, 'store'])->name('store');
@@ -120,15 +118,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::post('/{id}/reject', [TestimonialController::class, 'reject'])->name('reject');
         Route::delete('/{id}', [TestimonialController::class, 'destroy'])->name('destroy');
 
-        // BULK ACTIONS - PERBAIKAN METHOD
+        // Bulk Actions
         Route::post('/bulk-delete', [TestimonialController::class, 'bulkDelete'])->name('bulk.delete');
         Route::post('/bulk-approve', [TestimonialController::class, 'bulkApprove'])->name('bulk.approve');
         Route::post('/bulk-reject', [TestimonialController::class, 'bulkReject'])->name('bulk.reject');
+        
     });
-    // ============================================
-// FORUM REPLIES
-// ============================================
-Route::post('/forum/reply', [ForumReplyController::class, 'store'])->name('forum.reply.store');
-// TAMBAHKAN ROUTE INI:
-Route::get('/forum/{contactId}/replies', [ForumReplyController::class, 'getReplies'])->name('forum.replies.get');
 });
