@@ -56,8 +56,8 @@ class StoreMediaRequest extends FormRequest
 
                 if ($type == 'image') {
                     $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'];
-                    $maxSize = 10 * 1024 * 1024; // 10MB
-                    $errorMsg = 'Image harus berupa JPG, PNG, GIF, WEBP, BMP (max 10MB)';
+                    $maxSize = 1 * 1024 * 1024; // 10MB
+                    $errorMsg = 'Image harus berupa JPG, PNG, GIF, WEBP, BMP (max 1MB)';
                 } else {
                     $allowed = ['mp4', 'avi', 'mov', 'wmv', 'webm', 'ogg'];
                     $maxSize = 50 * 1024 * 1024; // 50MB

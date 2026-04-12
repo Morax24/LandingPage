@@ -17,6 +17,7 @@ class Contact extends Model
         'email',
         'institution',
         'message',
+        'rating',     // <-- TAMBAHKAN INI
         'type',
         'status',
         'approved_at',
@@ -29,6 +30,7 @@ class Contact extends Model
      */
     protected $casts = [
         'approved_at' => 'datetime',
+        'rating' => 'integer',  // <-- TAMBAHKAN INI
     ];
 
     /**
@@ -143,6 +145,36 @@ class Contact extends Model
             'testimonial' => 'Testimoni',
             default => 'Tidak Diketahui'
         };
+    }
+
+    /**
+     * Accessor untuk rating dalam bentuk bintang HTML
+     */
+    public function getStarsHtmlAttribute()
+    {
+        if (!$this->rating || $this->type !== 'testimonial') {
+            return '<span style="color: #999;">-</span>';
+        }
+
+        $stars = '';
+        for ($i = 1; $i <= 5; $i++) {
+            if ($i <= $this->rating) {
+                $stars .= '<span style="color: #FFC107; font-size: 1rem;">★</span>';
+            } else {
+                $stars .= '<span style="color: #ddd; font-size: 1rem;">★</span>';
+            }
+        }
+
+        $ratingText = match($this->rating) {
+            5 => 'Sangat Baik',
+            4 => 'Baik',
+            3 => 'Cukup',
+            2 => 'Kurang',
+            1 => 'Sangat Kurang',
+            default => ''
+        };
+
+        return '<div class="rating-stars" title="' . $ratingText . '">' . $stars . ' <span style="font-size:0.75rem; color:#666;">(' . $this->rating . ')</span></div>';
     }
 
     /**

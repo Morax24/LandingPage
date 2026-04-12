@@ -8,10 +8,9 @@ use Illuminate\Http\Request;
 
 class LandingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // ==================== MEDIA FROM DATABASE ====================
-        // Gunakan method static dari model Media
         $heroMedia = Media::getHeroMedia();
         $storyMedia = Media::getStoryMedia();
         $whyLearnMedia = Media::getWhyLearnMedia();
@@ -19,20 +18,56 @@ class LandingController extends Controller
         $aktivitasMedia = Media::getActivitiesMedia();
         $productsMedia = Media::getProductsMedia();
 
-        // ==================== TESTIMONIALS ====================
-        // HANYA yang type = 'testimonial'
-        $testimonials = Contact::where('type', 'testimonial')
-            ->where('status', 'approved')
-            ->orderBy('created_at', 'desc')
-            ->limit(8)
-            ->get();
+        // ==================== TESTIMONIALS DENGAN FILTER RATING ====================
+        $rating = $request->get('rating');
+
+        // Query untuk testimonial - HANYA yang approved
+        $testimonialsQuery = Contact::where('type', 'testimonial')
+            ->where('status', 'approved');
+
+        // Jika filter rating aktif, hanya tampilkan yang punya rating dan sesuai
+        if ($rating && $rating !== 'all' && $rating !== '') {
+            $testimonialsQuery->where('rating', (int)$rating);
+        } else {
+            // Jika filter 'all' atau tidak ada filter, tampilkan semua yang sudah memiliki rating
+            $testimonialsQuery->whereNotNull('rating');
+        }
+
+        $testimonials = $testimonialsQuery->orderBy('created_at', 'desc')->get();
+
+        // ==================== HITUNG JUMLAH PER RATING ====================
+        $ratingCounts = [
+            'all' => Contact::where('type', 'testimonial')
+                ->where('status', 'approved')
+                ->whereNotNull('rating')
+                ->count(),
+            5 => Contact::where('type', 'testimonial')
+                ->where('status', 'approved')
+                ->where('rating', 5)
+                ->count(),
+            4 => Contact::where('type', 'testimonial')
+                ->where('status', 'approved')
+                ->where('rating', 4)
+                ->count(),
+            3 => Contact::where('type', 'testimonial')
+                ->where('status', 'approved')
+                ->where('rating', 3)
+                ->count(),
+            2 => Contact::where('type', 'testimonial')
+                ->where('status', 'approved')
+                ->where('rating', 2)
+                ->count(),
+            1 => Contact::where('type', 'testimonial')
+                ->where('status', 'approved')
+                ->where('rating', 1)
+                ->count(),
+        ];
 
         // ==================== FORUM POSTS ====================
-        // HANYA yang type = 'forum' DENGAN SEMUA BALASAN (TANPA FILTER STATUS)
         $forumPosts = Contact::where('type', 'forum')
             ->where('status', 'approved')
             ->with(['replies' => function($query) {
-                $query->orderBy('created_at', 'asc'); // Tampilkan semua balasan
+                $query->orderBy('created_at', 'asc');
             }])
             ->orderBy('created_at', 'desc')
             ->limit(6)
@@ -46,31 +81,14 @@ class LandingController extends Controller
             'understanding' => 87,
         ];
 
-        // ==================== DEBUG LOG ====================
-        if (app()->environment('local')) {
-            \Log::info('Landing Page Data:', [
-                'hero_media' => $heroMedia ? $heroMedia->title : 'None',
-                'story_media' => $storyMedia ? $storyMedia->title : 'None',
-                'why_learn_media' => $whyLearnMedia ? $whyLearnMedia->title : 'None',
-                'features_count' => $featuresMedia->count(),
-                'aktivitas_count' => $aktivitasMedia->count(),
-                'products_count' => $productsMedia->count(),
-                'testimonials_count' => $testimonials->count(),
-                'forum_posts_count' => $forumPosts->count(),
-                'forum_posts_with_replies' => $forumPosts->map(function($post) {
-                    return [
-                        'id' => $post->id,
-                        'title' => substr($post->message, 0, 50) . '...',
-                        'replies_count' => $post->replies->count(),
-                        'replies' => $post->replies->map(function($reply) {
-                            return [
-                                'id' => $reply->id,
-                                'message' => substr($reply->message, 0, 30) . '...',
-                                'status' => $reply->status
-                            ];
-                        })
-                    ];
-                })
+        // ==================== JIKA REQUEST AJAX ====================
+        if ($request->ajax() || $request->wantsJson()) {
+            // Gunakan method renderTestimonialsCarousel yang SUDAH TERFILTER
+            $html = $this->renderTestimonialsCarousel($testimonials);
+            return response()->json([
+                'success' => true,
+                'html' => $html,
+                'ratingCounts' => $ratingCounts
             ]);
         }
 
@@ -83,7 +101,94 @@ class LandingController extends Controller
             'productsMedia',
             'testimonials',
             'forumPosts',
-            'stats'
+            'stats',
+            'ratingCounts'
         ));
+    }
+
+    /**
+     * Render carousel testimonials - Method yang SAMA dengan Code 1 (BEKERJA dengan filter)
+     */
+    private function renderTestimonialsCarousel($testimonials)
+    {
+        if ($testimonials->count() == 0) {
+            return '<div class="testimonial-carousel" id="testimonialCarousel">
+                        <div class="carousel-slide active">
+                            <div class="no-testimonials">
+                                <h3>Belum ada testimoni</h3>
+                                <p>Jadilah yang pertama memberikan testimoni tentang pengalaman Anda!</p>
+                            </div>
+                        </div>
+                    </div>';
+        }
+
+        $itemsPerSlide = 5;
+        $totalItems = $testimonials->count();
+        $totalSlides = ceil($totalItems / $itemsPerSlide);
+
+        $html = '<div class="testimonial-carousel" id="testimonialCarousel">';
+
+        for ($slide = 0; $slide < $totalSlides; $slide++) {
+            $activeClass = ($slide === 0) ? 'active' : '';
+            $displayStyle = ($slide === 0) ? 'block' : 'none';
+
+            $html .= '<div class="carousel-slide ' . $activeClass . '" data-slide="' . $slide . '" style="display: ' . $displayStyle . ';">';
+            $html .= '<div class="testimonial-grid">';
+
+            $slideItems = $testimonials->slice($slide * $itemsPerSlide, $itemsPerSlide);
+            foreach ($slideItems as $testimonial) {
+                // Ambil inisial nama
+                $names = explode(' ', $testimonial->name);
+                $initials = '';
+                foreach ($names as $n) {
+                    if (!empty(trim($n))) {
+                        $initials .= strtoupper(substr(trim($n), 0, 1));
+                    }
+                }
+                $initials = substr($initials, 0, 2) ?: 'GU';
+
+                $html .= '<div class="testimonial-card">';
+                $html .= '<div class="testimonial-header">';
+                $html .= '<div class="testimonial-avatar">' . $initials . '</div>';
+                $html .= '<div class="testimonial-info">';
+                $html .= '<h4>' . e($testimonial->name) . '</h4>';
+                $html .= '<div class="testimonial-institution">' . e($testimonial->institution ?? 'Pengguna') . '</div>';
+                $html .= '<div class="testimonial-date">' . $testimonial->created_at->translatedFormat('d F Y') . '</div>';
+                $html .= '</div></div>';
+
+                // Rating stars
+                $html .= '<div class="testimonial-rating"><div class="stars">';
+                $ratingValue = $testimonial->rating ?? 0;
+                for ($i = 1; $i <= 5; $i++) {
+                    if ($i <= $ratingValue) {
+                        $html .= '<span class="star-filled">★</span>';
+                    } else {
+                        $html .= '<span class="star-empty">★</span>';
+                    }
+                }
+                $html .= '</div><span class="rating-number">' . ($ratingValue ? $ratingValue . '/5' : 'Belum dinilai') . '</span></div>';
+
+                $html .= '<p class="testimonial-message">"' . e($testimonial->message) . '"</p>';
+                $html .= '</div>';
+            }
+
+            $html .= '</div></div>';
+        }
+
+        $html .= '</div>';
+
+        // Tambahkan tombol navigasi jika perlu
+        if ($totalSlides > 1) {
+            $html .= '<button class="carousel-btn prev-btn" onclick="prevTestimonialSlide()"><span>‹</span></button>';
+            $html .= '<button class="carousel-btn next-btn" onclick="nextTestimonialSlide()"><span>›</span></button>';
+            $html .= '<div class="carousel-dots" id="testimonialDots">';
+            for ($i = 0; $i < $totalSlides; $i++) {
+                $activeDot = ($i === 0) ? 'active' : '';
+                $html .= '<span class="dot ' . $activeDot . '" onclick="goToTestimonialSlide(' . $i . ')"></span>';
+            }
+            $html .= '</div>';
+        }
+
+        return $html;
     }
 }

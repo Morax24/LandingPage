@@ -85,32 +85,27 @@ class ContactController extends Controller
 
     /**
      * Simpan pesan contact dari form (support AJAX dan regular)
-     *
-     * Validation Rules:
-     * - name: required, max 255
-     * - email: required, email format, max 255
-     * - institution: optional, max 255
-     * - message: required, max 2000
-     * - type: required, in:forum,testimonial
      */
     public function store(Request $request)
     {
         try {
-            // Validasi input
+            // Validasi input - TAMBAHKAN VALIDASI RATING
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
                 'institution' => 'nullable|string|max:255',
                 'message' => 'required|string|max:2000',
                 'type' => 'required|in:forum,testimonial',
+                'rating' => 'nullable|integer|min:1|max:5', // <-- TAMBAHKAN INI
             ]);
 
-            // Create contact record
+            // Create contact record - TAMBAHKAN RATING
             $contact = Contact::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'institution' => $validated['institution'] ?? null,
                 'message' => $validated['message'],
+                'rating' => $validated['rating'] ?? null, // <-- TAMBAHKAN INI
                 'type' => $validated['type'],
                 'status' => 'pending',
             ]);
@@ -120,6 +115,7 @@ class ContactController extends Controller
                 'name' => $contact->name,
                 'email' => $contact->email,
                 'type' => $contact->type,
+                'rating' => $contact->rating,
             ]);
 
             // Check if request is AJAX
@@ -131,7 +127,6 @@ class ContactController extends Controller
                 : 'Terima kasih! Pesan Anda telah terkirim dan akan ditinjau oleh admin.';
 
             if ($isAjax) {
-                // Return JSON response for AJAX
                 return response()->json([
                     'success' => true,
                     'message' => $message,
@@ -140,18 +135,17 @@ class ContactController extends Controller
                         'name' => $contact->name,
                         'email' => $contact->email,
                         'type' => $contact->type,
+                        'rating' => $contact->rating,
                         'created_at' => $contact->created_at->format('d M Y H:i'),
                     ]
                 ], 200);
             }
 
-            // Return redirect for regular form submission
             return redirect()
                 ->back()
                 ->with('success', $message);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // Validation error
             $errorMessage = $e->validator->errors()->first();
 
             Log::warning('Contact form validation failed', [
@@ -159,7 +153,6 @@ class ContactController extends Controller
                 'input' => $request->except(['_token']),
             ]);
 
-            // Check if request is AJAX
             $isAjax = $request->ajax() || $request->wantsJson() ||
                      ($request->header('X-Requested-With') === 'XMLHttpRequest');
 
@@ -178,14 +171,12 @@ class ContactController extends Controller
                 ->with('error', $errorMessage);
 
         } catch (\Exception $e) {
-            // General error
             Log::error('Failed to save contact message', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
                 'input' => $request->except(['_token']),
             ]);
 
-            // Check if request is AJAX
             $isAjax = $request->ajax() || $request->wantsJson() ||
                      ($request->header('X-Requested-With') === 'XMLHttpRequest');
 
@@ -228,6 +219,7 @@ class ContactController extends Controller
             'institution' => 'nullable|string|max:255',
             'message' => 'required|string|max:2000',
             'type' => 'required|in:forum,testimonial',
+            'rating' => 'nullable|integer|min:1|max:5', // <-- TAMBAHKAN INI
         ];
     }
 
@@ -247,6 +239,9 @@ class ContactController extends Controller
             'message.max' => 'Pesan maksimal 2000 karakter.',
             'type.required' => 'Tipe pesan wajib dipilih.',
             'type.in' => 'Tipe pesan tidak valid.',
+            'rating.integer' => 'Rating harus berupa angka.',
+            'rating.min' => 'Rating minimal 1 bintang.',
+            'rating.max' => 'Rating maksimal 5 bintang.',
         ];
     }
 }

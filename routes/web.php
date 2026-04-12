@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ForumReplyController as AdminForumReplyController
 use App\Http\Controllers\Admin\MediaController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ExportController;
 
 // ============================================
 // VISITOR TRACKING
@@ -44,7 +45,7 @@ Route::get('/', [LandingController::class, 'index'])->name('home');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 // ============================================
-// FORUM REPLIES - PENTING!
+// FORUM REPLIES
 // ============================================
 Route::post('/forum/reply', [ForumReplyController::class, 'store'])->name('forum.reply.store');
 Route::get('/forum/{contactId}/replies', [ForumReplyController::class, 'getReplies'])->name('forum.replies.get');
@@ -71,10 +72,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // ADMIN ROUTES
 // ============================================
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Contacts
+    // ----------------------------------------
+    // CONTACTS
+    // ----------------------------------------
     Route::get('/contacts', [AdminContactController::class, 'index'])->name('contacts.index');
     Route::get('/contacts/{id}', [AdminContactController::class, 'show'])->name('contacts.show');
     Route::delete('/contacts/{id}', [AdminContactController::class, 'destroy'])->name('contacts.destroy');
@@ -82,46 +86,67 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/contacts/{id}/reject', [AdminContactController::class, 'reject'])->name('contacts.reject');
     Route::post('/contacts/{id}/notes', [AdminContactController::class, 'updateNotes'])->name('contacts.notes');
 
-    // Bulk Contacts
+    // Bulk Contacts — harus SEBELUM route /{id}
     Route::post('/contacts/bulk-approve', [AdminContactController::class, 'bulkApprove'])->name('contacts.bulk-approve');
     Route::post('/contacts/bulk-reject', [AdminContactController::class, 'bulkReject'])->name('contacts.bulk-reject');
     Route::post('/contacts/bulk-delete', [AdminContactController::class, 'bulkDelete'])->name('contacts.bulk-delete');
 
-    // Media Management
+    // ----------------------------------------
+    // MEDIA MANAGEMENT
+    // ----------------------------------------
     Route::prefix('media')->name('media.')->group(function () {
         Route::get('/', [MediaController::class, 'index'])->name('index');
         Route::get('/create', [MediaController::class, 'create'])->name('create');
         Route::post('/', [MediaController::class, 'store'])->name('store');
+
+        // Bulk — harus SEBELUM /{id}
+        Route::post('/bulk-delete', [MediaController::class, 'bulkDelete'])->name('bulk-delete');
+        Route::post('/bulk-toggle-active', [MediaController::class, 'bulkToggleActive'])->name('bulk-toggle-active');
+
         Route::get('/{id}/edit', [MediaController::class, 'edit'])->name('edit');
         Route::put('/{id}', [MediaController::class, 'update'])->name('update');
         Route::delete('/{id}', [MediaController::class, 'destroy'])->name('destroy');
         Route::post('/{id}/toggle-active', [MediaController::class, 'toggleActive'])->name('toggle-active');
-
-        // Bulk Actions
-        Route::post('/bulk-delete', [MediaController::class, 'bulkDelete'])->name('bulk-delete');
-        Route::post('/bulk-toggle-active', [MediaController::class, 'bulkToggleActive'])->name('bulk-toggle-active');
     });
 
-    // Forum Replies (Admin)
+    // ----------------------------------------
+    // FORUM REPLIES (ADMIN)
+    // ----------------------------------------
     Route::get('/forum-replies', [AdminForumReplyController::class, 'index'])->name('forum-replies.index');
-    Route::post('/forum-replies/{id}/approve', [AdminForumReplyController::class, 'approve'])->name('forum-replies.approve');
-    Route::post('/forum-replies/{id}/reject', [AdminForumReplyController::class, 'reject'])->name('forum-replies.reject');
-    Route::delete('/forum-replies/{id}', [AdminForumReplyController::class, 'destroy'])->name('forum-replies.destroy');
+
+    // Bulk — harus SEBELUM /{id}
     Route::post('/forum-replies/bulk-approve', [AdminForumReplyController::class, 'bulkApprove'])->name('forum-replies.bulk-approve');
     Route::post('/forum-replies/bulk-delete', [AdminForumReplyController::class, 'bulkDelete'])->name('forum-replies.bulk-delete');
 
-    // Testimonials
+    Route::post('/forum-replies/{id}/approve', [AdminForumReplyController::class, 'approve'])->name('forum-replies.approve');
+    Route::post('/forum-replies/{id}/reject', [AdminForumReplyController::class, 'reject'])->name('forum-replies.reject');
+    Route::delete('/forum-replies/{id}', [AdminForumReplyController::class, 'destroy'])->name('forum-replies.destroy');
+
+    // ----------------------------------------
+    // TESTIMONIALS
+    // ----------------------------------------
     Route::prefix('testimonials')->name('testimonials.')->group(function () {
         Route::get('/', [TestimonialController::class, 'index'])->name('index');
         Route::post('/', [TestimonialController::class, 'store'])->name('store');
+
+        // Bulk & static — harus SEBELUM /{id}
+        Route::post('/bulk-delete', [TestimonialController::class, 'bulkDelete'])->name('bulk-delete');
+        Route::post('/bulk-approve', [TestimonialController::class, 'bulkApprove'])->name('bulk-approve');
+        Route::post('/bulk-reject', [TestimonialController::class, 'bulkReject'])->name('bulk-reject');
+        Route::get('/download-csv', [TestimonialController::class, 'downloadCSV'])->name('download-csv');
+        Route::get('/download-pdf', [TestimonialController::class, 'downloadPDF'])->name('download-pdf');
+
+        // Resource /{id} — harus PALING BAWAH
+        Route::get('/{id}', [TestimonialController::class, 'show'])->name('show');
         Route::post('/{id}/approve', [TestimonialController::class, 'approve'])->name('approve');
         Route::post('/{id}/reject', [TestimonialController::class, 'reject'])->name('reject');
         Route::delete('/{id}', [TestimonialController::class, 'destroy'])->name('destroy');
-
-        // Bulk Actions
-        Route::post('/bulk-delete', [TestimonialController::class, 'bulkDelete'])->name('bulk.delete');
-        Route::post('/bulk-approve', [TestimonialController::class, 'bulkApprove'])->name('bulk.approve');
-        Route::post('/bulk-reject', [TestimonialController::class, 'bulkReject'])->name('bulk.reject');
-        
+        Route::post('/{id}/update-rating', [TestimonialController::class, 'updateRating'])->name('update-rating');
+        Route::post('/{id}/notes', [TestimonialController::class, 'updateNotes'])->name('notes');
     });
+
+    // ----------------------------------------
+    // EXPORT LAPORAN
+    // ----------------------------------------
+    Route::get('/export-full-report', [ExportController::class, 'exportFullReport'])->name('export.full');
 });

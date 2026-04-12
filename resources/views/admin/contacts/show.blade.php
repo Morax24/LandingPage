@@ -3,32 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Pesan - {{ $contact->name }}</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Detail Pesan - {{ $contact->name }} | Waluya Land Admin</title>
     <style>
+        /* ===========================================
+           RESET & VARIABLES
+        =========================================== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #E8F4F8;
-            color: #333;
+        :root {
+            --primary: #5FB574;
+            --primary-dark: #4FA564;
+            --secondary: #F9D56E;
+            --secondary-dark: #E9C55E;
+            --danger: #FF8A5B;
+            --danger-dark: #E67A4B;
+            --gray-light: #F7FCF9;
+            --gray-border: #E8F4F8;
+            --text-dark: #333;
+            --text-gray: #666;
+            --shadow: 0 2px 15px rgba(0,0,0,0.08);
+            --shadow-hover: 0 5px 20px rgba(0,0,0,0.12);
         }
 
-        /* Layout */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--gray-border);
+            color: var(--text-dark);
+        }
+
+        /* ===========================================
+           LAYOUT
+        =========================================== */
         .admin-layout {
             display: flex;
             min-height: 100vh;
         }
 
-        /* Sidebar */
+        /* ===========================================
+           SIDEBAR
+        =========================================== */
         .sidebar {
             width: 280px;
-            background: #5FB574;
+            background: var(--primary);
             color: #fff;
-            padding: 0;
             position: fixed;
             height: 100vh;
             overflow-y: auto;
@@ -57,7 +79,6 @@
             height: 30px;
             background: #fff;
             display: inline-block;
-            vertical-align: middle;
         }
 
         .sidebar-header p {
@@ -82,16 +103,14 @@
             font-size: 1rem;
         }
 
-        .menu-item:hover {
-            background: rgba(255,255,255,0.15);
-            border-left-color: #F9D56E;
+        .menu-item:hover,
+        .menu-item.active {
+            background: rgba(255,255,255,0.2);
+            border-left-color: var(--secondary);
             color: #fff;
         }
 
         .menu-item.active {
-            background: rgba(255,255,255,0.2);
-            border-left-color: #F9D56E;
-            color: #fff;
             font-weight: 600;
         }
 
@@ -121,13 +140,13 @@
             width: 45px;
             height: 45px;
             border-radius: 50%;
-            background: #F9D56E;
+            background: var(--secondary);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
             font-size: 1.2rem;
-            color: #5FB574;
+            color: var(--primary);
             border: 2px solid rgba(255,255,255,0.5);
         }
 
@@ -142,17 +161,16 @@
         }
 
         .btn-logout {
-            background: #FF8A5B;
+            background: var(--danger);
             color: #fff;
             padding: 0.7rem 1.8rem;
             border: none;
             border-radius: 25px;
             cursor: pointer;
-            text-decoration: none;
             font-weight: 600;
             font-size: 0.95rem;
-            transition: all 0.3s;
             width: 100%;
+            transition: all 0.3s;
         }
 
         .btn-logout:hover {
@@ -160,7 +178,9 @@
             box-shadow: 0 4px 12px rgba(255,138,91,0.4);
         }
 
-        /* Main Content */
+        /* ===========================================
+           MAIN CONTENT
+        =========================================== */
         .main-content {
             margin-left: 280px;
             flex: 1;
@@ -169,12 +189,14 @@
             transition: margin-left 0.3s ease;
         }
 
-        /* Header */
+        /* ===========================================
+           HEADER
+        =========================================== */
         .header {
             background: #fff;
             padding: 1.5rem 2rem;
             border-radius: 15px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            box-shadow: var(--shadow);
             margin-bottom: 2rem;
             display: flex;
             justify-content: space-between;
@@ -185,9 +207,12 @@
 
         .header h1 {
             font-size: 1.8rem;
-            color: #333;
+            color: var(--text-dark);
         }
 
+        /* ===========================================
+           BUTTONS
+        =========================================== */
         .btn {
             padding: 0.7rem 1.5rem;
             border: none;
@@ -195,9 +220,14 @@
             cursor: pointer;
             font-weight: 600;
             text-decoration: none;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
             transition: all 0.3s;
-            text-align: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
         }
 
         .btn-back {
@@ -207,50 +237,40 @@
 
         .btn-back:hover {
             background: #7f8c8d;
-            transform: translateY(-2px);
         }
 
-        .btn-primary {
-            background: #5FB574;
-            color: #fff;
-        }
-
-        .btn-primary:hover {
-            background: #4FA564;
-            transform: translateY(-2px);
-        }
-
+        .btn-primary,
         .btn-success {
-            background: #5FB574;
+            background: var(--primary);
             color: #fff;
         }
 
+        .btn-primary:hover,
         .btn-success:hover {
-            background: #4FA564;
-            transform: translateY(-2px);
+            background: var(--primary-dark);
         }
 
         .btn-danger {
-            background: #FF8A5B;
+            background: var(--danger);
             color: #fff;
         }
 
         .btn-danger:hover {
-            background: #E67A4B;
-            transform: translateY(-2px);
+            background: var(--danger-dark);
         }
 
         .btn-warning {
-            background: #F9D56E;
-            color: #333;
+            background: var(--secondary);
+            color: var(--text-dark);
         }
 
         .btn-warning:hover {
-            background: #E9C55E;
-            transform: translateY(-2px);
+            background: var(--secondary-dark);
         }
 
-        /* Alert */
+        /* ===========================================
+           ALERTS
+        =========================================== */
         .alert {
             padding: 1rem 1.5rem;
             border-radius: 12px;
@@ -260,17 +280,19 @@
 
         .alert-success {
             background: #E8F5EC;
-            color: #4FA564;
-            border: 2px solid #5FB574;
+            color: var(--primary-dark);
+            border: 2px solid var(--primary);
         }
 
         .alert-info {
-            background: #E8F4F8;
-            color: #5FB574;
-            border: 2px solid #5FB574;
+            background: var(--gray-border);
+            color: var(--primary);
+            border: 2px solid var(--primary);
         }
 
-        /* Main Content */
+        /* ===========================================
+           CARDS & CONTENT
+        =========================================== */
         .content-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -280,21 +302,21 @@
         .card {
             background: #fff;
             border-radius: 15px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            box-shadow: var(--shadow);
             padding: 2rem;
             transition: all 0.3s;
         }
 
         .card:hover {
-            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+            box-shadow: var(--shadow-hover);
         }
 
         .card h2 {
             font-size: 1.3rem;
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
-            border-bottom: 2px solid #E8F4F8;
-            color: #5FB574;
+            border-bottom: 2px solid var(--gray-border);
+            color: var(--primary);
         }
 
         .info-row {
@@ -311,22 +333,39 @@
 
         .info-row .value {
             padding: 1rem;
-            background: #F7FCF9;
+            background: var(--gray-light);
             border-radius: 10px;
             font-size: 0.95rem;
-            border: 1px solid #E8F4F8;
+            border: 1px solid var(--gray-border);
         }
 
         .message-box {
             padding: 1.2rem;
-            background: #F7FCF9;
+            background: var(--gray-light);
             border-radius: 10px;
             line-height: 1.8;
             min-height: 150px;
             white-space: pre-wrap;
-            border: 1px solid #E8F4F8;
+            border: 1px solid var(--gray-border);
         }
 
+        .meta-info {
+            background: var(--gray-light);
+            padding: 1.2rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: #666;
+            line-height: 1.8;
+            border: 1px solid var(--gray-border);
+        }
+
+        .meta-info strong {
+            color: var(--primary);
+        }
+
+        /* ===========================================
+           BADGES
+        =========================================== */
         .badge {
             padding: 0.5rem 1.2rem;
             border-radius: 20px;
@@ -342,15 +381,17 @@
 
         .badge-approved {
             background: #E8F5EC;
-            color: #4FA564;
+            color: var(--primary-dark);
         }
 
         .badge-rejected {
             background: #FFE8E1;
-            color: #D96F4A;
+            color: var(--danger-dark);
         }
 
-        /* Action Card */
+        /* ===========================================
+           ACTION SECTION
+        =========================================== */
         .action-card {
             position: sticky;
             top: 2rem;
@@ -363,89 +404,49 @@
             margin-bottom: 2rem;
         }
 
-        .action-buttons form {
-            width: 100%;
-        }
-
-        .action-buttons button,
+        .action-buttons form,
         .action-buttons .btn {
             width: 100%;
+        }
+
+        .action-buttons .btn {
             justify-content: center;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* Notes Section */
-        .notes-section {
-            margin-top: 2rem;
-        }
-
-        .notes-section textarea {
-            width: 100%;
-            padding: 1.2rem;
-            border: 2px solid #E8F4F8;
-            border-radius: 10px;
-            font-family: inherit;
-            min-height: 120px;
-            resize: vertical;
-            margin-bottom: 1rem;
-            transition: all 0.3s;
-        }
-
-        .notes-section textarea:focus {
-            outline: none;
-            border-color: #5FB574;
-            background: #F7FCF9;
-        }
-
-        /* Meta Info */
-        .meta-info {
-            background: #F7FCF9;
-            padding: 1.2rem;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            color: #666;
-            line-height: 1.8;
-            border: 1px solid #E8F4F8;
-        }
-
-        .meta-info strong {
-            color: #5FB574;
         }
 
         .info-box {
             padding: 1rem;
-            background: #F7FCF9;
+            background: var(--gray-light);
             border-radius: 10px;
             text-align: center;
             color: #666;
-            border: 1px solid #E8F4F8;
+            border: 1px solid var(--gray-border);
         }
 
         .meta-section {
             margin-top: 2rem;
             padding-top: 2rem;
-            border-top: 2px solid #E8F4F8;
+            border-top: 2px solid var(--gray-border);
         }
 
         .meta-section h3 {
             font-size: 1rem;
             margin-bottom: 1rem;
-            color: #5FB574;
+            color: var(--primary);
         }
 
-        .meta-section .meta-text {
+        .meta-text {
             font-size: 0.85rem;
             color: #666;
             line-height: 1.8;
         }
 
-        .meta-section .meta-text strong {
-            color: #333;
+        .meta-text strong {
+            color: var(--text-dark);
         }
 
-        /* Modal Reject */
+        /* ===========================================
+           MODAL
+        =========================================== */
         .modal {
             display: none;
             position: fixed;
@@ -474,7 +475,7 @@
 
         .modal-content h3 {
             margin-bottom: 1rem;
-            color: #5FB574;
+            color: var(--primary);
         }
 
         .modal-content label {
@@ -487,18 +488,17 @@
         .modal-content textarea {
             width: 100%;
             padding: 1rem;
-            border: 2px solid #E8F4F8;
+            border: 2px solid var(--gray-border);
             border-radius: 10px;
             font-family: inherit;
             min-height: 100px;
             resize: vertical;
             margin-bottom: 1rem;
-            transition: all 0.3s;
         }
 
         .modal-content textarea:focus {
             outline: none;
-            border-color: #5FB574;
+            border-color: var(--primary);
         }
 
         .modal-buttons {
@@ -507,14 +507,16 @@
             justify-content: flex-end;
         }
 
-        /* Mobile Menu Toggle */
+        /* ===========================================
+           MOBILE MENU
+        =========================================== */
         .mobile-menu-toggle {
             display: none;
             position: fixed;
             top: 1rem;
             left: 1rem;
             z-index: 1001;
-            background: #5FB574;
+            background: var(--primary);
             color: white;
             border: none;
             border-radius: 8px;
@@ -524,7 +526,6 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
-        /* Overlay for mobile */
         .overlay {
             display: none;
             position: fixed;
@@ -540,7 +541,9 @@
             display: block;
         }
 
-        /* Responsive Design */
+        /* ===========================================
+           RESPONSIVE DESIGN
+        =========================================== */
         @media (max-width: 1200px) {
             .content-grid {
                 grid-template-columns: 1.5fr 1fr;
@@ -568,21 +571,15 @@
             }
 
             .header {
-                padding: 1rem;
                 margin-top: 3rem;
             }
 
             .content-grid {
                 grid-template-columns: 1fr;
-                gap: 1rem;
             }
 
             .action-card {
                 position: static;
-            }
-
-            .card {
-                padding: 1.5rem;
             }
         }
 
@@ -590,14 +587,11 @@
             .header {
                 flex-direction: column;
                 text-align: center;
+                padding: 1rem;
             }
 
             .header h1 {
                 font-size: 1.5rem;
-            }
-
-            .content-grid {
-                grid-template-columns: 1fr;
             }
 
             .card {
@@ -608,27 +602,21 @@
                 font-size: 1.2rem;
             }
 
-            .info-row .value,
-            .message-box {
-                padding: 0.8rem;
-            }
-
-            .action-buttons {
-                gap: 0.8rem;
-            }
-
             .btn {
-                padding: 0.8rem 1.2rem;
+                padding: 0.7rem 1.2rem;
                 font-size: 0.9rem;
             }
 
             .modal-content {
                 padding: 1.5rem;
-                margin: 1rem;
             }
 
             .modal-buttons {
                 flex-direction: column;
+            }
+
+            .modal-buttons .btn {
+                width: 100%;
             }
         }
 
@@ -647,27 +635,10 @@
 
             .card {
                 padding: 1rem;
-                border-radius: 10px;
             }
 
             .card h2 {
                 font-size: 1.1rem;
-                margin-bottom: 1rem;
-                padding-bottom: 0.8rem;
-            }
-
-            .info-row {
-                margin-bottom: 1rem;
-            }
-
-            .info-row label {
-                font-size: 0.85rem;
-            }
-
-            .info-row .value,
-            .message-box {
-                padding: 0.7rem;
-                font-size: 0.9rem;
             }
 
             .badge {
@@ -676,45 +647,7 @@
             }
 
             .btn {
-                padding: 0.7rem 1rem;
-                font-size: 0.85rem;
-            }
-
-            .notes-section textarea {
-                padding: 1rem;
-                min-height: 100px;
-            }
-
-            .meta-section {
-                margin-top: 1.5rem;
-                padding-top: 1.5rem;
-            }
-
-            .mobile-menu-toggle {
-                top: 0.5rem;
-                left: 0.5rem;
-                padding: 0.5rem;
-                font-size: 1.3rem;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .header h1 {
-                font-size: 1.2rem;
-            }
-
-            .card {
-                padding: 0.8rem;
-            }
-
-            .btn {
-                padding: 0.6rem 0.8rem;
-                font-size: 0.8rem;
-            }
-
-            .info-row .value,
-            .message-box {
-                padding: 0.6rem;
+                padding: 0.6rem 1rem;
                 font-size: 0.85rem;
             }
         }
@@ -728,48 +661,47 @@
     <div class="admin-layout">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-        <h2><span class="logo-square"></span> <span>WALUYA LAND</span></h2>
-        <p>Admin Panel</p>
-    </div>
-
-    <nav class="sidebar-menu">
-        <a href="{{ route('admin.dashboard') }}" class="menu-item">
-            <span class="menu-icon">📊</span>
-            <span>Dashboard</span>
-        </a>
-        <a href="{{ route('admin.contacts.index') }}" class="menu-item active">
-            <span class="menu-icon">📧</span>
-            <span>Kelola Pesan</span>
-        </a>
-        <!-- =========================================== -->
-        <!-- TAMBAH MENU TESTIMONI DI SINI -->
-        <!-- =========================================== -->
-        <a href="{{ route('admin.testimonials.index') }}" class="menu-item">
-            <span class="menu-icon">⭐</span>
-            <span>Kelola Testimoni</span>
-        </a>
-        <!-- =========================================== -->
-        <a href="{{ route('admin.media.index') }}" class="menu-item">
-            <span class="menu-icon">🖼️</span>
-            <span>Media Library</span>
-        </a>
-    </nav>
-
-    <div class="sidebar-footer">
-        <div class="user-profile">
-            <div class="user-avatar">AM</div>
-            <div class="user-info">
-                <h4>Admin Malaya</h4>
-                <p>Administrator</p>
+            <div class="sidebar-header">
+                <h2>
+                    <span class="logo-square"></span>
+                    <span>WALUYA LAND</span>
+                </h2>
+                <p>Admin Panel</p>
             </div>
-        </div>
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="btn-logout">Logout</button>
-        </form>
-    </div>
-</aside>
+
+            <nav class="sidebar-menu">
+                <a href="{{ route('admin.dashboard') }}" class="menu-item">
+                    <span class="menu-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{{ route('admin.contacts.index') }}" class="menu-item active">
+                    <span class="menu-icon">📧</span>
+                    <span>Kelola Pesan</span>
+                </a>
+                <a href="{{ route('admin.testimonials.index') }}" class="menu-item">
+                    <span class="menu-icon">⭐</span>
+                    <span>Kelola Testimoni</span>
+                </a>
+                <a href="{{ route('admin.media.index') }}" class="menu-item">
+                    <span class="menu-icon">🖼️</span>
+                    <span>Media Library</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">AM</div>
+                    <div class="user-info">
+                        <h4>Admin Malaya</h4>
+                        <p>Administrator</p>
+                    </div>
+                </div>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn-logout">Logout</button>
+                </form>
+            </div>
+        </aside>
 
         <!-- Main Content -->
         <main class="main-content">
@@ -794,7 +726,7 @@
 
             <!-- Content Grid -->
             <div class="content-grid">
-                <!-- Main Content -->
+                <!-- Left Column - Informasi Pengirim -->
                 <div>
                     <div class="card">
                         <h2>Informasi Pengirim</h2>
@@ -807,9 +739,24 @@
                         <div class="info-row">
                             <label>Email</label>
                             <div class="value">
-                                <a href="mailto:{{ $contact->email }}" style="color: #5FB574; text-decoration: none; font-weight: 600;">
+                                <a href="mailto:{{ $contact->email }}" style="color: var(--primary); text-decoration: none; font-weight: 600;">
                                     {{ $contact->email }}
                                 </a>
+                            </div>
+                        </div>
+
+                        <div class="info-row">
+                            <label>Nomor HP / WhatsApp</label>
+                            <div class="value">
+                                @if($contact->phone)
+                                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $contact->phone) }}"
+                                       target="_blank"
+                                       style="color: var(--primary); text-decoration: none; font-weight: 600;">
+                                        {{ $contact->phone }}
+                                    </a>
+                                @else
+                                    -
+                                @endif
                             </div>
                         </div>
 
@@ -838,20 +785,17 @@
                             <strong>Waktu:</strong> {{ $contact->approved_at->format('d/m/Y H:i') }}
                         </div>
                         @endif
-                    </div>
 
-                    <!-- Admin Notes -->
-                    <div class="card notes-section">
-                        <h2>Catatan Admin</h2>
-                        <form action="{{ route('admin.contacts.notes', $contact->id) }}" method="POST">
-                            @csrf
-                            <textarea name="admin_notes" placeholder="Tambahkan catatan internal...">{{ $contact->admin_notes }}</textarea>
-                            <button type="submit" class="btn btn-primary">💾 Simpan Catatan</button>
-                        </form>
+                        @if($contact->admin_notes)
+                        <div class="meta-info" style="margin-top: 1rem;">
+                            <strong>Catatan Admin:</strong><br>
+                            {{ $contact->admin_notes }}
+                        </div>
+                        @endif
                     </div>
                 </div>
 
-                <!-- Action Sidebar -->
+                <!-- Right Column - Aksi -->
                 <div>
                     <div class="card action-card">
                         <h2>Aksi</h2>
@@ -872,7 +816,7 @@
                             </button>
                             @else
                             <div class="info-box">
-                                Pesan sudah ditinjau
+                                ℹ️ Pesan sudah ditinjau
                             </div>
                             @endif
 
@@ -880,7 +824,7 @@
                             <form action="{{ route('admin.contacts.destroy', $contact->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Yakin ingin menghapus pesan ini?')">
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Yakin ingin menghapus pesan ini? Tindakan ini tidak dapat dibatalkan.')">
                                     🗑️ Hapus Pesan
                                 </button>
                             </form>
@@ -890,12 +834,15 @@
                         <div class="meta-section">
                             <h3>Informasi Tambahan</h3>
                             <div class="meta-text">
-                                <strong>Diterima:</strong><br>
+                                <strong>📅 Diterima:</strong><br>
                                 {{ $contact->created_at->format('d F Y, H:i') }}<br>
                                 ({{ $contact->created_at->diffForHumans() }})<br><br>
 
-                                <strong>ID Pesan:</strong><br>
-                                #{{ $contact->id }}
+                                <strong>🆔 ID Pesan:</strong><br>
+                                #{{ $contact->id }}<br><br>
+
+                                <strong>📝 Tipe:</strong><br>
+                                {{ ucfirst($contact->type) }}
                             </div>
                         </div>
                     </div>
@@ -922,7 +869,9 @@
     </div>
 
     <script>
-        // Mobile menu functionality
+        // ===========================================
+        // MOBILE MENU FUNCTIONALITY
+        // ===========================================
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
@@ -935,7 +884,7 @@
         mobileMenuToggle.addEventListener('click', toggleMobileMenu);
         overlay.addEventListener('click', toggleMobileMenu);
 
-        // Handle window resize
+        // Close mobile menu on window resize if screen becomes desktop
         window.addEventListener('resize', function() {
             if (window.innerWidth > 992) {
                 sidebar.classList.remove('mobile-open');
@@ -943,7 +892,9 @@
             }
         });
 
-        // Modal functions
+        // ===========================================
+        // MODAL FUNCTIONS
+        // ===========================================
         function openRejectModal() {
             document.getElementById('rejectModal').classList.add('active');
         }

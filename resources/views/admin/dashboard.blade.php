@@ -1501,12 +1501,12 @@ $conn->close();
                 <h1>📊 Dashboard Analytics</h1>
                 <span>Welcome, <strong style="color: #5FB574;">Admin</strong></span>
                 <div class="header-actions">
-                    <span class="btn btn-secondary">🕒 <?php echo date('d M Y, H:i'); ?></span>
+                    <!--<span class="btn btn-secondary">🕒 <?php echo date('d M Y, H:i'); ?></span>-->
                     <?php if ($today_visitors > 1): ?>
-                    <a href="dashboard.php?reset_visitors=1" class="btn btn-secondary"
+                    <!--<a href="dashboard.php?reset_visitors=1" class="btn btn-secondary"
                        onclick="return confirm('Reset pengunjung hari ini ke 1?')">
                        🔄 Reset Pengunjung
-                    </a>
+                    </a>-->
                     <?php endif; ?>
                 </div>
             </div>
@@ -1598,7 +1598,7 @@ $conn->close();
                 <div class="stat-card">
                     <span class="stat-icon">👥</span>
                     <div class="stat-number"><?php echo $total_visitors; ?></div>
-                    <div class="stat-label">Total Kumulatif</div>
+                    <div class="stat-label">Total Pengunjung</div>
                 </div>
 
                 <!-- Baris 3: Statistik Pengunjung -->
@@ -1621,23 +1621,33 @@ $conn->close();
                     <div class="stat-label">Rata-rata per Hari</div>
                 </div>
 
-                <!-- Total Testimoni -->
-                <a href="{{ route('admin.testimonials.index') }}" class="stat-link">
-                    <div class="stat-card" id="testimonialCard">
-                        <span class="stat-icon">⭐</span>
-                        <div class="stat-number"><?php echo $total_testimonials; ?></div>
-                        <div class="stat-label">Total Testimoni</div>
-                    </div>
-                </a>
-                
-                <!-- Testimoni Ditolak (GANTI DARI "Kunjungan Tertinggi") -->
+                <!-- Total Testimoni + Tombol Download -->
+<div style="display: flex; gap: 10px;">
+    <a href="{{ route('admin.testimonials.index') }}" class="stat-link" style="flex: 2;">
+        <div class="stat-card" id="testimonialCard">
+            <span class="stat-icon">⭐</span>
+            <div class="stat-number"><?php echo $total_testimonials; ?></div>
+            <div class="stat-label">Total Testimoni</div>
+        </div>
+    </a>
+
+    <a href="{{ route('admin.export.full') }}" class="stat-link" style="flex: 1;">
+        <div class="stat-card" style="background: linear-gradient(135deg, #2ecc71, #27ae60); border-top-color: #1e8449;">
+            <span class="stat-icon">📥</span>
+            <div class="stat-number" style="font-size: 1.2rem;">Download</div>
+            <div class="stat-label">Laporan Excel</div>
+        </div>
+    </a>
+</div>
+
+                <!-- Testimoni Ditolak (GANTI DARI "Kunjungan Tertinggi")
                 <a href="{{ route('admin.testimonials.index') }}" class="stat-link">
                     <div class="stat-card">
                         <span class="stat-icon">🚫</span>
                         <div class="stat-number"><?php echo $rejected_testimonials; ?></div>
                         <div class="stat-label">Testimoni Ditolak</div>
                     </div>
-                </a>
+                </a>-->
             </div>
 
             <!-- Dashboard 3 Kolom -->

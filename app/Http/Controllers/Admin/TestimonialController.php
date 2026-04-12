@@ -33,6 +33,15 @@ class TestimonialController extends Controller
             $query->where('status', $request->status);
         }
 
+        // Rating filter
+        if($request->has('rating') && $request->rating != 'all' && $request->rating != '') {
+            if($request->rating == 'null') {
+                $query->whereNull('rating');
+            } else {
+                $query->where('rating', $request->rating);
+            }
+        }
+
         $testimonials = $query->latest()->paginate(10);
 
         // Stats - HANYA untuk testimonial menggunakan scope dari model
@@ -56,15 +65,16 @@ class TestimonialController extends Controller
             'email' => 'required|email|max:255',
             'message' => 'required|string',
             'institution' => 'nullable|string|max:255',
+            'rating' => 'nullable|integer|min:1|max:5',
             'status' => 'required|in:approved,rejected',
         ]);
 
-        // PASTIKAN type = 'testimonial' untuk admin
         Contact::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'institution' => $validated['institution'] ?? null,
             'message' => $validated['message'],
+            'rating' => $validated['rating'] ?? null,
             'type' => 'testimonial',
             'status' => $validated['status'],
             'approved_at' => $validated['status'] == 'approved' ? now() : null,
@@ -80,33 +90,28 @@ class TestimonialController extends Controller
      */
     public function approve($id)
     {
-        // Pastikan hanya testimonial menggunakan scope dari model
-        $testimonial = Contact::testimonial()->findOrFail($id);
+        $testimoni = Contact::testimonial()->findOrFail($id);
 
-        $testimonial->update([
+        $testimoni->update([
             'status' => 'approved',
             'approved_at' => now(),
-            'approved_by' => auth()->id(),
+            'approved_by' => auth()->id()
         ]);
 
-        return back()->with('success', 'Testimoni disetujui!');
+        return back()->with('success', 'Testimoni disetujui');
     }
 
-    /**
-     * Reject a testimonial
-     */
     public function reject($id)
     {
-        // Pastikan hanya testimonial menggunakan scope dari model
-        $testimonial = Contact::testimonial()->findOrFail($id);
+        $testimoni = Contact::testimonial()->findOrFail($id);
 
-        $testimonial->update([
+        $testimoni->update([
             'status' => 'rejected',
             'approved_at' => now(),
-            'approved_by' => auth()->id(),
+            'approved_by' => auth()->id()
         ]);
 
-        return back()->with('success', 'Testimoni ditolak!');
+        return back()->with('success', 'Testimoni ditolak');
     }
 
     /**
@@ -114,33 +119,86 @@ class TestimonialController extends Controller
      */
     public function destroy($id)
     {
-        // Pastikan hanya testimonial menggunakan scope dari model
         $testimonial = Contact::testimonial()->findOrFail($id);
         $testimonial->delete();
 
         return back()->with('success', 'Testimoni berhasil dihapus!');
     }
 
-    // ============================================
-    // BULK ACTIONS
-    // ============================================
+    /**
+     * Update rating testimonial via AJAX
+     */
+    public function updateRating(Request $request, $id)
+    {
+        try {
+            $testimonial = Contact::testimonial()->findOrFail($id);
+
+            $request->validate([
+                'rating' => 'required|integer|min:1|max:5',
+            ]);
+
+            $testimonial->rating = $request->rating;
+            $testimonial->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Rating berhasil diperbarui',
+                'rating' => $testimonial->rating
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal memperbarui rating: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Bulk delete testimonials
+     */
+    public function bulkDelete(Request $request)
+    {
+        try {
+            // Cek apakah menggunakan parameter 'ids' (JSON) atau 'selected_ids' (string comma)
+            if ($request->has('ids')) {
+                $ids = json_decode($request->ids, true);
+            } else if ($request->has('selected_ids')) {
+                $ids = $this->parseSelectedIds($request->selected_ids);
+            } else {
+                return redirect()->route('admin.testimonials.index')->with('error', 'Tidak ada testimoni yang dipilih!');
+            }
+
+            if (empty($ids)) {
+                return redirect()->route('admin.testimonials.index')->with('error', 'Tidak ada testimoni yang valid untuk dihapus!');
+            }
+
+            $deleted = Contact::whereIn('id', $ids)
+                ->testimonial()
+                ->delete();
+
+            if ($deleted > 0) {
+                return redirect()->route('admin.testimonials.index')->with('success', $deleted . ' testimoni berhasil dihapus!');
+            } else {
+                return redirect()->route('admin.testimonials.index')->with('error', 'Tidak ada testimoni yang terhapus.');
+            }
+
+        } catch (\Exception $e) {
+            Log::error('BULK DELETE ERROR:', ['message' => $e->getMessage()]);
+            return redirect()->route('admin.testimonials.index')->with('error', 'Gagal menghapus testimoni: ' . $e->getMessage());
+        }
+    }
 
     /**
      * Bulk approve testimonials
      */
     public function bulkApprove(Request $request)
     {
-        $request->validate([
-            'selected_ids' => 'required|string',
-        ]);
-
         $ids = $this->parseSelectedIds($request->selected_ids);
 
         if (empty($ids)) {
             return back()->with('error', 'Tidak ada ID yang valid untuk disetujui!');
         }
 
-        // Filter hanya testimoni yang ada dan tipe testimonial
         $updated = Contact::whereIn('id', $ids)
             ->testimonial()
             ->update([
@@ -157,10 +215,6 @@ class TestimonialController extends Controller
      */
     public function bulkReject(Request $request)
     {
-        $request->validate([
-            'selected_ids' => 'required|string',
-        ]);
-
         $ids = $this->parseSelectedIds($request->selected_ids);
 
         if (empty($ids)) {
@@ -179,95 +233,118 @@ class TestimonialController extends Controller
     }
 
     /**
-     * Bulk delete testimonials - PERBAIKAN UTAMA
-     */
-    public function bulkDelete(Request $request)
-    {
-        try {
-            $request->validate([
-                'selected_ids' => 'required|string',
-            ]);
-
-            $ids = $this->parseSelectedIds($request->selected_ids);
-
-            if (empty($ids)) {
-                return back()->with('error', 'Tidak ada testimoni yang valid untuk dihapus!');
-            }
-
-            // Hitung sebelum menghapus untuk debug
-            $countBefore = Contact::whereIn('id', $ids)->testimonial()->count();
-
-            // Debug log
-            Log::info('BULK DELETE - Deleting testimonials:', [
-                'ids' => $ids,
-                'count_before' => $countBefore,
-                'user_id' => auth()->id(),
-                'user_name' => auth()->user()->name
-            ]);
-
-            $deleted = Contact::whereIn('id', $ids)
-                ->testimonial()
-                ->delete();
-
-            // Debug log setelah delete
-            Log::info('BULK DELETE - Deleted testimonials:', [
-                'deleted_count' => $deleted,
-                'remaining_count' => Contact::testimonial()->count()
-            ]);
-
-            if ($deleted > 0) {
-                return back()->with('success', $deleted . ' testimoni berhasil dihapus!');
-            } else {
-                return back()->with('error', 'Tidak ada testimoni yang terhapus. Pastikan testimoni yang dipilih berjenis testimonial.');
-            }
-
-        } catch (\Exception $e) {
-            Log::error('BULK DELETE ERROR:', [
-                'message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine(),
-                'trace' => $e->getTraceAsString(),
-                'selected_ids' => $request->selected_ids ?? 'empty'
-            ]);
-
-            return back()->with('error', 'Gagal menghapus testimoni: ' . $e->getMessage());
-        }
-    }
-
-    /**
      * Helper method to parse and validate selected IDs
      */
     private function parseSelectedIds($idsString)
     {
-        $ids = explode(',', $idsString);
+        if (empty($idsString)) {
+            return [];
+        }
 
-        // Bersihkan array dari nilai kosong dan non-numeric
+        $ids = explode(',', $idsString);
         $ids = array_filter($ids, function($id) {
             $id = trim($id);
             return !empty($id) && is_numeric($id) && $id > 0;
         });
-
-        // Konversi ke integer
         $ids = array_map('intval', $ids);
-
-        // Hapus duplikat
         $ids = array_unique($ids);
 
         return $ids;
     }
 
     /**
-     * Show testimonial details (optional - jika diperlukan)
+     * Download CSV (tanpa file baru)
      */
+    public function downloadCSV(Request $request)
+    {
+        $query = Contact::testimonial();
+
+        // Apply filters sama seperti di index
+        if($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%$search%")
+                  ->orWhere('email', 'like', "%$search%")
+                  ->orWhere('message', 'like', "%$search%");
+            });
+        }
+        if($request->has('status') && $request->status != 'all') {
+            $query->where('status', $request->status);
+        }
+        if($request->has('rating') && $request->rating != 'all' && $request->rating != '') {
+            if($request->rating == 'null') {
+                $query->whereNull('rating');
+            } else {
+                $query->where('rating', $request->rating);
+            }
+        }
+
+        $testimonials = $query->latest()->get();
+
+        // Buat CSV content
+        $csvContent = "Nama,Email,Rating,Pesan Testimoni,Tanggal,Status\n";
+
+        foreach ($testimonials as $t) {
+            $rating = $t->rating ?? 'Belum ada rating';
+            $status = $t->status == 'approved' ? 'Disetujui' : ($t->status == 'rejected' ? 'Ditolak' : 'Menunggu');
+
+            $csvContent .= "\"" . addslashes($t->name) . "\",";
+            $csvContent .= "\"" . addslashes($t->email) . "\",";
+            $csvContent .= "\"$rating\",";
+            $csvContent .= "\"" . addslashes($t->message) . "\",";
+            $csvContent .= "\"" . $t->created_at->format('d/m/Y H:i') . "\",";
+            $csvContent .= "\"$status\"\n";
+        }
+
+        // Download langsung tanpa file
+        return response($csvContent)
+            ->header('Content-Type', 'text/csv; charset=utf-8')
+            ->header('Content-Disposition', 'attachment; filename="testimonials_' . date('Y-m-d_His') . '.csv"');
+    }
+
+    /**
+     * Download PDF (tanpa file baru, langsung dari browser)
+     */
+    public function downloadPDF(Request $request)
+    {
+        $query = Contact::testimonial();
+
+        // Apply filters
+        if($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%$search%")
+                  ->orWhere('email', 'like', "%$search%")
+                  ->orWhere('message', 'like', "%$search%");
+            });
+        }
+        if($request->has('status') && $request->status != 'all') {
+            $query->where('status', $request->status);
+        }
+        if($request->has('rating') && $request->rating != 'all' && $request->rating != '') {
+            if($request->rating == 'null') {
+                $query->whereNull('rating');
+            } else {
+                $query->where('rating', $request->rating);
+            }
+        }
+
+        $testimonials = $query->latest()->get();
+
+        // Generate HTML untuk PDF
+        $html = $this->generatePDFHTML($testimonials, $request);
+
+        // Gunakan HTML2PDF via JavaScript di browser
+        // Atau kembalikan HTML yang bisa di-print ke PDF
+        return view('admin.testimonials.pdf-export', compact('testimonials', 'request'))->render();
+    }
+
     public function show($id)
     {
         $testimonial = Contact::testimonial()->with('approver')->findOrFail($id);
         return view('admin.testimonials.show', compact('testimonial'));
     }
 
-    /**
-     * Update admin notes (optional - jika diperlukan)
-     */
     public function updateNotes(Request $request, $id)
     {
         $testimonial = Contact::testimonial()->findOrFail($id);

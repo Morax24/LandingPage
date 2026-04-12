@@ -690,48 +690,44 @@
     <div class="admin-layout">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-        <h2><span class="logo-square"></span> <span>WALUYA LAND</span></h2>
-        <p>Admin Panel</p>
-    </div>
-
-    <nav class="sidebar-menu">
-        <a href="{{ route('admin.dashboard') }}" class="menu-item">
-            <span class="menu-icon">📊</span>
-            <span>Dashboard</span>
-        </a>
-        <a href="{{ route('admin.contacts.index') }}" class="menu-item">
-            <span class="menu-icon">📧</span>
-            <span>Kelola Pesan</span>
-        </a>
-        <!-- =========================================== -->
-        <!-- TAMBAH MENU TESTIMONI DI SINI -->
-        <!-- =========================================== -->
-        <a href="{{ route('admin.testimonials.index') }}" class="menu-item">
-            <span class="menu-icon">⭐</span>
-            <span>Kelola Testimoni</span>
-        </a>
-        <!-- =========================================== -->
-        <a href="{{ route('admin.media.index') }}" class="menu-item active">
-            <span class="menu-icon">🖼️</span>
-            <span>Media Library</span>
-        </a>
-    </nav>
-
-    <div class="sidebar-footer">
-        <div class="user-profile">
-            <div class="user-avatar">AM</div>
-            <div class="user-info">
-                <h4>Admin Malaya</h4>
-                <p>Administrator</p>
+            <div class="sidebar-header">
+                <h2><span class="logo-square"></span> <span>WALUYA LAND</span></h2>
+                <p>Admin Panel</p>
             </div>
-        </div>
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="btn-logout">Logout</button>
-        </form>
-    </div>
-</aside>
+
+            <nav class="sidebar-menu">
+                <a href="{{ route('admin.dashboard') }}" class="menu-item">
+                    <span class="menu-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{{ route('admin.contacts.index') }}" class="menu-item">
+                    <span class="menu-icon">📧</span>
+                    <span>Kelola Pesan</span>
+                </a>
+                <a href="{{ route('admin.testimonials.index') }}" class="menu-item">
+                    <span class="menu-icon">⭐</span>
+                    <span>Kelola Testimoni</span>
+                </a>
+                <a href="{{ route('admin.media.index') }}" class="menu-item active">
+                    <span class="menu-icon">🖼️</span>
+                    <span>Media Library</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">AM</div>
+                    <div class="user-info">
+                        <h4>Admin Malaya</h4>
+                        <p>Administrator</p>
+                    </div>
+                </div>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn-logout">Logout</button>
+                </form>
+            </div>
+        </aside>
 
         <!-- Main Content -->
         <main class="main-content">
@@ -764,12 +760,16 @@
                         <label for="section">Section *</label>
                         <select name="section" id="section" required onchange="updateSectionForm()">
                             <option value="">-- Pilih Section --</option>
-                            <option value="hero" {{ old('section') == 'hero' ? 'selected' : '' }}>Intro (1 gambar)</option>
-                            <option value="story" {{ old('section') == 'story' ? 'selected' : '' }}>Background (1 gambar)</option>
-                            <option value="whylearn" {{ old('section') == 'whylearn' ? 'selected' : '' }}>Fitur 3 (1 gambar)</option>
-                            <option value="features" {{ old('section') == 'features' ? 'selected' : '' }}>Fitur Unggulan (4 gambar)</option>
-                            <option value="aktivitas" {{ old('section') == 'aktivitas' ? 'selected' : '' }}>Aktivitas & Tutorial (6 gambar)</option>
-                            <option value="products" {{ old('section') == 'products' ? 'selected' : '' }}>Products (2 gambar)</option>
+                            @php
+                                $sections = App\Models\Media::getSections();
+                            @endphp
+                            @foreach($sections as $value => $label)
+                                @if($value !== 'other')
+                                    <option value="{{ $value }}" {{ old('section') == $value ? 'selected' : '' }}>
+                                        {{ $label }}
+                                    </option>
+                                @endif
+                            @endforeach
                         </select>
                         @error('section')
                             <span class="error-text">{{ $message }}</span>
@@ -820,7 +820,7 @@
             }
         });
 
-        // KONFIGURASI SECTION YANG DIPERBAIKI:
+        // KONFIGURASI SECTION
         const sectionConfig = {
             'hero': { count: 1, name: 'Intro' },
             'story': { count: 1, name: 'Background' },
@@ -874,84 +874,82 @@
                 const previewId = `preview${itemNumber}`;
                 const fileInfoId = `fileInfo${itemNumber}`;
 
-                // Di dalam fungsi updateSectionForm(), UBAH bagian Description agar selalu ada untuk semua section:
+                const itemHTML = `
+                    <div class="upload-item" id="${itemId}">
+                        <div class="upload-item-header">
+                            <div class="upload-item-title">${getItemTitle(section, i)}</div>
+                            <div class="upload-item-index">${itemNumber}</div>
+                        </div>
 
-const itemHTML = `
-    <div class="upload-item" id="${itemId}">
-        <div class="upload-item-header">
-            <div class="upload-item-title">${getItemTitle(section, i)}</div>
-            <div class="upload-item-index">${itemNumber}</div>
-        </div>
+                        <div class="upload-item-content">
+                            <!-- Type Selection -->
+                            <div class="form-group">
+                                <label for="type${itemNumber}">Tipe Media *</label>
+                                <select name="items[${i}][type]" id="type${itemNumber}" class="item-type" required onchange="updateFileAccept(this, '${fileInputId}')">
+                                    <option value="">-- Pilih Tipe --</option>
+                                    <option value="image">Image</option>
+                                    <option value="video" ${section === 'products' ? 'disabled' : ''}>Video</option>
+                                </select>
+                                <small class="form-help">Format: JPEG, PNG, JPG, WEBP | Max: 5MB</small>
+                            </div>
 
-        <div class="upload-item-content">
-            <!-- Type Selection -->
-            <div class="form-group">
-                <label for="type${itemNumber}">Tipe Media *</label>
-                <select name="items[${i}][type]" id="type${itemNumber}" class="item-type" required onchange="updateFileAccept(this, '${fileInputId}')">
-                    <option value="">-- Pilih Tipe --</option>
-                    <option value="image">Image</option>
-                    <option value="video" ${section === 'products' ? 'disabled' : ''}>Video</option>
-                </select>
-                <small class="form-help">Format: JPEG, PNG, JPG, WEBP | Max: 5MB</small>
-            </div>
+                            <!-- File Upload -->
+                            <div class="form-group">
+                                <label>File *</label>
+                                <div class="file-upload-area-small" id="uploadArea${itemNumber}" onclick="document.getElementById('${fileInputId}').click()">
+                                    <div class="file-upload-icon-small">📁</div>
+                                    <div class="file-upload-text-small">Klik atau drag & drop</div>
+                                    <small class="form-help">Max 10MB</small>
+                                </div>
+                                <input type="file" name="items[${i}][file]" id="${fileInputId}" class="item-file" accept="image/*" style="display: none;" onchange="handleFileSelect(event, '${previewId}', '${fileInfoId}', 'type${itemNumber}', 'uploadArea${itemNumber}')">
 
-            <!-- File Upload -->
-            <div class="form-group">
-                <label>File *</label>
-                <div class="file-upload-area-small" id="uploadArea${itemNumber}" onclick="document.getElementById('${fileInputId}').click()">
-                    <div class="file-upload-icon-small">📁</div>
-                    <div class="file-upload-text-small">Klik atau drag & drop</div>
-                    <small class="form-help">Max 10MB</small>
-                </div>
-                <input type="file" name="items[${i}][file]" id="${fileInputId}" class="item-file" accept="image/*" style="display: none;" onchange="handleFileSelect(event, '${previewId}', '${fileInfoId}', 'type${itemNumber}', 'uploadArea${itemNumber}')">
+                                <!-- File Preview -->
+                                <div class="file-preview-small" id="${previewId}">
+                                    <div class="preview-container-small" id="previewContainer${itemNumber}"></div>
+                                    <div class="file-info-small" id="${fileInfoId}"></div>
+                                </div>
+                            </div>
 
-                <!-- File Preview -->
-                <div class="file-preview-small" id="${previewId}">
-                    <div class="preview-container-small" id="previewContainer${itemNumber}"></div>
-                    <div class="file-info-small" id="${fileInfoId}"></div>
-                </div>
-            </div>
+                            <!-- Title -->
+                            <div class="form-group">
+                                <label for="title${itemNumber}">Judul *</label>
+                                <input type="text" name="items[${i}][title]" id="title${itemNumber}" class="item-title" required placeholder="Masukkan judul">
+                            </div>
 
-            <!-- Title -->
-            <div class="form-group">
-                <label for="title${itemNumber}">Judul *</label>
-                <input type="text" name="items[${i}][title]" id="title${itemNumber}" class="item-title" required placeholder="Masukkan judul">
-            </div>
+                            <!-- Description -->
+                            <div class="form-group">
+                                <label for="description${itemNumber}">Deskripsi</label>
+                                <textarea name="items[${i}][description]"
+                                          id="description${itemNumber}"
+                                          class="item-description"
+                                          placeholder="Masukkan deskripsi (akan ditampilkan di website)"
+                                          rows="3"></textarea>
+                                <small class="form-help">Deskripsi akan ditampilkan di landing page</small>
+                            </div>
 
-            <!-- Description - SELALU ADA UNTUK SEMUA SECTION -->
-            <div class="form-group">
-                <label for="description${itemNumber}">Deskripsi</label>
-                <textarea name="items[${i}][description]"
-                          id="description${itemNumber}"
-                          class="item-description"
-                          placeholder="Masukkan deskripsi (akan ditampilkan di website)"
-                          rows="3">{{ old(`items.${i}.description`) }}</textarea>
-                <small class="form-help">Deskripsi akan ditampilkan di landing page</small>
-            </div>
+                            ${section === 'products' ? `
+                            <!-- Price Field (hanya untuk products) -->
+                            <div class="form-group">
+                                <label for="price${itemNumber}">Harga Produk (Rp) *</label>
+                                <input type="number"
+                                       name="items[${i}][price]"
+                                       id="price${itemNumber}"
+                                       class="item-price"
+                                       required
+                                       min="0"
+                                       max="9999999999.99"
+                                       step="0.01"
+                                       placeholder="Contoh: 300000">
+                                <small class="form-help">Harga maksimal: Rp 9.999.999.999,99</small>
+                            </div>
+                            ` : ''}
 
-            ${section === 'products' ? `
-            <!-- Price Field (hanya untuk products) -->
-            <div class="form-group">
-                <label for="price${itemNumber}">Harga Produk (Rp) *</label>
-                <input type="number"
-                       name="items[${i}][price]"
-                       id="price${itemNumber}"
-                       class="item-price"
-                       required
-                       min="0"
-                       max="9999999999.99"
-                       step="0.01"
-                       placeholder="Contoh: 300000">
-                <small class="form-help">Harga maksimal: Rp 9.999.999.999,99</small>
-            </div>
-            ` : ''}
-
-            <!-- Hidden section field -->
-            <input type="hidden" name="items[${i}][section]" value="${section}">
-            <input type="hidden" name="items[${i}][order]" value="${i}">
-        </div>
-    </div>
-`;
+                            <!-- Hidden section field -->
+                            <input type="hidden" name="items[${i}][section]" value="${section}">
+                            <input type="hidden" name="items[${i}][order]" value="${i}">
+                        </div>
+                    </div>
+                `;
 
                 container.innerHTML += itemHTML;
 

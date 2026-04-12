@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -56,6 +57,15 @@ class ContactController extends Controller
 
         return view('admin.contacts.show', compact('contact'));
     }
+ //Cetak Pdf
+    public function cetakPesan()
+{
+    $data = Contact::where('type', 'forum')->get();
+
+    $pdf = Pdf::loadView('pdf.pesan', compact('data'));
+
+    return $pdf->download('laporan-pesan.pdf');
+}
 
     /**
      * Approve contact message (HANYA FORUM)

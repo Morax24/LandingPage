@@ -6,17 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
         Schema::table('contacts', function (Blueprint $table) {
-            $table->enum('type', ['forum', 'testimonial'])->default('forum')->after('message');
+            $table->tinyInteger('rating')->nullable()->after('message')->comment('Rating 1-5 untuk testimonial');
         });
     }
 
-    public function down()
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
         Schema::table('contacts', function (Blueprint $table) {
-            $table->dropColumn('type');
+            $table->dropColumn('rating');
         });
     }
 };
