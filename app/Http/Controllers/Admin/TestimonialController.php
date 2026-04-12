@@ -28,7 +28,7 @@ class TestimonialController extends Controller
             });
         }
 
-        // Status filter
+        // Status filter - INI YANG AKAN DIGUNAKAN OLEH LINK DARI DASHBOARD
         if($request->has('status') && $request->status != 'all') {
             $query->where('status', $request->status);
         }
@@ -122,7 +122,7 @@ class TestimonialController extends Controller
         $testimonial = Contact::testimonial()->findOrFail($id);
         $testimonial->delete();
 
-        return back()->with('success', 'Testimoni berhasil dihapus!');
+        return back()->with('success', 'Testimonial berhasil dihapus!');
     }
 
     /**

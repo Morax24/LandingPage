@@ -421,7 +421,7 @@ $conn->close();
             min-height: 100vh;
         }
 
-        /* Sidebar - SAMA PERSIS DENGAN MEDIA LIBRARY */
+        /* Sidebar */
         .sidebar {
             width: 280px;
             background: #5FB574;
@@ -625,18 +625,7 @@ $conn->close();
             box-shadow: 0 3px 8px rgba(220, 53, 69, 0.3);
         }
 
-        .btn-secondary {
-            background: #95a5a6;
-            color: #fff;
-        }
-
-        .btn-secondary:hover {
-            background: #7f8c8d;
-            transform: translateY(-2px);
-            box-shadow: 0 3px 8px rgba(108, 117, 125, 0.2);
-        }
-
-        /* Alert dengan close button */
+        /* Alert */
         .alert {
             padding: 1rem 1.5rem;
             border-radius: 12px;
@@ -761,21 +750,7 @@ $conn->close();
             text-align: center;
         }
 
-        .day-name {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 0.2rem;
-            line-height: 1;
-        }
-
-        .day-count {
-            font-size: 0.85rem;
-            color: #7f8c8d;
-            margin-top: 0.3rem;
-        }
-
-        /* Warna border untuk stat cards - UPDATE sesuai perubahan */
+        /* Warna border untuk stat cards */
         .stat-card:nth-child(1) { border-top-color: #4CAF50; }
         .stat-card:nth-child(2) { border-top-color: #2196F3; }
         .stat-card:nth-child(3) { border-top-color: #FFC107; }
@@ -787,10 +762,10 @@ $conn->close();
         .stat-card:nth-child(9) { border-top-color: #FFA726; }
         .stat-card:nth-child(10) { border-top-color: #3498db; }
         .stat-card:nth-child(11) { border-top-color: #8BC34A; }
-        .stat-card:nth-child(12) { border-top-color: #F9D56E; } /* Total Testimoni */
-        .stat-card:nth-child(13) { border-top-color: #9b59b6; } /* Testimoni Pending */
-        .stat-card:nth-child(14) { border-top-color: #2ecc71; } /* Testimoni Disetujui */
-        .stat-card:nth-child(15) { border-top-color: #e74c3c; } /* Testimoni Ditolak */
+        .stat-card:nth-child(12) { border-top-color: #F9D56E; }
+        .stat-card:nth-child(13) { border-top-color: #9b59b6; }
+        .stat-card:nth-child(14) { border-top-color: #2ecc71; }
+        .stat-card:nth-child(15) { border-top-color: #e74c3c; }
 
         /* Dashboard Grid */
         .dashboard-grid {
@@ -870,7 +845,7 @@ $conn->close();
             border-color: #ced4da;
         }
 
-        /* Responsive Table Styles */
+        /* Visitor Table */
         .visitor-table-wrapper {
             flex-grow: 1;
             overflow-x: auto;
@@ -944,7 +919,7 @@ $conn->close();
             border-left: 3px solid #FFA726;
         }
 
-        /* Mobile Cards untuk pengunjung (alternatif) */
+        /* Mobile Cards */
         .visitor-mobile-cards {
             display: none;
             flex-direction: column;
@@ -1013,6 +988,7 @@ $conn->close();
             border-left-color: #FFA726;
         }
 
+        /* Activity List */
         .activity-list {
             flex-grow: 1;
             overflow-y: auto;
@@ -1084,6 +1060,7 @@ $conn->close();
             font-size: 0.75rem;
         }
 
+        /* Recent Grid */
         .recent-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1226,6 +1203,7 @@ $conn->close();
             color: #721c24;
         }
 
+        /* Mobile Menu */
         .mobile-menu-toggle {
             display: none;
             position: fixed;
@@ -1256,7 +1234,7 @@ $conn->close();
             display: block;
         }
 
-        /* Print styles untuk PDF */
+        /* Print styles */
         @media print {
             .sidebar,
             .mobile-menu-toggle,
@@ -1382,10 +1360,6 @@ $conn->close();
                 font-size: 1.6rem;
             }
 
-            .day-name {
-                font-size: 1.1rem;
-            }
-
             .stat-icon {
                 font-size: 1.8rem;
                 height: 35px;
@@ -1431,7 +1405,6 @@ $conn->close();
                 padding: 0.4rem 0.8rem;
             }
 
-            /* Responsive table untuk mobile */
             .visitor-table-wrapper {
                 max-height: 250px;
                 font-size: 0.9rem;
@@ -1556,7 +1529,6 @@ $conn->close();
                 <h1>📊 Dashboard Analytics</h1>
                 <div class="header-actions">
                     <button onclick="downloadExcel()" class="btn btn-excel">📊 Download Laporan</button>
-                    <!--<button onclick="downloadPDF()" class="btn btn-pdf">📄 Download PDF</button>-->
                 </div>
             </div>
 
@@ -1567,102 +1539,122 @@ $conn->close();
                 <button class="alert-close" onclick="closeAlert()">×</button>
             </div>
 
-            <!-- Stats Grid - 15 KARTU SESUAI PERUBAHAN -->
+            <!-- Stats Grid - 15 KARTU -->
             <div class="stats-grid">
+                <!-- Kartu 1 -->
                 <div class="stat-card">
                     <span class="stat-icon">💾</span>
                     <div class="stat-number"><?php echo $total_size_mb; ?><span class="stat-unit">MB</span></div>
                     <div class="stat-label">Total Size Media</div>
                 </div>
 
+                <!-- Kartu 2 -->
                 <div class="stat-card">
                     <span class="stat-icon">📨</span>
                     <div class="stat-number"><?php echo $total_contacts; ?></div>
                     <div class="stat-label">Total Pesan</div>
                 </div>
 
+                <!-- Kartu 3 -->
                 <div class="stat-card">
                     <span class="stat-icon">⏳</span>
                     <div class="stat-number"><?php echo $pending_contacts; ?></div>
                     <div class="stat-label">Pesan Pending</div>
                 </div>
 
+                <!-- Kartu 4 -->
                 <div class="stat-card">
                     <span class="stat-icon">✅</span>
                     <div class="stat-number"><?php echo $approved_contacts; ?></div>
                     <div class="stat-label">Pesan Disetujui</div>
                 </div>
 
+                <!-- Kartu 5 -->
                 <div class="stat-card">
                     <span class="stat-icon">❌</span>
                     <div class="stat-number"><?php echo $rejected_contacts; ?></div>
                     <div class="stat-label">Pesan Ditolak</div>
                 </div>
 
+                <!-- Kartu 6 -->
                 <div class="stat-card">
                     <span class="stat-icon">🖼️</span>
                     <div class="stat-number"><?php echo $total_media; ?></div>
                     <div class="stat-label">Total Media</div>
                 </div>
 
+                <!-- Kartu 7 -->
                 <div class="stat-card">
                     <span class="stat-icon">🟢</span>
                     <div class="stat-number"><?php echo $active_media; ?></div>
                     <div class="stat-label">Media Aktif</div>
                 </div>
 
+                <!-- Kartu 8 -->
                 <div class="stat-card">
                     <span class="stat-icon">🔴</span>
                     <div class="stat-number"><?php echo $inactive_media; ?></div>
                     <div class="stat-label">Media Nonaktif</div>
                 </div>
 
+                <!-- Kartu 9 -->
                 <div class="stat-card">
                     <span class="stat-icon">📅</span>
                     <div class="stat-number"><?php echo $today_visitors; ?></div>
                     <div class="stat-label">Pengunjung Hari Ini</div>
                 </div>
 
+                <!-- Kartu 10 -->
                 <div class="stat-card">
                     <span class="stat-icon">👥</span>
                     <div class="stat-number"><?php echo $total_visitors; ?></div>
                     <div class="stat-label">Total Pengunjung</div>
                 </div>
 
+                <!-- Kartu 11 -->
                 <div class="stat-card">
                     <span class="stat-icon">📊</span>
                     <div class="stat-number"><?php echo $yesterday_visitors; ?></div>
                     <div class="stat-label">Pengunjung Kemarin</div>
                 </div>
 
-                <!-- PERUBAHAN: Total Testimoni (ganti dari Histori Pengunjung) -->
-                <div class="stat-card">
-                    <span class="stat-icon">⭐</span>
-                    <div class="stat-number"><?php echo $total_testimonials; ?></div>
-                    <div class="stat-label">Total Testimoni</div>
-                </div>
+                <!-- Kartu 12: Total Testimoni -->
+                <a href="<?php echo route('admin.testimonials.index'); ?>" class="stat-link">
+                    <div class="stat-card">
+                        <span class="stat-icon">⭐</span>
+                        <div class="stat-number"><?php echo $total_testimonials; ?></div>
+                        <div class="stat-label">Total Testimoni</div>
+                    </div>
+                </a>
 
-                <!-- PERUBAHAN: Testimoni Pending/Review -->
-                <div class="stat-card">
-                    <span class="stat-icon">⏳</span>
-                    <div class="stat-number"><?php echo $pending_testimonials; ?></div>
-                    <div class="stat-label">Testimoni Pending</div>
-                </div>
+                <!-- Kartu 13: Testimoni Pending -->
+                <a href="<?php echo route('admin.testimonials.index', ['status' => 'pending']); ?>" class="stat-link">
+                    <div class="stat-card">
+                        <span class="stat-icon">⏳</span>
+                        <div class="stat-number"><?php echo $pending_testimonials; ?></div>
+                        <div class="stat-label">Testimoni Pending</div>
+                    </div>
+                </a>
 
-                <!-- PERUBAHAN: Testimoni Disetujui -->
-                <div class="stat-card">
-                    <span class="stat-icon">✅</span>
-                    <div class="stat-number"><?php echo $approved_testimonials; ?></div>
-                    <div class="stat-label">Testimoni Disetujui</div>
-                </div>
+                <!-- Kartu 14: Testimoni Disetujui -->
+                <a href="<?php echo route('admin.testimonials.index', ['status' => 'approved']); ?>" class="stat-link">
+                    <div class="stat-card">
+                        <span class="stat-icon">✅</span>
+                        <div class="stat-number"><?php echo $approved_testimonials; ?></div>
+                        <div class="stat-label">Testimoni Disetujui</div>
+                    </div>
+                </a>
 
-                <!-- PERUBAHAN: Testimoni Ditolak -->
-                <div class="stat-card">
-                    <span class="stat-icon">🚫</span>
-                    <div class="stat-number"><?php echo $rejected_testimonials; ?></div>
-                    <div class="stat-label">Testimoni Ditolak</div>
-                </div>
+                <!-- Kartu 15: Testimoni Ditolak -->
+                <a href="<?php echo route('admin.testimonials.index', ['status' => 'rejected']); ?>" class="stat-link">
+                    <div class="stat-card">
+                        <span class="stat-icon">🚫</span>
+                        <div class="stat-number"><?php echo $rejected_testimonials; ?></div>
+                        <div class="stat-label">Testimoni Ditolak</div>
+                    </div>
+                </a>
             </div>
+            <!-- END stats-grid -->
 
             <!-- Dashboard 3 Kolom -->
             <div class="dashboard-grid">
@@ -1908,7 +1900,7 @@ $conn->close();
 
     <script>
         // ======================
-        // DATA DARI PHP UNTUK CHART (15 DATA - SUDAH DIUPDATE)
+        // DATA DARI PHP UNTUK CHART
         // ======================
         const chartLabels = [
             'Total Size Media', 'Total Pesan', 'Pesan Pending', 'Pesan Disetujui', 'Pesan Ditolak',
@@ -1924,10 +1916,10 @@ $conn->close();
         function downloadExcel() {
             // Ambil semua data dari dashboard
             const statsData = [];
-            const statCards = document.querySelectorAll('.stat-card');
+            const statCards = document.querySelectorAll('.stats-grid .stat-card');
             statCards.forEach(card => {
-                const label = card.querySelector('.stat-label').innerText;
-                const number = card.querySelector('.stat-number').innerText;
+                const label = card.querySelector('.stat-label')?.innerText || '';
+                const number = card.querySelector('.stat-number')?.innerText || '';
                 statsData.push([label, number]);
             });
 
@@ -1938,10 +1930,10 @@ $conn->close();
                 const cells = row.querySelectorAll('td');
                 if (cells.length > 0) {
                     visitorData.push([
-                        cells[0].innerText,
-                        cells[1].innerText,
-                        cells[2].innerText,
-                        cells[3].innerText
+                        cells[0]?.innerText || '',
+                        cells[1]?.innerText || '',
+                        cells[2]?.innerText || '',
+                        cells[3]?.innerText || ''
                     ]);
                 }
             });
@@ -1962,7 +1954,8 @@ $conn->close();
             mediaItems.forEach(item => {
                 const title = item.querySelector('.recent-name')?.innerText || '';
                 const type = item.querySelector('.badge')?.innerText || '';
-                const section = item.querySelectorAll('.recent-meta span')[1]?.innerText || '';
+                const sectionSpans = item.querySelectorAll('.recent-meta span');
+                const section = sectionSpans.length > 1 ? sectionSpans[1]?.innerText || '' : '';
                 recentMedia.push([title, type, section]);
             });
 
@@ -2012,37 +2005,6 @@ $conn->close();
         }
 
         // ======================
-        // FUNGSI DOWNLOAD PDF
-        // ======================
-        async function downloadPDF() {
-            const element = document.getElementById('reportContent');
-
-            // Tampilkan loading
-            const btn = event.target;
-            const originalText = btn.innerText;
-            btn.innerText = '⏳ Generating PDF...';
-            btn.disabled = true;
-
-            try {
-                const opt = {
-                    margin: [0.5, 0.5, 0.5, 0.5],
-                    filename: `dashboard_report_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}.pdf`,
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2, useCORS: true, logging: false },
-                    jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
-                };
-
-                await html2pdf().set(opt).from(element).save();
-            } catch (error) {
-                console.error('PDF generation error:', error);
-                alert('Gagal membuat PDF. Silakan coba lagi.');
-            } finally {
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }
-        }
-
-        // ======================
         // MOBILE MENU FUNCTIONALITY
         // ======================
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
@@ -2055,8 +2017,12 @@ $conn->close();
             document.body.style.overflow = sidebar.classList.contains('mobile-open') ? 'hidden' : 'auto';
         }
 
-        mobileMenuToggle.addEventListener('click', toggleMobileMenu);
-        overlay.addEventListener('click', toggleMobileMenu);
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+        }
+        if (overlay) {
+            overlay.addEventListener('click', toggleMobileMenu);
+        }
 
         // ======================
         // ALERT AUTO-CLOSE FUNCTIONALITY
@@ -2106,7 +2072,7 @@ $conn->close();
             }]
         };
 
-        const ctx = document.getElementById('dashboardChart').getContext('2d');
+        const ctx = document.getElementById('dashboardChart')?.getContext('2d');
         let currentChart = null;
 
         function createChart(type) {
@@ -2220,38 +2186,24 @@ $conn->close();
             currentChart = new Chart(ctx, config);
         }
 
-        createChart('bar');
+        if (ctx) {
+            createChart('bar');
 
-        const chartTabs = document.querySelectorAll('.chart-tab');
-        chartTabs.forEach(tab => {
-            tab.addEventListener('click', function() {
-                chartTabs.forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                createChart(this.dataset.chart);
+            const chartTabs = document.querySelectorAll('.chart-tab');
+            chartTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    chartTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    createChart(this.dataset.chart);
+                });
             });
-        });
-
-        // ======================
-        // STAT CARD INTERACTIONS
-        // ======================
-        const statCards = document.querySelectorAll('.stat-card');
-        statCards.forEach(card => {
-            card.addEventListener('click', function() {
-                this.style.transform = 'translateY(-3px) scale(1.02)';
-                this.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
-
-                setTimeout(() => {
-                    this.style.transform = '';
-                    this.style.boxShadow = '';
-                }, 300);
-            });
-        });
+        }
 
         // ======================
         // PAGE LOAD ANIMATION
         // ======================
         document.addEventListener('DOMContentLoaded', function() {
-            const statCards = document.querySelectorAll('.stat-card');
+            const statCards = document.querySelectorAll('.stats-grid .stat-card');
             statCards.forEach((card, index) => {
                 card.style.opacity = '0';
                 card.style.transform = 'translateY(15px)';
