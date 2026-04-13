@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Media - Admin</title>
     <style>
+        /* SEMUA CSS SAMA SEPERTI SEBELUMNYA - TIDAK BERUBAH */
         * {
             margin: 0;
             padding: 0;
@@ -821,13 +822,16 @@
         });
 
         // KONFIGURASI SECTION
+        // Section yang memiliki deskripsi: HANYA products
+        const sectionsWithDescription = ['products'];
+
         const sectionConfig = {
-            'hero': { count: 1, name: 'Intro' },
-            'story': { count: 1, name: 'Background' },
-            'whylearn': { count: 1, name: 'Fitur 3' },
-            'features': { count: 4, name: 'Fitur Unggulan' },
-            'aktivitas': { count: 6, name: 'Aktivitas & Tutorial' },
-            'products': { count: 2, name: 'Products' }
+            'hero': { count: 1, name: 'Intro', hasDescription: false },
+            'story': { count: 1, name: 'Background', hasDescription: false },
+            'whylearn': { count: 1, name: 'Fitur 3', hasDescription: false },
+            'features': { count: 4, name: 'Fitur Unggulan', hasDescription: false },
+            'aktivitas': { count: 6, name: 'Aktivitas & Tutorial', hasDescription: false },
+            'products': { count: 2, name: 'Products', hasDescription: true }
         };
 
         // Fungsi untuk update form berdasarkan section
@@ -851,6 +855,7 @@
             }
 
             const config = sectionConfig[section];
+            const hasDescription = config.hasDescription;
 
             // Tampilkan info section
             sectionInfo.classList.add('active');
@@ -862,6 +867,7 @@
                         `<li>Gambar ${i + 1}: ${getImageDescription(section, i)}</li>`
                     ).join('')}
                 </ul>
+                ${!hasDescription ? '<p><strong>⚠️ Catatan:</strong> Section ini TIDAK memiliki field deskripsi. Hanya file gambar/video dan judul yang akan disimpan.</p>' : ''}
             `;
 
             // Generate upload items
@@ -873,6 +879,46 @@
                 const fileInputId = `fileInput${itemNumber}`;
                 const previewId = `preview${itemNumber}`;
                 const fileInfoId = `fileInfo${itemNumber}`;
+
+                // Tentukan apakah section ini memiliki deskripsi
+                const showDescription = hasDescription;
+                const showPrice = (section === 'products');
+
+                let descriptionHTML = '';
+                if (showDescription) {
+                    descriptionHTML = `
+                        <!-- Description (HANYA untuk products) -->
+                        <div class="form-group">
+                            <label for="description${itemNumber}">Deskripsi Produk / Fitur *</label>
+                            <textarea name="items[${i}][description]"
+                                      id="description${itemNumber}"
+                                      class="item-description"
+                                      placeholder="Masukkan deskripsi produk (pisahkan fitur dengan baris baru)&#10;Contoh:&#10;Board game edukatif&#10;Includes 4 player pieces&#10;Dice & cards included"
+                                      rows="4"></textarea>
+                            <small class="form-help">Deskripsi akan ditampilkan sebagai list fitur di halaman produk</small>
+                        </div>
+                    `;
+                }
+
+                let priceHTML = '';
+                if (showPrice) {
+                    priceHTML = `
+                        <!-- Price Field (hanya untuk products) -->
+                        <div class="form-group">
+                            <label for="price${itemNumber}">Harga Produk (Rp) *</label>
+                            <input type="number"
+                                   name="items[${i}][price]"
+                                   id="price${itemNumber}"
+                                   class="item-price"
+                                   required
+                                   min="0"
+                                   max="9999999999.99"
+                                   step="0.01"
+                                   placeholder="Contoh: 300000">
+                            <small class="form-help">Harga maksimal: Rp 9.999.999.999,99</small>
+                        </div>
+                    `;
+                }
 
                 const itemHTML = `
                     <div class="upload-item" id="${itemId}">
@@ -890,7 +936,7 @@
                                     <option value="image">Image</option>
                                     <option value="video" ${section === 'products' ? 'disabled' : ''}>Video</option>
                                 </select>
-                                <small class="form-help">Format: JPEG, PNG, JPG, WEBP | Max: 5MB</small>
+                                <small class="form-help">Format: JPEG, PNG, JPG, WEBP | Max: 10MB</small>
                             </div>
 
                             <!-- File Upload -->
@@ -914,35 +960,11 @@
                             <div class="form-group">
                                 <label for="title${itemNumber}">Judul *</label>
                                 <input type="text" name="items[${i}][title]" id="title${itemNumber}" class="item-title" required placeholder="Masukkan judul">
+                                <small class="form-help">Judul akan ditampilkan di website</small>
                             </div>
 
-                            <!-- Description -->
-                            <div class="form-group">
-                                <label for="description${itemNumber}">Deskripsi</label>
-                                <textarea name="items[${i}][description]"
-                                          id="description${itemNumber}"
-                                          class="item-description"
-                                          placeholder="Masukkan deskripsi (akan ditampilkan di website)"
-                                          rows="3"></textarea>
-                                <small class="form-help">Deskripsi akan ditampilkan di landing page</small>
-                            </div>
-
-                            ${section === 'products' ? `
-                            <!-- Price Field (hanya untuk products) -->
-                            <div class="form-group">
-                                <label for="price${itemNumber}">Harga Produk (Rp) *</label>
-                                <input type="number"
-                                       name="items[${i}][price]"
-                                       id="price${itemNumber}"
-                                       class="item-price"
-                                       required
-                                       min="0"
-                                       max="9999999999.99"
-                                       step="0.01"
-                                       placeholder="Contoh: 300000">
-                                <small class="form-help">Harga maksimal: Rp 9.999.999.999,99</small>
-                            </div>
-                            ` : ''}
+                            ${descriptionHTML}
+                            ${priceHTML}
 
                             <!-- Hidden section field -->
                             <input type="hidden" name="items[${i}][section]" value="${section}">
@@ -1180,6 +1202,9 @@
                     return;
                 }
 
+                const config = sectionConfig[section];
+                const hasDescription = config.hasDescription;
+
                 // Validasi semua file sudah diupload
                 const fileInputs = form.querySelectorAll('.item-file');
                 let allFilesUploaded = true;
@@ -1228,6 +1253,24 @@
                     e.preventDefault();
                     alert('Harap isi judul untuk semua media!');
                     return;
+                }
+
+                // Validasi deskripsi untuk products (jika diperlukan)
+                if (hasDescription) {
+                    const descriptionInputs = form.querySelectorAll('.item-description');
+                    let allDescriptionsFilled = true;
+
+                    descriptionInputs.forEach((input, index) => {
+                        if (!input.value.trim()) {
+                            allDescriptionsFilled = false;
+                        }
+                    });
+
+                    if (!allDescriptionsFilled) {
+                        e.preventDefault();
+                        alert('Harap isi deskripsi untuk semua produk!');
+                        return;
+                    }
                 }
 
                 // Validasi price untuk products
