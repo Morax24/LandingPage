@@ -196,7 +196,7 @@ if ($today_visitors_result->num_rows > 0) {
     }
 }
 
-// 10. Total Pengunjung Keseluruhan (kumulatif semua hari)
+// 10. Total Pengunjung Keseluruhan (semua pengunjung)
 $total_visitors_sql = "SELECT SUM(count) as total FROM visitor_counter";
 $total_visitors_result = $conn->query($total_visitors_sql);
 $total_visitors = 0;
@@ -292,7 +292,7 @@ $chart_data = [
     $active_media,               // 7. Media Aktif
     $inactive_media,             // 8. Media Nonaktif
     $today_visitors,             // 9. Hari Ini
-    $total_visitors,             // 10. Total Kumulatif
+    $total_visitors,             // 10. Total Pengunjung
     $yesterday_visitors,         // 11. Kemarin
     $total_testimonials,         // 12. TOTAL TESTIMONI (ganti dari histori pengunjung)
     $pending_testimonials,       // 13. TESTIMONI PENDING/REVIEW
@@ -1490,23 +1490,27 @@ $conn->close();
             </div>
 
             <nav class="sidebar-menu">
-                <a href="#" class="menu-item active">
-                    <span class="menu-icon">📊</span>
-                    <span>Dashboard</span>
-                </a>
-                <a href="#" class="menu-item">
-                    <span class="menu-icon">📧</span>
-                    <span>Kelola Pesan</span>
-                </a>
-                <a href="#" class="menu-item">
-                    <span class="menu-icon">⭐</span>
-                    <span>Kelola Testimoni</span>
-                </a>
-                <a href="#" class="menu-item">
-                    <span class="menu-icon">🖼️</span>
-                    <span>Media Library</span>
-                </a>
-            </nav>
+        <a href="{{ route('admin.dashboard') }}" class="menu-item active">
+            <span class="menu-icon">📊</span>
+            <span>Dashboard</span>
+        </a>
+        <a href="{{ route('admin.contacts.index') }}" class="menu-item">
+            <span class="menu-icon">📧</span>
+            <span>Kelola Pesan</span>
+        </a>
+        <!-- =========================================== -->
+        <!-- TAMBAH MENU TESTIMONI DI SINI -->
+        <!-- =========================================== -->
+        <a href="{{ route('admin.testimonials.index') }}" class="menu-item">
+            <span class="menu-icon">⭐</span>
+            <span>Kelola Testimoni</span>
+        </a>
+        <!-- =========================================== -->
+        <a href="{{ route('admin.media.index') }}" class="menu-item">
+            <span class="menu-icon">🖼️</span>
+            <span>Media Library</span>
+        </a>
+    </nav>
 
             <div class="sidebar-footer">
                 <div class="user-profile">
@@ -1904,7 +1908,7 @@ $conn->close();
         // ======================
         const chartLabels = [
             'Total Size Media', 'Total Pesan', 'Pesan Pending', 'Pesan Disetujui', 'Pesan Ditolak',
-            'Total Media', 'Media Aktif', 'Media Nonaktif', 'Hari Ini', 'Total Kumulatif',
+            'Total Media', 'Media Aktif', 'Media Nonaktif', 'Hari Ini', 'Total Pengunjung',
             'Kemarin', '⭐ Total Testimoni', '⏳ Testimoni Pending', '✅ Testimoni Disetujui', '🚫 Testimoni Ditolak'
         ];
 
