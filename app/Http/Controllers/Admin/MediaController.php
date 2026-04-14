@@ -86,9 +86,23 @@ class MediaController extends Controller
      */
     private function handleSingleUpload(Request $request)
     {
-        $validated = $request->validate(Media::getValidationRules('store'));
+        // VALIDASI: title TIDAK required (bisa auto-generate dari nama file)
+        $validated = $request->validate([
+            'title' => 'nullable|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'type' => 'required|in:image,video',
+            'section' => 'required|in:hero,story,features,whylearn,aktivitas,products,other',
+            'file' => 'required|file|max:1024|mimes:jpg,jpeg,png,webp,mp4,webm,ogg',
+            'price' => 'nullable|numeric|min:0|max:9999999999.99',
+            'order' => 'nullable|integer|min:0',
+        ]);
 
         $file = $request->file('file');
+
+        // Jika title kosong, generate dari nama file
+        if (empty($validated['title'])) {
+            $validated['title'] = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        }
 
         // Generate safe filename
         $filename = time() . '_' . preg_replace('/[^a-zA-Z0-9\._-]/', '_', $file->getClientOriginalName());
@@ -133,14 +147,15 @@ class MediaController extends Controller
     {
         Log::info('=== HANDLE MULTIPLE UPLOAD ===');
 
-        // Validate the request
+        // VALIDASI: title TIDAK required untuk semua section
+        // title hanya akan divalidasi khusus untuk section 'products' nanti
         $request->validate([
             'items' => 'required|array',
-            'items.*.title' => 'required|string|max:255',
             'items.*.type' => 'required|in:image,video',
             'items.*.section' => 'required|in:hero,story,features,whylearn,aktivitas,products,other',
-            'items.*.file' => 'required|file|max:10240',
+            'items.*.file' => 'required|file|max:1024|mimes:jpg,jpeg,png,webp,mp4,webm,ogg',
             'items.*.price' => 'nullable|numeric|min:0|max:9999999999.99',
+            // 'items.*.title' => TIDAK ADA VALIDASI REQUIRED
         ]);
 
         $uploadedCount = 0;
@@ -174,12 +189,33 @@ class MediaController extends Controller
                 }
 
                 // Get form data
-                $title = $request->input("items.{$index}.title", 'Untitled');
+                $section = $request->input("items.{$index}.section", 'other');
+
+                // TITLE: bisa dari request atau auto-generate dari nama file
+                $title = $request->input("items.{$index}.title");
+
+                // Jika title kosong, generate dari nama file
+                if (empty($title)) {
+                    $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                    $title = $originalName;
+                }
+
                 $description = $request->input("items.{$index}.description");
                 $type = $request->input("items.{$index}.type", 'image');
-                $section = $request->input("items.{$index}.section", 'other');
                 $price = $request->input("items.{$index}.price", 0);
                 $order = $request->input("items.{$index}.order", $index);
+
+                // VALIDASI KHUSUS: untuk section products, title TIDAK BOLEH kosong
+                if ($section === 'products' && empty(trim($title))) {
+                    $errors[] = "File " . ($index + 1) . ": Judul wajib diisi untuk section Products";
+                    continue;
+                }
+
+                // VALIDASI KHUSUS: untuk section products, price harus diisi
+                if ($section === 'products' && (empty($price) || $price <= 0)) {
+                    $errors[] = "File " . ($index + 1) . ": Harga wajib diisi untuk section Products";
+                    continue;
+                }
 
                 // Generate safe filename
                 $safeName = preg_replace('/[^a-zA-Z0-9\._-]/', '_', $file->getClientOriginalName());
@@ -274,7 +310,7 @@ class MediaController extends Controller
 
         // Handle file upload if new file is provided
         if ($request->hasFile('file')) {
-            $request->validate(['file' => 'file|max:10240']);
+            $request->validate(['file' => 'file|max:1024|mimes:jpg,jpeg,png,webp,mp4,webm,ogg']);
 
             // Delete old file
             $media->deleteFile();

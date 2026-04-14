@@ -475,6 +475,14 @@
             border-top: 2px solid #E8F4F8;
         }
 
+        /* Styling untuk field judul yang dinonaktifkan */
+        input.item-title:disabled {
+            background-color: #F0F0F0;
+            color: #666;
+            cursor: not-allowed;
+            border-color: #E0E0E0;
+        }
+
         /* Mobile Menu Toggle */
         .mobile-menu-toggle {
             display: none;
@@ -824,14 +832,16 @@
         // KONFIGURASI SECTION
         // Section yang memiliki deskripsi: HANYA products
         const sectionsWithDescription = ['products'];
+        // Section yang memiliki judul dinonaktifkan (hero, story, whylearn, features, aktivitas)
+        const sectionsWithTitleDisabled = ['hero', 'story', 'whylearn', 'features', 'aktivitas'];
 
         const sectionConfig = {
-            'hero': { count: 1, name: 'Intro', hasDescription: false },
-            'story': { count: 1, name: 'Background', hasDescription: false },
-            'whylearn': { count: 1, name: 'Fitur 3', hasDescription: false },
-            'features': { count: 4, name: 'Fitur Unggulan', hasDescription: false },
-            'aktivitas': { count: 6, name: 'Aktivitas & Tutorial', hasDescription: false },
-            'products': { count: 2, name: 'Products', hasDescription: true }
+            'hero': { count: 1, name: 'Intro', hasDescription: false, titleDisabled: true },
+            'story': { count: 1, name: 'Background', hasDescription: false, titleDisabled: true },
+            'whylearn': { count: 1, name: 'Fitur 3', hasDescription: false, titleDisabled: true },
+            'features': { count: 4, name: 'Fitur Unggulan', hasDescription: false, titleDisabled: true },
+            'aktivitas': { count: 6, name: 'Aktivitas & Tutorial', hasDescription: false, titleDisabled: true },
+            'products': { count: 2, name: 'Products', hasDescription: true, titleDisabled: false }
         };
 
         // Fungsi untuk update form berdasarkan section
@@ -856,6 +866,7 @@
 
             const config = sectionConfig[section];
             const hasDescription = config.hasDescription;
+            const isTitleDisabled = config.titleDisabled;
 
             // Tampilkan info section
             sectionInfo.classList.add('active');
@@ -868,6 +879,7 @@
                     ).join('')}
                 </ul>
                 ${!hasDescription ? '<p><strong>⚠️ Catatan:</strong> Section ini TIDAK memiliki field deskripsi. Hanya file gambar/video dan judul yang akan disimpan.</p>' : ''}
+                ${isTitleDisabled ? '<p><strong>ℹ️ Catatan:</strong> Field judul pada section ini akan diisi otomatis berdasarkan nama file dan tidak dapat diedit.</p>' : ''}
             `;
 
             // Generate upload items
@@ -883,6 +895,8 @@
                 // Tentukan apakah section ini memiliki deskripsi
                 const showDescription = hasDescription;
                 const showPrice = (section === 'products');
+                // Tentukan apakah judul dinonaktifkan
+                const titleDisabled = isTitleDisabled;
 
                 let descriptionHTML = '';
                 if (showDescription) {
@@ -936,7 +950,7 @@
                                     <option value="image">Image</option>
                                     <option value="video" ${section === 'products' ? 'disabled' : ''}>Video</option>
                                 </select>
-                                <small class="form-help">Format: JPEG, PNG, JPG, WEBP | Max: 10MB</small>
+                                <small class="form-help">Format: JPEG, PNG, JPG, WEBP </small>
                             </div>
 
                             <!-- File Upload -->
@@ -947,7 +961,7 @@
                                     <div class="file-upload-text-small">Klik atau drag & drop</div>
                                     <small class="form-help">Max 10MB</small>
                                 </div>
-                                <input type="file" name="items[${i}][file]" id="${fileInputId}" class="item-file" accept="image/*" style="display: none;" onchange="handleFileSelect(event, '${previewId}', '${fileInfoId}', 'type${itemNumber}', 'uploadArea${itemNumber}')">
+                                <input type="file" name="items[${i}][file]" id="${fileInputId}" class="item-file" accept="image/*" style="display: none;" onchange="handleFileSelect(event, '${previewId}', '${fileInfoId}', 'type${itemNumber}', 'uploadArea${itemNumber}', ${titleDisabled}, ${itemNumber})">
 
                                 <!-- File Preview -->
                                 <div class="file-preview-small" id="${previewId}">
@@ -958,9 +972,9 @@
 
                             <!-- Title -->
                             <div class="form-group">
-                                <label for="title${itemNumber}">Judul *</label>
-                                <input type="text" name="items[${i}][title]" id="title${itemNumber}" class="item-title" required placeholder="Masukkan judul">
-                                <small class="form-help">Judul akan ditampilkan di website</small>
+                                <label for="title${itemNumber}">Judul ${titleDisabled ? '(Otomatis dari nama file)' : '*'}</label>
+                                <input type="text" name="items[${i}][title]" id="title${itemNumber}" class="item-title" ${titleDisabled ? 'disabled' : 'required'} placeholder="${titleDisabled ? 'Judul akan diisi otomatis' : 'Masukkan judul'}">
+                                ${!titleDisabled ? '<small class="form-help">Judul akan ditampilkan di website</small>' : '<small class="form-help">Judul otomatis dari nama file (tidak dapat diedit)</small>'}
                             </div>
 
                             ${descriptionHTML}
@@ -1076,7 +1090,7 @@
         }
 
         // Handle file selection untuk item kecil
-        function handleFileSelect(event, previewId, fileInfoId, typeId, uploadAreaId) {
+        function handleFileSelect(event, previewId, fileInfoId, typeId, uploadAreaId, isTitleDisabled, itemNumber) {
             const file = event.target.files[0];
             if (!file) return;
 
@@ -1126,11 +1140,18 @@
             };
             reader.readAsDataURL(file);
 
-            // Auto-fill title
-            const titleInput = event.target.closest('.upload-item').querySelector('.item-title');
-            if (titleInput && !titleInput.value) {
-                const filename = file.name.replace(/\.[^/.]+$/, "");
-                titleInput.value = filename;
+            // Handle title field
+            const titleInput = document.getElementById(`title${itemNumber}`);
+            if (titleInput) {
+                if (isTitleDisabled) {
+                    // Jika judul dinonaktifkan, set value dari nama file (tanpa ekstensi)
+                    const filename = file.name.replace(/\.[^/.]+$/, "");
+                    titleInput.value = filename;
+                } else if (!titleInput.value) {
+                    // Jika judul aktif dan belum diisi, isi otomatis
+                    const filename = file.name.replace(/\.[^/.]+$/, "");
+                    titleInput.value = filename;
+                }
             }
 
             // Update upload area text
@@ -1204,6 +1225,7 @@
 
                 const config = sectionConfig[section];
                 const hasDescription = config.hasDescription;
+                const isTitleDisabled = config.titleDisabled;
 
                 // Validasi semua file sudah diupload
                 const fileInputs = form.querySelectorAll('.item-file');
@@ -1239,20 +1261,22 @@
                     return;
                 }
 
-                // Validasi semua title sudah diisi
-                const titleInputs = form.querySelectorAll('.item-title');
-                let allTitlesFilled = true;
+                // Validasi title: hanya untuk section yang judulnya tidak dinonaktifkan (products)
+                if (!isTitleDisabled) {
+                    const titleInputs = form.querySelectorAll('.item-title');
+                    let allTitlesFilled = true;
 
-                titleInputs.forEach((input, index) => {
-                    if (!input.value.trim()) {
-                        allTitlesFilled = false;
+                    titleInputs.forEach((input, index) => {
+                        if (!input.value.trim()) {
+                            allTitlesFilled = false;
+                        }
+                    });
+
+                    if (!allTitlesFilled) {
+                        e.preventDefault();
+                        alert('Harap isi judul untuk semua media!');
+                        return;
                     }
-                });
-
-                if (!allTitlesFilled) {
-                    e.preventDefault();
-                    alert('Harap isi judul untuk semua media!');
-                    return;
                 }
 
                 // Validasi deskripsi untuk products (jika diperlukan)

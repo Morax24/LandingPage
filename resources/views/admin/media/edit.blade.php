@@ -377,6 +377,16 @@
             width: 100%;
         }
 
+        /* Style khusus untuk description field (hanya muncul untuk products) */
+        .description-field {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .description-field.show {
+            display: block;
+        }
+
         /* Style khusus untuk price field (hanya muncul untuk products) */
         .price-field {
             display: none;
@@ -592,48 +602,44 @@
     <div class="admin-layout">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-        <h2><span class="logo-square"></span> <span>WALUYA LAND</span></h2>
-        <p>Admin Panel</p>
-    </div>
-
-    <nav class="sidebar-menu">
-        <a href="{{ route('admin.dashboard') }}" class="menu-item">
-            <span class="menu-icon">📊</span>
-            <span>Dashboard</span>
-        </a>
-        <a href="{{ route('admin.contacts.index') }}" class="menu-item">
-            <span class="menu-icon">📧</span>
-            <span>Kelola Pesan</span>
-        </a>
-        <!-- =========================================== -->
-        <!-- TAMBAH MENU TESTIMONI DI SINI -->
-        <!-- =========================================== -->
-        <a href="{{ route('admin.testimonials.index') }}" class="menu-item">
-            <span class="menu-icon">⭐</span>
-            <span>Kelola Testimoni</span>
-        </a>
-        <!-- =========================================== -->
-        <a href="{{ route('admin.media.index') }}" class="menu-item active">
-            <span class="menu-icon">🖼️</span>
-            <span>Media Library</span>
-        </a>
-    </nav>
-
-    <div class="sidebar-footer">
-        <div class="user-profile">
-            <div class="user-avatar">AM</div>
-            <div class="user-info">
-                <h4>Admin Malaya</h4>
-                <p>Administrator</p>
+            <div class="sidebar-header">
+                <h2><span class="logo-square"></span> <span>WALUYA LAND</span></h2>
+                <p>Admin Panel</p>
             </div>
-        </div>
-        <form action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="btn-logout">Logout</button>
-        </form>
-    </div>
-</aside>
+
+            <nav class="sidebar-menu">
+                <a href="{{ route('admin.dashboard') }}" class="menu-item">
+                    <span class="menu-icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="{{ route('admin.contacts.index') }}" class="menu-item">
+                    <span class="menu-icon">📧</span>
+                    <span>Kelola Pesan</span>
+                </a>
+                <a href="{{ route('admin.testimonials.index') }}" class="menu-item">
+                    <span class="menu-icon">⭐</span>
+                    <span>Kelola Testimoni</span>
+                </a>
+                <a href="{{ route('admin.media.index') }}" class="menu-item active">
+                    <span class="menu-icon">🖼️</span>
+                    <span>Media Library</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">AM</div>
+                    <div class="user-info">
+                        <h4>Admin Malaya</h4>
+                        <p>Administrator</p>
+                    </div>
+                </div>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn-logout">Logout</button>
+                </form>
+            </div>
+        </aside>
 
         <!-- Main Content -->
         <main class="main-content">
@@ -677,7 +683,6 @@
                     <p><strong>Tipe:</strong> {{ strtoupper($media->type) }}</p>
                     <p><strong>Nama File:</strong> {{ $media->file_name }}</p>
                     <p><strong>Ukuran:</strong> {{ $media->file_size_formatted }}</p>
-                    <p><strong>Harga:</strong> {{ $media->formatted_price }}</p>
                     <p><strong>Diupload:</strong> {{ $media->created_at->format('d M Y H:i') }}</p>
                     <p><strong>Diupload oleh:</strong> {{ $media->uploader->name ?? 'Unknown' }}</p>
                     <p><strong>Path:</strong> <code>{{ $media->file_path }}</code></p>
@@ -695,33 +700,35 @@
                         @error('title')
                             <span class="error-text">{{ $message }}</span>
                         @enderror
-                    </div>
-
-                    <!-- Description -->
-                    <div class="form-group">
-                        <label for="description">Deskripsi</label>
-                        <textarea name="description" id="description">{{ old('description', $media->description) }}</textarea>
-                        @error('description')
-                            <span class="error-text">{{ $message }}</span>
-                        @enderror
+                        <small class="form-help">Judul akan ditampilkan di website</small>
                     </div>
 
                     <!-- Section -->
                     <div class="form-group">
                         <label for="section">Section *</label>
-                        <select name="section" id="section" required onchange="togglePriceField()">
+                        <select name="section" id="section" required onchange="toggleFieldsBySection()">
                             <option value="">-- Pilih Section --</option>
-                            <option value="hero" {{ old('section', $media->section) == 'hero' ? 'selected' : '' }}>Intro (1 gambar)</option>
-                            <option value="story" {{ old('section', $media->section) == 'story' ? 'selected' : '' }}>Background (1 gambar)</option>
-                            <option value="whylearn" {{ old('section', $media->section) == 'whylearn' ? 'selected' : '' }}>Fitur 3 (1 gambar)</option>
-                            <option value="features" {{ old('section', $media->section) == 'features' ? 'selected' : '' }}>Fitur Unggulan (4 gambar)</option>
-                            <option value="aktivitas" {{ old('section', $media->section) == 'aktivitas' ? 'selected' : '' }}>Aktivitas & Tutorial (6 gambar)</option>
-                            <option value="products" {{ old('section', $media->section) == 'products' ? 'selected' : '' }}>Products (2 gambar)</option>
+                            <option value="hero" {{ old('section', $media->section) == 'hero' ? 'selected' : '' }}>🎯 Intro (1 gambar)</option>
+                            <option value="story" {{ old('section', $media->section) == 'story' ? 'selected' : '' }}>📖 Background (1 gambar)</option>
+                            <option value="whylearn" {{ old('section', $media->section) == 'whylearn' ? 'selected' : '' }}>💡 Fitur 3 (1 gambar)</option>
+                            <option value="features" {{ old('section', $media->section) == 'features' ? 'selected' : '' }}>⭐ Fitur Unggulan (4 gambar)</option>
+                            <option value="aktivitas" {{ old('section', $media->section) == 'aktivitas' ? 'selected' : '' }}>🎮 Aktivitas & Tutorial (6 gambar)</option>
+                            <option value="products" {{ old('section', $media->section) == 'products' ? 'selected' : '' }}>📦 Products (2 gambar)</option>
                         </select>
                         @error('section')
                             <span class="error-text">{{ $message }}</span>
                         @enderror
                         <small class="form-help" id="sectionHelp">Pilih di section mana media ini akan ditampilkan</small>
+                    </div>
+
+                    <!-- Description Field - HANYA UNTUK PRODUCTS -->
+                    <div class="form-group description-field" id="descriptionField">
+                        <label for="description">Deskripsi Produk / Fitur *</label>
+                        <textarea name="description" id="description" placeholder="Masukkan deskripsi produk (pisahkan fitur dengan baris baru)&#10;Contoh:&#10;Board game edukatif&#10;Includes 4 player pieces&#10;Dice & cards included" rows="4">{{ old('description', $media->description) }}</textarea>
+                        @error('description')
+                            <span class="error-text">{{ $message }}</span>
+                        @enderror
+                        <small class="form-help">Deskripsi akan ditampilkan sebagai list fitur di halaman produk (HANYA untuk section Products)</small>
                     </div>
 
                     <!-- Price Field - HANYA UNTUK PRODUCTS -->
@@ -740,20 +747,6 @@
                         @enderror
                         <small class="form-help">Hanya untuk section Products. Maksimal Rp 9.999.999.999,99</small>
                     </div>
-
-                    <!-- Order
-                    <div class="form-group">
-                        <label for="order">Urutan</label>
-                        <input type="number"
-                               name="order"
-                               id="order"
-                               value="{{ old('order', $media->order) }}"
-                               min="0">
-                        @error('order')
-                            <span class="error-text">{{ $message }}</span>
-                        @enderror
-                        <small class="form-help">Semakin kecil angkanya, semakin awal ditampilkan</small>
-                    </div>-->
 
                     <!-- Active Status -->
                     <div class="form-group">
@@ -805,10 +798,12 @@
             }
         });
 
-        // Fungsi untuk menampilkan/menyembunyikan price field berdasarkan section
-        function togglePriceField() {
+        // Fungsi untuk menampilkan/menyembunyikan field berdasarkan section
+        function toggleFieldsBySection() {
             const section = document.getElementById('section').value;
+            const descriptionField = document.getElementById('descriptionField');
             const priceField = document.getElementById('priceField');
+            const descriptionInput = document.getElementById('description');
             const priceInput = document.getElementById('price');
             const sectionHelp = document.getElementById('sectionHelp');
 
@@ -819,7 +814,7 @@
                 'whylearn': '💡 Fitur 3 - gambar fitur ketiga. Hanya 1 media aktif yang ditampilkan.',
                 'features': '⭐ Fitur Unggulan - 4 slot yang ditampilkan.',
                 'aktivitas': '🎮 Aktivitas & Tutorial - 6 slot yang ditampilkan.',
-                'products': '📦 Products - gambar untuk bagian produk. 2 slot yang ditampilkan. HARUS DIISI HARGA!'
+                'products': '📦 Products - gambar untuk bagian produk. 2 slot yang ditampilkan. HARUS DIISI DESKRIPSI DAN HARGA!'
             };
 
             // Update deskripsi section
@@ -833,17 +828,22 @@
                 sectionHelp.style.fontWeight = 'normal';
             }
 
-            // Tampilkan price field hanya untuk products
+            // Tampilkan description dan price field HANYA untuk products
             if (section === 'products') {
+                descriptionField.classList.add('show');
                 priceField.classList.add('show');
-                priceInput.required = true;
+                if (descriptionInput) descriptionInput.required = true;
+                if (priceInput) priceInput.required = true;
             } else {
+                descriptionField.classList.remove('show');
                 priceField.classList.remove('show');
-                priceInput.required = false;
+                if (descriptionInput) descriptionInput.required = false;
+                if (priceInput) priceInput.required = false;
 
-                // Reset harga jika bukan products
+                // Reset harga dan deskripsi jika bukan products
                 if (section !== 'products') {
-                    priceInput.value = '0';
+                    if (priceInput) priceInput.value = '0';
+                    if (descriptionInput) descriptionInput.value = '';
                 }
             }
         }
@@ -911,12 +911,19 @@
 
             form.addEventListener('submit', function(e) {
                 const section = document.getElementById('section').value;
+                const descriptionInput = document.getElementById('description');
                 const priceInput = document.getElementById('price');
 
-                // Validasi price untuk products
+                // Validasi description untuk products
                 if (section === 'products') {
-                    const price = parseFloat(priceInput.value);
+                    if (!descriptionInput.value.trim()) {
+                        e.preventDefault();
+                        alert('Harap isi deskripsi untuk section Products!');
+                        descriptionInput.focus();
+                        return;
+                    }
 
+                    const price = parseFloat(priceInput.value);
                     if (!priceInput.value || isNaN(price) || price < 0) {
                         e.preventDefault();
                         alert('Harap isi harga yang valid untuk section Products!');
@@ -931,23 +938,13 @@
                         return;
                     }
                 }
-
-                // Validasi order
-                const orderInput = document.getElementById('order');
-                const order = parseInt(orderInput.value);
-                if (order < 0) {
-                    e.preventDefault();
-                    alert('Urutan tidak boleh negatif!');
-                    orderInput.focus();
-                    return;
-                }
             });
         }
 
         // Auto-call saat halaman load
         document.addEventListener('DOMContentLoaded', function() {
-            // Panggil togglePriceField saat halaman dimuat
-            togglePriceField();
+            // Panggil toggleFieldsBySection saat halaman dimuat
+            toggleFieldsBySection();
 
             checkImageLoad();
             setupPriceValidation();

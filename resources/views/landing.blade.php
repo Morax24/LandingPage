@@ -2430,11 +2430,56 @@
     </section>
 
     <section id="home" class="stats">
-        <div class="stat-card"><h3>85%</h3><p>Kepuasan user sejauh ini saat bermain</p></div>
-        <div class="stat-card"><h3>50+</h3><p>Sekolah dan siswa yang sudah menekankannya</p></div>
-        <div class="stat-card"><h3>80%</h3><p>Membantu mereka dari pengalaman baru</p></div>
-        <div class="stat-card"><h3>87%</h3><p>Meningkatkan pemahaman pembelajaran</p></div>
-    </section>
+    @php
+        // ============================================
+        // DATA STATISTIK REAL DARI DATABASE
+        // ============================================
+
+        // 1. Rata-rata rating testimoni (konversi ke persen, rating 1-5 = 20-100%)
+        $avgRating = App\Models\Contact::where('type', 'testimonial')
+            ->whereNotNull('rating')
+            ->avg('rating');
+        $satisfactionRate = $avgRating ? round($avgRating * 20) : 85; // fallback 85 jika belum ada rating
+
+        // 2. Total pengunjung dari visitor_counter
+        $totalVisitors = App\Models\VisitorCounter::sum('count');
+        $visitorDisplay = $totalVisitors ? $totalVisitors . '+' : '50+';
+
+        // 3. Persentase testimoni yang disetujui (membantu pengalaman)
+        $totalTestimonials = App\Models\Contact::where('type', 'testimonial')->count();
+        $approvedTestimonials = App\Models\Contact::where('type', 'testimonial')->where('status', 'approved')->count();
+        $helpPercentage = $totalTestimonials > 0 ? round(($approvedTestimonials / $totalTestimonials) * 100) : 80;
+
+        // 4. Persentase pesan forum yang disetujui (meningkatkan pemahaman)
+        $totalForumMessages = App\Models\Contact::where('type', 'forum')->count();
+        $approvedForumMessages = App\Models\Contact::where('type', 'forum')->where('status', 'approved')->count();
+        $understandingPercentage = $totalForumMessages > 0 ? round(($approvedForumMessages / $totalForumMessages) * 100) : 87;
+    @endphp
+
+    <div class="stat-card">
+        <h3>{{ $satisfactionRate }}%</h3>
+        <p>Kepuasan Customer</p>
+        <!--<small style="display: block; margin-top: 0.5rem; opacity: 0.8;">⭐ {{ $avgRating ? number_format($avgRating, 1) : '0' }}/5.0</small>-->
+    </div>
+
+    <div class="stat-card">
+        <h3>{{ $visitorDisplay }}</h3>
+        <p>Pengunjung</p>
+        <!--<small style="display: block; margin-top: 0.5rem; opacity: 0.8;">📊 Data realtime</small>-->
+    </div>
+
+    <div class="stat-card">
+        <h3>{{ $helpPercentage }}%</h3>
+        <p>Pengalaman Baru Customer</p>
+        <!--<small style="display: block; margin-top: 0.5rem; opacity: 0.8;">✅ {{ $approvedTestimonials }}/{{ $totalTestimonials }} testimoni</small>-->
+    </div>
+
+    <div class="stat-card">
+        <h3>{{ $understandingPercentage }}%</h3>
+        <p>Forum</p>
+        <!--<small style="display: block; margin-top: 0.5rem; opacity: 0.8;">💬 {{ $approvedForumMessages }}/{{ $totalForumMessages }} pesan terjawab</small>-->
+    </div>
+</section>
 
     <section class="story-section">
         <div class="story-grid">

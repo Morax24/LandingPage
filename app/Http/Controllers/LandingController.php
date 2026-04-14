@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Contact;
 use App\Models\Media;
+use App\Models\VisitorCounter;
 use Illuminate\Http\Request;
 
 class LandingController extends Controller
@@ -73,12 +74,57 @@ class LandingController extends Controller
             ->limit(6)
             ->get();
 
-        // ==================== STATS ====================
+        // ==================== STATISTIK REAL TIME ====================
+
+        // 1. Rata-rata rating testimoni (konversi ke persen, rating 1-5 = 20-100%)
+        $avgRating = Contact::where('type', 'testimonial')
+            ->where('status', 'approved')
+            ->whereNotNull('rating')
+            ->avg('rating');
+
+        // Konversi rating ke persen (rating 5 = 100%, rating 4 = 80%, dst)
+        $satisfactionRate = $avgRating ? round($avgRating * 20) : 85;
+
+        // 2. Total pengunjung dari visitor_counter
+        $totalVisitors = VisitorCounter::sum('count');
+        $visitorDisplay = $totalVisitors ? number_format($totalVisitors) . '+' : '50+';
+
+        // 3. Persentase testimoni yang disetujui (membantu pengalaman baru)
+        $totalTestimonials = Contact::where('type', 'testimonial')->count();
+        $approvedTestimonials = Contact::where('type', 'testimonial')->where('status', 'approved')->count();
+        $helpPercentage = $totalTestimonials > 0 ? round(($approvedTestimonials / $totalTestimonials) * 100) : 80;
+
+        // 4. Persentase pesan forum yang disetujui (meningkatkan pemahaman)
+        $totalForumMessages = Contact::where('type', 'forum')->count();
+        $approvedForumMessages = Contact::where('type', 'forum')->where('status', 'approved')->count();
+        $understandingPercentage = $totalForumMessages > 0 ? round(($approvedForumMessages / $totalForumMessages) * 100) : 87;
+
+        // 5. Data tambahan untuk ditampilkan di tooltip
         $stats = [
-            'satisfaction' => 85,
-            'schools' => 50,
-            'students' => 80,
-            'understanding' => 87,
+            // Stat 1 - Kepuasan user
+            'satisfaction' => [
+                'value' => $satisfactionRate,
+                'label' => 'Kepuasan user dari rating testimoni',
+                'detail' => '⭐ ' . ($avgRating ? number_format($avgRating, 1) : '0') . '/5.0 dari ' . $ratingCounts['all'] . ' testimoni'
+            ],
+            // Stat 2 - Sekolah & siswa (diganti total pengunjung)
+            'visitors' => [
+                'value' => $visitorDisplay,
+                'label' => 'Total pengunjung website',
+                'detail' => '📊 Data realtime dari ' . number_format($totalVisitors) . ' kunjungan'
+            ],
+            // Stat 3 - Membantu pengalaman baru
+            'help' => [
+                'value' => $helpPercentage,
+                'label' => 'Testimoni yang membantu pengalaman baru',
+                'detail' => '✅ ' . $approvedTestimonials . '/' . $totalTestimonials . ' testimoni disetujui'
+            ],
+            // Stat 4 - Meningkatkan pemahaman
+            'understanding' => [
+                'value' => $understandingPercentage,
+                'label' => 'Pesan forum meningkatkan pemahaman',
+                'detail' => '💬 ' . $approvedForumMessages . '/' . $totalForumMessages . ' pesan terjawab'
+            ],
         ];
 
         // ==================== JIKA REQUEST AJAX ====================
