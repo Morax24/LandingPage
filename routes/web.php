@@ -95,9 +95,13 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // MEDIA MANAGEMENT
     // ----------------------------------------
     Route::prefix('media')->name('media.')->group(function () {
+        Route::post('/store-all', [MediaController::class, 'storeAll'])->name('storeAll');
         Route::get('/', [MediaController::class, 'index'])->name('index');
         Route::get('/create', [MediaController::class, 'create'])->name('create');
         Route::post('/', [MediaController::class, 'store'])->name('store');
+
+        // ========== STORE ALL SECTIONS (BULK UPLOAD) ==========
+        Route::post('/store-all', [MediaController::class, 'storeAll'])->name('storeAll');
 
         // Bulk — harus SEBELUM /{id}
         Route::post('/bulk-delete', [MediaController::class, 'bulkDelete'])->name('bulk-delete');

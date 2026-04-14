@@ -2118,6 +2118,7 @@
             }
         }
 
+        /* PERBAIKAN: Latar belakang modal balasan menjadi transparan (gelap dengan efek blur) */
         .comments-modal-overlay {
             display: none;
             position: fixed;
@@ -2125,7 +2126,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
             z-index: 99999;
             justify-content: center;
             align-items: center;

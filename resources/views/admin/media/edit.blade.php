@@ -232,6 +232,16 @@
             box-shadow: 0 4px 12px rgba(255,138,91,0.4);
         }
 
+        .btn-warning {
+            background: #f39c12;
+            color: #fff;
+        }
+
+        .btn-warning:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
+        }
+
         .alert {
             padding: 1rem 1.5rem;
             border-radius: 12px;
@@ -249,6 +259,12 @@
             background: #FFE8E1;
             color: #D96F4A;
             border: 2px solid #FF8A5B;
+        }
+
+        .alert-warning {
+            background: #FFF3E0;
+            color: #E67E22;
+            border: 2px solid #F9D56E;
         }
 
         .edit-form {
@@ -279,6 +295,13 @@
             transition: all 0.3s;
         }
 
+        .form-group input:disabled {
+            background-color: #F0F0F0;
+            color: #666;
+            cursor: not-allowed;
+            border-color: #E0E0E0;
+        }
+
         .form-group textarea {
             min-height: 100px;
             resize: vertical;
@@ -307,28 +330,107 @@
             font-weight: 500;
         }
 
-        .media-preview {
+        /* Media Upload Section */
+        .media-upload-section {
             background: #fff;
             padding: 2rem;
             border-radius: 15px;
             box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-            text-align: center;
             margin-bottom: 2rem;
+        }
+
+        .media-preview {
+            text-align: center;
+            margin-bottom: 1.5rem;
         }
 
         .media-preview img,
         .media-preview video {
             max-width: 100%;
-            height: auto;
+            max-height: 300px;
             border-radius: 10px;
             border: 2px solid #E8F4F8;
+        }
+
+        .media-type-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            justify-content: center;
+        }
+
+        .media-type-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #E8F4F8;
+            border-radius: 10px;
+            background: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .media-type-btn.active {
+            background: #5FB574;
+            color: #fff;
+            border-color: #5FB574;
+        }
+
+        .media-type-btn:hover:not(.active) {
+            border-color: #5FB574;
+            background: #F7FCF9;
+        }
+
+        .file-input-wrapper {
+            margin-bottom: 1rem;
+        }
+
+        .file-input-label {
+            display: inline-block;
+            background: #5FB574;
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .file-input-label:hover {
+            background: #4FA564;
+            transform: translateY(-2px);
+        }
+
+        .file-info {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #F7FCF9;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .replace-btn {
+            background: #f39c12;
+            color: #fff;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+
+        .replace-btn:hover {
+            background: #e67e22;
+            transform: translateY(-2px);
         }
 
         .media-info {
             background: #F7FCF9;
             padding: 1.2rem;
             border-radius: 15px;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             border: 2px solid #E8F4F8;
         }
 
@@ -377,23 +479,13 @@
             width: 100%;
         }
 
-        /* Style khusus untuk description field (hanya muncul untuk products) */
-        .description-field {
+        /* Style khusus untuk field yang hanya muncul untuk section tertentu */
+        .conditional-field {
             display: none;
             animation: fadeIn 0.3s ease;
         }
 
-        .description-field.show {
-            display: block;
-        }
-
-        /* Style khusus untuk price field (hanya muncul untuk products) */
-        .price-field {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .price-field.show {
+        .conditional-field.show {
             display: block;
         }
 
@@ -466,11 +558,8 @@
                 margin-top: 3rem;
             }
 
-            .edit-form {
-                padding: 1.5rem;
-            }
-
-            .media-preview {
+            .edit-form,
+            .media-upload-section {
                 padding: 1.5rem;
             }
         }
@@ -497,20 +586,13 @@
                 width: 100%;
             }
 
-            .media-preview {
-                padding: 1.2rem;
+            .media-type-selector {
+                flex-direction: column;
+                gap: 0.5rem;
             }
 
-            .media-info {
-                padding: 1rem;
-            }
-
-            .edit-form {
-                padding: 1.2rem;
-            }
-
-            .form-group {
-                margin-bottom: 1.2rem;
+            .media-type-btn {
+                text-align: center;
             }
         }
 
@@ -528,18 +610,9 @@
                 font-size: 1.3rem;
             }
 
-            .edit-form {
+            .edit-form,
+            .media-upload-section {
                 padding: 1rem;
-                border-radius: 10px;
-            }
-
-            .media-preview {
-                padding: 1rem;
-                border-radius: 10px;
-            }
-
-            .media-info {
-                padding: 0.8rem;
                 border-radius: 10px;
             }
 
@@ -548,48 +621,6 @@
             .form-group textarea {
                 padding: 0.7rem 0.8rem;
                 font-size: 0.9rem;
-            }
-
-            .media-info p {
-                font-size: 0.85rem;
-            }
-
-            .mobile-menu-toggle {
-                top: 0.5rem;
-                left: 0.5rem;
-                padding: 0.5rem;
-                font-size: 1.3rem;
-            }
-
-            .checkbox-group {
-                align-items: flex-start;
-            }
-
-            .checkbox-group input[type="checkbox"] {
-                margin-top: 0.2rem;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .admin-header h1 {
-                font-size: 1.2rem;
-            }
-
-            .edit-form {
-                padding: 0.8rem;
-            }
-
-            .media-preview {
-                padding: 0.8rem;
-            }
-
-            .btn {
-                padding: 0.8rem 1rem;
-                font-size: 0.9rem;
-            }
-
-            .form-help {
-                font-size: 0.8rem;
             }
         }
     </style>
@@ -663,44 +694,81 @@
                 </div>
                 @endif
 
-                <!-- Media Preview -->
-                <div class="media-preview">
-                    @if($media->isImage())
-                        <img src="{{ $media->getMediaUrl() }}" alt="{{ $media->title }}" id="mediaPreview">
-                    @elseif($media->isVideo())
-                        <video controls style="width: 100%;">
-                            <source src="{{ $media->getMediaUrl() }}" type="{{ $media->mime_type }}">
-                        </video>
-                    @endif
-                    <div id="mediaError" style="display: none; color: #FF8A5B; margin-top: 1rem;">
-                        <p>⚠️ Gambar tidak dapat ditampilkan. Pastikan file ada di lokasi yang benar.</p>
-                        <p>Path: <code>{{ $media->file_path }}</code></p>
+                <!-- Media Upload Section -->
+                <div class="media-upload-section">
+                    <h3 style="margin-bottom: 1rem; color: #5FB574;">🖼️ Ganti Media</h3>
+
+                    <!-- Media Type Selector -->
+                    <div class="media-type-selector">
+                        <button type="button" class="media-type-btn {{ $media->type == 'image' ? 'active' : '' }}" data-type="image" onclick="setMediaType('image')">
+                            🖼️ Gambar
+                        </button>
+                        <button type="button" class="media-type-btn {{ $media->type == 'video' ? 'active' : '' }}" data-type="video" onclick="setMediaType('video')">
+                            🎥 Video
+                        </button>
+                    </div>
+
+                    <!-- Media Preview -->
+                    <div class="media-preview" id="mediaPreviewContainer">
+                        @if($media->isImage())
+                            <img src="{{ $media->getMediaUrl() }}" alt="{{ $media->title }}" id="currentMediaPreview">
+                        @elseif($media->isVideo())
+                            <video controls style="max-width: 100%; max-height: 300px;" id="currentMediaPreview">
+                                <source src="{{ $media->getMediaUrl() }}" type="{{ $media->mime_type }}">
+                            </video>
+                        @endif
+                        <div id="mediaError" style="display: none; color: #FF8A5B; margin-top: 1rem;">
+                            <p>⚠️ Media tidak dapat ditampilkan. Pastikan file ada di lokasi yang benar.</p>
+                        </div>
+                    </div>
+
+                    <!-- File Upload -->
+                    <div class="file-input-wrapper">
+                        <label class="file-input-label" id="fileInputLabel">
+                            📁 Pilih File Baru
+                            <input type="file" id="mediaFile" accept="image/*,video/*" style="display:none" onchange="previewNewMedia(this)">
+                        </label>
+                        <button type="button" class="replace-btn" onclick="document.getElementById('mediaFile').click()">
+                            🔄 Ganti Media
+                        </button>
+                    </div>
+
+                    <!-- New Media Preview -->
+                    <div id="newMediaPreview" style="display: none; margin-top: 1rem;">
+                        <p style="font-weight: 600; color: #5FB574; margin-bottom: 0.5rem;">📷 Preview Media Baru:</p>
+                        <div id="newPreviewContainer" style="text-align: center;"></div>
+                        <div class="file-info" id="newFileInfo"></div>
                     </div>
                 </div>
 
                 <!-- Media Info -->
                 <div class="media-info">
-                    <p><strong>Tipe:</strong> {{ strtoupper($media->type) }}</p>
+                    <p><strong>Tipe Saat Ini:</strong> {{ strtoupper($media->type) }}</p>
                     <p><strong>Nama File:</strong> {{ $media->file_name }}</p>
                     <p><strong>Ukuran:</strong> {{ $media->file_size_formatted }}</p>
                     <p><strong>Diupload:</strong> {{ $media->created_at->format('d M Y H:i') }}</p>
                     <p><strong>Diupload oleh:</strong> {{ $media->uploader->name ?? 'Unknown' }}</p>
-                    <p><strong>Path:</strong> <code>{{ $media->file_path }}</code></p>
                 </div>
 
                 <!-- Form Update -->
-                <form action="{{ route('admin.media.update', $media->id) }}" method="POST" class="edit-form" id="editForm">
+                <form action="{{ route('admin.media.update', $media->id) }}" method="POST" class="edit-form" id="editForm" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
-                    <!-- Title -->
-                    <div class="form-group">
-                        <label for="title">Judul *</label>
+                    <!-- Hidden input untuk tipe media yang dipilih -->
+                    <input type="hidden" name="media_type" id="selectedMediaType" value="{{ $media->type }}">
+
+                    <!-- File input (tersembunyi, akan dikirim jika ada file baru) -->
+                    <input type="file" name="file" id="hiddenFileInput" style="display:none">
+
+                    <!-- Title - SEMUA SECTION BISA EDIT JUDUL -->
+                    <div class="form-group" id="titleGroup">
+                        <label for="title" id="titleLabel">Judul *</label>
                         <input type="text" name="title" id="title" required value="{{ old('title', $media->title) }}">
+                        <small class="form-help" id="titleHelp">Judul akan ditampilkan di website</small>
                         @error('title')
                             <span class="error-text">{{ $message }}</span>
                         @enderror
-                        <small class="form-help">Judul akan ditampilkan di website</small>
                     </div>
 
                     <!-- Section -->
@@ -721,18 +789,18 @@
                         <small class="form-help" id="sectionHelp">Pilih di section mana media ini akan ditampilkan</small>
                     </div>
 
-                    <!-- Description Field - HANYA UNTUK PRODUCTS -->
-                    <div class="form-group description-field" id="descriptionField">
-                        <label for="description">Deskripsi Produk / Fitur *</label>
-                        <textarea name="description" id="description" placeholder="Masukkan deskripsi produk (pisahkan fitur dengan baris baru)&#10;Contoh:&#10;Board game edukatif&#10;Includes 4 player pieces&#10;Dice & cards included" rows="4">{{ old('description', $media->description) }}</textarea>
+                    <!-- Description Field - UNTUK FEATURES, AKTIVITAS, dan PRODUCTS -->
+                    <div class="form-group conditional-field" id="descriptionField">
+                        <label for="description" id="descriptionLabel">Deskripsi</label>
+                        <textarea name="description" id="description" placeholder="Masukkan deskripsi (pisahkan fitur dengan baris baru)&#10;Contoh:&#10;Board game edukatif&#10;Includes 4 player pieces&#10;Dice & cards included" rows="4">{{ old('description', $media->description) }}</textarea>
                         @error('description')
                             <span class="error-text">{{ $message }}</span>
                         @enderror
-                        <small class="form-help">Deskripsi akan ditampilkan sebagai list fitur di halaman produk (HANYA untuk section Products)</small>
+                        <small class="form-help" id="descriptionHelp">Deskripsi akan ditampilkan di website</small>
                     </div>
 
                     <!-- Price Field - HANYA UNTUK PRODUCTS -->
-                    <div class="form-group price-field" id="priceField">
+                    <div class="form-group conditional-field" id="priceField">
                         <label for="price">Harga Produk (Rp) *</label>
                         <input type="number"
                                name="price"
@@ -777,6 +845,10 @@
     </div>
 
     <script>
+        // Variabel untuk menyimpan file baru
+        let newMediaFile = null;
+        let selectedType = '{{ $media->type }}';
+
         // Mobile menu functionality
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
         const sidebar = document.getElementById('sidebar');
@@ -790,7 +862,6 @@
         mobileMenuToggle.addEventListener('click', toggleMobileMenu);
         overlay.addEventListener('click', toggleMobileMenu);
 
-        // Handle window resize
         window.addEventListener('resize', function() {
             if (window.innerWidth > 992) {
                 sidebar.classList.remove('mobile-open');
@@ -798,26 +869,125 @@
             }
         });
 
-        // Fungsi untuk menampilkan/menyembunyikan field berdasarkan section
+        // Fungsi untuk mengatur tipe media
+        function setMediaType(type) {
+            selectedType = type;
+            document.getElementById('selectedMediaType').value = type;
+
+            // Update active class pada tombol
+            document.querySelectorAll('.media-type-btn').forEach(btn => {
+                if (btn.dataset.type === type) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            // Update accept attribute pada file input
+            const fileInput = document.getElementById('mediaFile');
+            if (type === 'image') {
+                fileInput.accept = 'image/jpeg,image/png,image/jpg,image/webp,image/gif';
+            } else {
+                fileInput.accept = 'video/mp4,video/webm,video/ogg';
+            }
+
+            // Reset preview jika ada
+            if (newMediaFile) {
+                newMediaFile = null;
+                document.getElementById('newMediaPreview').style.display = 'none';
+                document.getElementById('newPreviewContainer').innerHTML = '';
+                document.getElementById('newFileInfo').innerHTML = '';
+                document.getElementById('mediaFile').value = '';
+            }
+        }
+
+        // Preview media baru
+        function previewNewMedia(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            // Validasi ukuran (10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                alert('Ukuran file maksimal 10MB!');
+                input.value = '';
+                return;
+            }
+
+            // Validasi tipe file berdasarkan pilihan
+            if (selectedType === 'image' && !file.type.startsWith('image/')) {
+                alert('File harus berupa gambar!');
+                input.value = '';
+                return;
+            }
+
+            if (selectedType === 'video' && !file.type.startsWith('video/')) {
+                alert('File harus berupa video!');
+                input.value = '';
+                return;
+            }
+
+            newMediaFile = file;
+
+            // Simpan file ke hidden input untuk dikirim ke server
+            const hiddenFileInput = document.getElementById('hiddenFileInput');
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            hiddenFileInput.files = dataTransfer.files;
+
+            // Preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewContainer = document.getElementById('newPreviewContainer');
+                const fileInfo = document.getElementById('newFileInfo');
+
+                if (selectedType === 'image') {
+                    previewContainer.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; max-height: 200px; border-radius: 8px;">`;
+                } else {
+                    previewContainer.innerHTML = `<video controls style="max-width: 100%; max-height: 200px;"><source src="${e.target.result}" type="${file.type}"></video>`;
+                }
+
+                fileInfo.innerHTML = `
+                    <strong>File baru:</strong> ${file.name}<br>
+                    <strong>Ukuran:</strong> ${formatFileSize(file.size)}<br>
+                    <strong>Tipe:</strong> ${selectedType === 'image' ? 'Gambar' : 'Video'}
+                `;
+
+                document.getElementById('newMediaPreview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        // Section yang memiliki field DESKRIPSI (features, aktivitas, products)
+        const sectionsWithDescription = ['features', 'aktivitas', 'products'];
+        const sectionsWithPrice = ['products'];
+
         function toggleFieldsBySection() {
             const section = document.getElementById('section').value;
             const descriptionField = document.getElementById('descriptionField');
             const priceField = document.getElementById('priceField');
             const descriptionInput = document.getElementById('description');
             const priceInput = document.getElementById('price');
+            const descriptionLabel = document.getElementById('descriptionLabel');
+            const descriptionHelp = document.getElementById('descriptionHelp');
             const sectionHelp = document.getElementById('sectionHelp');
 
-            // DESKRIPSI SECTION
             const descriptions = {
                 'hero': '🎯 Intro - gambar utama board game. Hanya 1 media aktif yang ditampilkan.',
                 'story': '📖 Background - gambar box di samping cerita. Hanya 1 media aktif yang ditampilkan.',
                 'whylearn': '💡 Fitur 3 - gambar fitur ketiga. Hanya 1 media aktif yang ditampilkan.',
-                'features': '⭐ Fitur Unggulan - 4 slot yang ditampilkan.',
-                'aktivitas': '🎮 Aktivitas & Tutorial - 6 slot yang ditampilkan.',
+                'features': '⭐ Fitur Unggulan - 4 slot yang ditampilkan. Bisa menambahkan deskripsi untuk setiap fitur.',
+                'aktivitas': '🎮 Aktivitas & Tutorial - 6 slot yang ditampilkan. Bisa menambahkan deskripsi untuk setiap aktivitas.',
                 'products': '📦 Products - gambar untuk bagian produk. 2 slot yang ditampilkan. HARUS DIISI DESKRIPSI DAN HARGA!'
             };
 
-            // Update deskripsi section
             if (section && descriptions[section]) {
                 sectionHelp.textContent = descriptions[section];
                 sectionHelp.style.color = '#5FB574';
@@ -828,38 +998,34 @@
                 sectionHelp.style.fontWeight = 'normal';
             }
 
-            // Tampilkan description dan price field HANYA untuk products
-            if (section === 'products') {
+            if (sectionsWithDescription.includes(section)) {
                 descriptionField.classList.add('show');
-                priceField.classList.add('show');
-                if (descriptionInput) descriptionInput.required = true;
-                if (priceInput) priceInput.required = true;
+                descriptionInput.required = false;
+
+                if (section === 'products') {
+                    descriptionLabel.innerHTML = 'Deskripsi Produk';
+                    descriptionHelp.innerHTML = 'Deskripsi produk akan ditampilkan sebagai list fitur di halaman produk';
+                } else if (section === 'features') {
+                    descriptionLabel.innerHTML = 'Deskripsi Fitur';
+                    descriptionHelp.innerHTML = 'Deskripsi fitur akan ditampilkan di halaman website';
+                } else if (section === 'aktivitas') {
+                    descriptionLabel.innerHTML = 'Deskripsi Aktivitas';
+                    descriptionHelp.innerHTML = 'Deskripsi aktivitas akan ditampilkan di halaman website';
+                }
             } else {
                 descriptionField.classList.remove('show');
-                priceField.classList.remove('show');
-                if (descriptionInput) descriptionInput.required = false;
-                if (priceInput) priceInput.required = false;
-
-                // Reset harga dan deskripsi jika bukan products
-                if (section !== 'products') {
-                    if (priceInput) priceInput.value = '0';
-                    if (descriptionInput) descriptionInput.value = '';
-                }
+                descriptionInput.required = false;
             }
-        }
 
-        // Check if image loads successfully
-        function checkImageLoad() {
-            const img = document.getElementById('mediaPreview');
-            const errorDiv = document.getElementById('mediaError');
-
-            if (img) {
-                img.onerror = function() {
-                    errorDiv.style.display = 'block';
-                };
-                img.onload = function() {
-                    errorDiv.style.display = 'none';
-                };
+            if (sectionsWithPrice.includes(section)) {
+                priceField.classList.add('show');
+                priceInput.required = true;
+            } else {
+                priceField.classList.remove('show');
+                priceInput.required = false;
+                if (section !== 'products') {
+                    priceInput.value = '0';
+                }
             }
         }
 
@@ -870,35 +1036,25 @@
 
             priceInput.addEventListener('input', function(e) {
                 let value = e.target.value;
-
-                // Remove non-numeric characters except decimal point
                 value = value.replace(/[^\d.]/g, '');
-
-                // Ensure only one decimal point
                 const parts = value.split('.');
                 if (parts.length > 2) {
                     value = parts[0] + '.' + parts.slice(1).join('');
                 }
-
-                // Limit to 2 decimal places
                 if (parts.length === 2 && parts[1].length > 2) {
                     value = parts[0] + '.' + parts[1].substring(0, 2);
                 }
-
-                // Check max value
                 const numericValue = parseFloat(value);
                 if (!isNaN(numericValue) && numericValue > 9999999999.99) {
                     alert('Harga terlalu besar! Maksimal Rp 9.999.999.999,99');
                     value = '9999999999.99';
                 }
-
                 e.target.value = value;
             });
 
             priceInput.addEventListener('blur', function(e) {
                 let value = parseFloat(e.target.value);
                 if (!isNaN(value)) {
-                    // Format to 2 decimal places
                     e.target.value = value.toFixed(2);
                 }
             });
@@ -911,18 +1067,17 @@
 
             form.addEventListener('submit', function(e) {
                 const section = document.getElementById('section').value;
-                const descriptionInput = document.getElementById('description');
-                const priceInput = document.getElementById('price');
+                const titleInput = document.getElementById('title');
 
-                // Validasi description untuk products
+                if (!titleInput.value.trim()) {
+                    e.preventDefault();
+                    alert('Harap isi judul!');
+                    titleInput.focus();
+                    return;
+                }
+
                 if (section === 'products') {
-                    if (!descriptionInput.value.trim()) {
-                        e.preventDefault();
-                        alert('Harap isi deskripsi untuk section Products!');
-                        descriptionInput.focus();
-                        return;
-                    }
-
+                    const priceInput = document.getElementById('price');
                     const price = parseFloat(priceInput.value);
                     if (!priceInput.value || isNaN(price) || price < 0) {
                         e.preventDefault();
@@ -930,7 +1085,6 @@
                         priceInput.focus();
                         return;
                     }
-
                     if (price > 9999999999.99) {
                         e.preventDefault();
                         alert('Harga terlalu besar! Maksimal Rp 9.999.999.999,99');
@@ -941,12 +1095,26 @@
             });
         }
 
-        // Auto-call saat halaman load
-        document.addEventListener('DOMContentLoaded', function() {
-            // Panggil toggleFieldsBySection saat halaman dimuat
-            toggleFieldsBySection();
+        // Check if image loads successfully
+        function checkMediaLoad() {
+            const mediaElement = document.getElementById('currentMediaPreview');
+            const errorDiv = document.getElementById('mediaError');
 
-            checkImageLoad();
+            if (mediaElement) {
+                if (mediaElement.tagName === 'IMG') {
+                    mediaElement.onerror = function() {
+                        errorDiv.style.display = 'block';
+                    };
+                    mediaElement.onload = function() {
+                        errorDiv.style.display = 'none';
+                    };
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleFieldsBySection();
+            checkMediaLoad();
             setupPriceValidation();
             setupFormValidation();
         });

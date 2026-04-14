@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Media - Admin</title>
+    <title>Manajemen Media | Admin Waluya Land</title>
     <style>
-        /* SEMUA CSS SAMA SEPERTI SEBELUMNYA - TIDAK BERUBAH */
         * {
             margin: 0;
             padding: 0;
@@ -29,7 +28,6 @@
             width: 280px;
             background: #5FB574;
             color: #fff;
-            padding: 0;
             position: fixed;
             height: 100vh;
             overflow-y: auto;
@@ -58,7 +56,6 @@
             height: 30px;
             background: #fff;
             display: inline-block;
-            vertical-align: middle;
         }
 
         .sidebar-header p {
@@ -81,19 +78,13 @@
             transition: all 0.3s;
             border-left: 4px solid transparent;
             font-size: 1rem;
+            cursor: pointer;
         }
 
-        .menu-item:hover {
+        .menu-item:hover, .menu-item.active {
             background: rgba(255,255,255,0.15);
             border-left-color: #F9D56E;
             color: #fff;
-        }
-
-        .menu-item.active {
-            background: rgba(255,255,255,0.2);
-            border-left-color: #F9D56E;
-            color: #fff;
-            font-weight: 600;
         }
 
         .menu-icon {
@@ -171,11 +162,12 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
-        .admin-header {
+        /* Header */
+        .page-header {
             background: #fff;
             padding: 1.5rem 2rem;
             border-radius: 15px;
@@ -188,36 +180,28 @@
             gap: 1rem;
         }
 
-        .admin-header h1 {
+        .page-header h1 {
             font-size: 1.8rem;
             color: #333;
         }
 
-        .btn {
-            padding: 0.7rem 1.5rem;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
-            transition: all 0.3s;
-            text-align: center;
-        }
-
-        .btn-secondary {
-            background: #95a5a6;
-            color: #fff;
-        }
-
-        .btn-secondary:hover {
-            background: #7f8c8d;
-            transform: translateY(-2px);
+        .header-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         .btn-primary {
             background: #5FB574;
             color: #fff;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
         }
 
         .btn-primary:hover {
@@ -226,27 +210,66 @@
             box-shadow: 0 4px 12px rgba(95,181,116,0.4);
         }
 
-        .btn-primary:disabled {
+        .btn-secondary {
             background: #95a5a6;
-            cursor: not-allowed;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        .btn-primary:disabled:hover {
-            transform: none;
-            box-shadow: none;
+        .btn-secondary:hover {
+            background: #7f8c8d;
+            transform: translateY(-2px);
         }
 
+        .btn-danger {
+            background: #FF8A5B;
+            color: #fff;
+            padding: 0.3rem 0.8rem;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .btn-danger:hover {
+            background: #e67e22;
+        }
+
+        .btn-back {
+            background: #95a5a6;
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-back:hover {
+            background: #7f8c8d;
+            transform: translateY(-2px);
+        }
+
+        /* Alert */
         .alert {
             padding: 1rem 1.5rem;
             border-radius: 12px;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             font-weight: 500;
-        }
-
-        .alert-danger {
-            background: #FFE8E1;
-            color: #D96F4A;
-            border: 2px solid #FF8A5B;
         }
 
         .alert-success {
@@ -255,232 +278,297 @@
             border: 2px solid #5FB574;
         }
 
-        .upload-form {
+        .alert-warning {
+            background: #FFF3E0;
+            color: #E67E22;
+            border: 2px solid #F9D56E;
+        }
+
+        .alert-danger {
+            background: #FFE8E1;
+            color: #D96F4A;
+            border: 2px solid #FF8A5B;
+        }
+
+        /* Section Card */
+        .section-card {
             background: #fff;
-            padding: 2rem;
             border-radius: 15px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow: hidden;
         }
 
-        .form-group {
-            margin-bottom: 1.5rem;
+        .section-header {
+            padding: 1.2rem 1.5rem;
+            background: #F7FCF9;
+            border-bottom: 2px solid #E8F4F8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
 
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #555;
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
         }
 
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
+        .section-title h3 {
+            font-size: 1.3rem;
+            color: #5FB574;
+        }
+
+        .section-status {
+            font-size: 0.8rem;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            background: #E8F4F8;
+            color: #666;
+        }
+
+        .section-status.filled {
+            background: #5FB574;
+            color: #fff;
+        }
+
+        .section-body {
+            padding: 1.5rem;
+        }
+
+        /* Single Upload */
+        .single-upload {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        .preview-box {
+            width: 180px;
+            height: 180px;
+            background: #F7FCF9;
+            border: 2px dashed #E8F4F8;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .preview-box img, .preview-box video {
             width: 100%;
-            padding: 0.8rem 1rem;
-            border: 2px solid #E8F4F8;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-box .empty-text {
+            text-align: center;
+            color: #999;
+        }
+
+        .upload-controls {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .file-input-label {
+            display: inline-block;
+            background: #5FB574;
+            color: #fff;
+            padding: 0.7rem 1.5rem;
             border-radius: 10px;
-            font-family: inherit;
-            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
             transition: all 0.3s;
         }
 
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
+        .file-input-label:hover {
+            background: #4FA564;
         }
 
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #5FB574;
-            background: #F7FCF9;
-        }
-
-        .form-help {
-            font-size: 0.85rem;
-            color: #666;
-            margin-top: 0.3rem;
-            display: block;
-        }
-
-        .error-text {
-            color: #FF8A5B;
-            font-size: 0.85rem;
-            display: block;
-            margin-top: 0.3rem;
-            font-weight: 500;
-        }
-
-        /* Container untuk multiple upload items */
-        .upload-items-container {
-            display: none;
-            margin-top: 1.5rem;
-        }
-
-        .upload-items-container.active {
-            display: block;
-        }
-
-        .upload-item {
-            background: #F7FCF9;
-            border: 2px solid #E8F4F8;
-            border-radius: 12px;
-            padding: 1.5rem;
+        /* Upload Grid untuk Features & Aktivitas */
+        .upload-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
             margin-bottom: 1.5rem;
         }
 
-        .upload-item:last-child {
-            margin-bottom: 0;
+        .grid-item {
+            background: #F7FCF9;
+            border: 2px solid #E8F4F8;
+            border-radius: 12px;
+            padding: 0.8rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s;
         }
 
-        .upload-item-header {
+        .grid-item:hover {
+            border-color: #5FB574;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .grid-item .preview-img, .grid-item .preview-video {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .grid-item .empty-placeholder {
+            width: 100%;
+            height: 120px;
+            background: #fff;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 2rem;
+            color: #ccc;
+        }
+
+        .grid-item .empty-placeholder:hover {
+            border-color: #5FB574;
+            background: #F7FCF9;
+            color: #5FB574;
+        }
+
+        .grid-item .item-order {
+            font-size: 0.7rem;
+            color: #5FB574;
+            font-weight: bold;
+            margin-top: 0.3rem;
+        }
+
+        .grid-item .media-badge {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+        }
+
+        .btn-remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #FF8A5B;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-remove:hover {
+            background: #e67e22;
+            transform: scale(1.1);
+        }
+
+        /* Product Card */
+        .products-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: #F7FCF9;
+            border: 2px solid #E8F4F8;
+            border-radius: 12px;
+            padding: 1.2rem;
+            position: relative;
+        }
+
+        .product-card .product-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1rem;
-            padding-bottom: 0.8rem;
-            border-bottom: 2px solid #E8F4F8;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #E8F4F8;
         }
 
-        .upload-item-title {
-            font-weight: 600;
+        .product-card .product-header strong {
             color: #5FB574;
             font-size: 1.1rem;
         }
 
-        .upload-item-index {
-            background: #5FB574;
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .upload-item-content {
+        .product-form {
             display: grid;
-            gap: 1.5rem;
+            grid-template-columns: 120px 1fr;
+            gap: 1rem;
         }
 
-        .file-upload-area-small {
-            border: 3px dashed #E8F4F8;
-            border-radius: 12px;
-            padding: 2rem 1.5rem;
-            text-align: center;
-            transition: all 0.3s;
-            cursor: pointer;
+        .product-preview {
+            width: 120px;
+            height: 120px;
             background: #fff;
-            min-height: 150px;
+            border: 2px dashed #E8F4F8;
+            border-radius: 10px;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .file-upload-area-small:hover {
+        .product-preview:hover {
             border-color: #5FB574;
             background: #F7FCF9;
         }
 
-        .file-upload-area-small.dragover {
-            border-color: #5FB574;
-            background: #E8F5EC;
+        .product-preview img, .product-preview video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .file-upload-icon-small {
-            font-size: 2.5rem;
-            color: #5FB574;
-            margin-bottom: 0.8rem;
-        }
-
-        .file-upload-text-small {
-            color: #555;
-            margin-bottom: 0.3rem;
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        .file-preview-small {
-            margin-top: 1rem;
-            display: none;
-        }
-
-        .file-preview-small.active {
-            display: block;
-        }
-
-        .preview-container-small {
-            max-width: 100%;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-top: 1rem;
-            border: 2px solid #E8F4F8;
-        }
-
-        .preview-container-small img,
-        .preview-container-small video {
-            max-width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .file-info-small {
-            background: #fff;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 0.8rem;
-            border: 2px solid #E8F4F8;
-            font-size: 0.85rem;
-        }
-
-        .section-info {
-            background: #E8F5EC;
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            margin: 1rem 0;
-            border-left: 4px solid #5FB574;
-            display: none;
-        }
-
-        .section-info.active {
-            display: block;
-        }
-
-        .section-info h4 {
-            color: #4FA564;
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-        }
-
-        .section-info ul {
-            margin-left: 1.5rem;
-            color: #555;
-        }
-
-        .section-info li {
-            margin-bottom: 0.3rem;
-        }
-
-        .form-actions {
+        .product-fields {
             display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 2px solid #E8F4F8;
+            flex-direction: column;
+            gap: 0.8rem;
         }
 
-        /* Styling untuk field judul yang dinonaktifkan */
-        input.item-title:disabled {
-            background-color: #F0F0F0;
-            color: #666;
-            cursor: not-allowed;
-            border-color: #E0E0E0;
+        .product-fields input, .product-fields textarea {
+            padding: 0.7rem;
+            border: 2px solid #E8F4F8;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .product-fields input:focus, .product-fields textarea:focus {
+            outline: none;
+            border-color: #5FB574;
+        }
+
+        .product-fields textarea {
+            min-height: 80px;
+            resize: vertical;
         }
 
         /* Mobile Menu Toggle */
@@ -500,7 +588,6 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
-        /* Overlay for mobile */
         .overlay {
             display: none;
             position: fixed;
@@ -516,194 +603,67 @@
             display: block;
         }
 
-        /* Responsive Design */
-        @media (max-width: 1200px) {
-            .container {
-                max-width: 90%;
-            }
+        /* Loading Spinner */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
         }
 
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
         @media (max-width: 992px) {
             .main-content {
                 margin-left: 0;
                 width: 100%;
                 padding: 1rem;
             }
-
             .sidebar {
                 transform: translateX(-100%);
             }
-
             .sidebar.mobile-open {
                 transform: translateX(0);
             }
-
             .mobile-menu-toggle {
                 display: block;
             }
-
-            .admin-header {
-                padding: 1rem;
+            .page-header {
                 margin-top: 3rem;
-            }
-
-            .upload-form {
-                padding: 1.5rem;
-            }
-
-            .file-upload-area-small {
-                padding: 1.5rem 1rem;
-            }
-
-            .upload-item-content {
-                grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 768px) {
-            .admin-header {
+            .product-form {
+                grid-template-columns: 1fr;
+            }
+            .single-upload {
                 flex-direction: column;
-                text-align: center;
+                align-items: center;
             }
-
-            .admin-header h1 {
-                font-size: 1.5rem;
-            }
-
-            .form-actions {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-            }
-
-            .file-upload-icon-small {
-                font-size: 2rem;
-            }
-
-            .file-upload-text-small {
-                font-size: 0.9rem;
-            }
-
-            .upload-form {
-                padding: 1.2rem;
-            }
-
-            .form-group {
-                margin-bottom: 1.2rem;
-            }
-
-            .upload-item {
-                padding: 1.2rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .main-content {
-                padding: 0.5rem;
-            }
-
-            .admin-header {
-                padding: 1rem;
-                border-radius: 10px;
-            }
-
-            .admin-header h1 {
-                font-size: 1.3rem;
-            }
-
-            .upload-form {
-                padding: 1rem;
-                border-radius: 10px;
-            }
-
-            .file-upload-area-small {
-                padding: 1.2rem 0.8rem;
-                border-radius: 10px;
-                min-height: 120px;
-            }
-
-            .file-upload-icon-small {
-                font-size: 1.8rem;
-                margin-bottom: 0.5rem;
-            }
-
-            .file-upload-text-small {
-                font-size: 0.85rem;
-            }
-
-            .form-group input,
-            .form-group select,
-            .form-group textarea {
-                padding: 0.7rem 0.8rem;
-                font-size: 0.9rem;
-            }
-
-            .file-info-small {
-                padding: 0.8rem;
-                font-size: 0.8rem;
-            }
-
-            .upload-item-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
-            }
-
-            .upload-item-index {
-                align-self: flex-end;
-            }
-
-            .mobile-menu-toggle {
-                top: 0.5rem;
-                left: 0.5rem;
-                padding: 0.5rem;
-                font-size: 1.3rem;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .admin-header h1 {
-                font-size: 1.2rem;
-            }
-
-            .upload-form {
-                padding: 0.8rem;
-            }
-
-            .file-upload-area-small {
-                padding: 1rem 0.5rem;
-            }
-
-            .btn {
-                padding: 0.8rem 1rem;
-                font-size: 0.9rem;
-            }
-
-            .form-help {
-                font-size: 0.8rem;
-            }
-
-            .upload-item {
-                padding: 1rem;
+            .upload-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             }
         }
     </style>
 </head>
 <body>
-    <!-- Mobile Menu Toggle -->
     <button class="mobile-menu-toggle" id="mobileMenuToggle">☰</button>
     <div class="overlay" id="overlay"></div>
 
     <div class="admin-layout">
-        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <h2><span class="logo-square"></span> <span>WALUYA LAND</span></h2>
+                <h2><span class="logo-square"></span> WALUYA LAND</h2>
                 <p>Admin Panel</p>
             </div>
-
             <nav class="sidebar-menu">
                 <a href="{{ route('admin.dashboard') }}" class="menu-item">
                     <span class="menu-icon">📊</span>
@@ -722,7 +682,6 @@
                     <span>Media Library</span>
                 </a>
             </nav>
-
             <div class="sidebar-footer">
                 <div class="user-profile">
                     <div class="user-avatar">AM</div>
@@ -738,589 +697,566 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
         <main class="main-content">
             <div class="container">
-                <!-- Header -->
-                <div class="admin-header">
-                    <h1>📤 Upload Media</h1>
-                    <a href="{{ route('admin.media.index') }}" class="btn btn-secondary">← Kembali</a>
+                <div class="page-header">
+                    <div class="header-buttons">
+                        <a href="{{ route('admin.media.index') }}" class="btn-back">← Kembali</a>
+                    </div>
+                    <h1>🖼️ Manajemen Media</h1>
+                    <div class="header-buttons">
+                        <button class="btn-primary" id="saveAllBtn">💾 Simpan Semua</button>
+                    </div>
                 </div>
 
-                <!-- Alert Messages -->
-                @if(session('error'))
-                <div class="alert alert-danger">
-                    ✗ {{ session('error') }}
+                <div id="alertContainer"></div>
+
+                <!-- HERO SECTION -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <h3>📸 Hero Banner</h3>
+                            <span class="section-status" id="heroStatus">○ Kosong</span>
+                        </div>
+                    </div>
+                    <div class="section-body">
+                        <div class="single-upload">
+                            <div class="preview-box" id="heroPreview"><div class="empty-text">Belum ada media</div></div>
+                            <div class="upload-controls">
+                                <label class="file-input-label">📁 Pilih File (Gambar/Video)<input type="file" id="heroInput" accept="image/*,video/*" style="display:none"></label>
+                                <button class="btn-secondary" id="heroRemoveBtn" style="display:none">Hapus</button>
+                                <p><small>Format: JPG, PNG, WEBP, GIF (gambar) / MP4, WebM (video). Max 10MB</small></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                @endif
 
-                @if(session('success'))
-                <div class="alert alert-success">
-                    ✓ {{ session('success') }}
+                <!-- STORY SECTION -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <h3>📖 Story / Background</h3>
+                            <span class="section-status" id="storyStatus">○ Kosong</span>
+                        </div>
+                    </div>
+                    <div class="section-body">
+                        <div class="single-upload">
+                            <div class="preview-box" id="storyPreview"><div class="empty-text">Belum ada media</div></div>
+                            <div class="upload-controls">
+                                <label class="file-input-label">📁 Pilih File (Gambar/Video)<input type="file" id="storyInput" accept="image/*,video/*" style="display:none"></label>
+                                <button class="btn-secondary" id="storyRemoveBtn" style="display:none">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                @endif
 
-                <!-- Upload Form -->
-                <form action="{{ route('admin.media.store') }}" method="POST" enctype="multipart/form-data" class="upload-form" id="uploadForm">
-                    @csrf
-
-                    <!-- Section Selection -->
-                    <div class="form-group">
-                        <label for="section">Section *</label>
-                        <select name="section" id="section" required onchange="updateSectionForm()">
-                            <option value="">-- Pilih Section --</option>
-                            @php
-                                $sections = App\Models\Media::getSections();
-                            @endphp
-                            @foreach($sections as $value => $label)
-                                @if($value !== 'other')
-                                    <option value="{{ $value }}" {{ old('section') == $value ? 'selected' : '' }}>
-                                        {{ $label }}
-                                    </option>
-                                @endif
-                            @endforeach
-                        </select>
-                        @error('section')
-                            <span class="error-text">{{ $message }}</span>
-                        @enderror
-                        <small class="form-help" id="sectionHelp">Pilih di section mana media ini akan ditampilkan</small>
+                <!-- WHY LEARN SECTION -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <h3>✨ Why Learn</h3>
+                            <span class="section-status" id="whylearnStatus">○ Kosong</span>
+                        </div>
                     </div>
-
-                    <!-- Section Info Box -->
-                    <div class="section-info" id="sectionInfo">
-                        <h4>📋 Informasi Section</h4>
-                        <div id="sectionInfoContent"></div>
+                    <div class="section-body">
+                        <div class="single-upload">
+                            <div class="preview-box" id="whylearnPreview"><div class="empty-text">Belum ada media</div></div>
+                            <div class="upload-controls">
+                                <label class="file-input-label">📁 Pilih File (Gambar/Video)<input type="file" id="whylearnInput" accept="image/*,video/*" style="display:none"></label>
+                                <button class="btn-secondary" id="whylearnRemoveBtn" style="display:none">Hapus</button>
+                            </div>
+                        </div>
                     </div>
+                </div>
 
-                    <!-- Container untuk multiple upload items -->
-                    <div class="upload-items-container" id="uploadItemsContainer">
-                        <!-- Items akan di-generate oleh JavaScript -->
+                <!-- FEATURES SECTION - SEKARANG PAKAI GRID SEPERTI CODE 2 -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <h3>⭐ Fitur Unggulan</h3>
+                            <span class="section-status" id="featuresStatus">○ 0/4 Terisi</span>
+                        </div>
+                        <small>Maksimal 4 gambar - Tidak wajib semua</small>
                     </div>
+                    <div class="section-body">
+                        <div class="upload-grid" id="featuresGrid"></div>
+                        <label class="file-input-label" style="display:inline-block; margin-top:0.5rem">
+                            📁 Upload Multiple Gambar/Video
+                            <input type="file" id="featuresInput" accept="image/*,video/*" multiple style="display:none">
+                        </label>
+                        <p><small>💡 Tips: Pilih beberapa file sekaligus (Ctrl+Click atau Shift+Click)</small></p>
+                    </div>
+                </div>
 
-                    <!-- Form Actions -->
-                    <div class="form-actions">
-                        <a href="{{ route('admin.media.index') }}" class="btn btn-secondary">Batal</a>
-                        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>📤 Upload Media</button>
+                <!-- AKTIVITAS SECTION -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <h3>🎯 Aktivitas & Tutorial</h3>
+                            <span class="section-status" id="aktivitasStatus">○ 0/6 Terisi</span>
+                        </div>
+                        <small>Maksimal 6 gambar - Tidak wajib semua</small>
                     </div>
-                </form>
+                    <div class="section-body">
+                        <div class="upload-grid" id="aktivitasGrid"></div>
+                        <label class="file-input-label" style="display:inline-block; margin-top:0.5rem">
+                            📁 Upload Multiple File (Gambar/Video)
+                            <input type="file" id="aktivitasInput" accept="image/*,video/*" multiple style="display:none">
+                        </label>
+                        <p><small>💡 Tips: Pilih beberapa file sekaligus (Ctrl+Click atau Shift+Click)</small></p>
+                    </div>
+                </div>
+
+                <!-- PRODUCTS SECTION -->
+                <div class="section-card">
+                    <div class="section-header">
+                        <div class="section-title">
+                            <h3>🛒 Produk</h3>
+                            <span class="section-status" id="productsStatus">○ 0/2 Terisi</span>
+                        </div>
+                    </div>
+                    <div class="section-body">
+                        <div class="products-container" id="productsContainer"></div>
+                        <button class="btn-secondary" id="addProductBtn" style="margin-top:1rem">+ Tambah Produk Baru</button>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
 
     <script>
-        // Mobile menu functionality
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-
-        function toggleMobileMenu() {
-            sidebar.classList.toggle('mobile-open');
-            overlay.classList.toggle('active');
-        }
-
-        mobileMenuToggle.addEventListener('click', toggleMobileMenu);
-        overlay.addEventListener('click', toggleMobileMenu);
-
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 992) {
-                sidebar.classList.remove('mobile-open');
-                overlay.classList.remove('active');
-            }
-        });
-
-        // KONFIGURASI SECTION
-        // Section yang memiliki deskripsi: HANYA products
-        const sectionsWithDescription = ['products'];
-        // Section yang memiliki judul dinonaktifkan (hero, story, whylearn, features, aktivitas)
-        const sectionsWithTitleDisabled = ['hero', 'story', 'whylearn', 'features', 'aktivitas'];
-
-        const sectionConfig = {
-            'hero': { count: 1, name: 'Intro', hasDescription: false, titleDisabled: true },
-            'story': { count: 1, name: 'Background', hasDescription: false, titleDisabled: true },
-            'whylearn': { count: 1, name: 'Fitur 3', hasDescription: false, titleDisabled: true },
-            'features': { count: 4, name: 'Fitur Unggulan', hasDescription: false, titleDisabled: true },
-            'aktivitas': { count: 6, name: 'Aktivitas & Tutorial', hasDescription: false, titleDisabled: true },
-            'products': { count: 2, name: 'Products', hasDescription: true, titleDisabled: false }
+        // DATA STATE
+        let mediaData = {
+            hero: { file: null, preview: null },
+            story: { file: null, preview: null },
+            whylearn: { file: null, preview: null },
+            features: [],
+            aktivitas: [],
+            products: []
         };
 
-        // Fungsi untuk update form berdasarkan section
-        function updateSectionForm() {
-            const section = document.getElementById('section').value;
-            const container = document.getElementById('uploadItemsContainer');
-            const sectionInfo = document.getElementById('sectionInfo');
-            const sectionInfoContent = document.getElementById('sectionInfoContent');
-            const submitBtn = document.getElementById('submitBtn');
+        const MAX_FEATURES = 4;
+        const MAX_AKTIVITAS = 6;
+        const MAX_PRODUCTS = 2;
 
-            // Reset container
-            container.innerHTML = '';
-            sectionInfoContent.innerHTML = '';
+        // Helper functions
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
 
-            if (!section || !sectionConfig[section]) {
-                container.classList.remove('active');
-                sectionInfo.classList.remove('active');
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '📤 Upload Media';
-                return;
+        function showAlert(message, type, autoRedirect = false) {
+            const container = document.getElementById('alertContainer');
+            const icon = type === 'success' ? '✓' : (type === 'warning' ? '⚠️' : '✗');
+            container.innerHTML = `<div class="alert alert-${type}">${icon} ${message}</div>`;
+            if (autoRedirect && type === 'success') {
+                setTimeout(() => window.location.href = '{{ route("admin.media.index") }}', 1500);
+            } else {
+                setTimeout(() => container.innerHTML = '', 3000);
+            }
+        }
+
+        function createPreview(file, callback) {
+            const reader = new FileReader();
+            reader.onload = e => callback(e.target.result);
+            reader.readAsDataURL(file);
+        }
+
+        function getMediaType(file) {
+            return file.type.startsWith('image/') ? 'image' : 'video';
+        }
+
+        function updateStatus(elementId, filled, max) {
+            const el = document.getElementById(elementId);
+            if (el) {
+                if (filled > 0) {
+                    el.innerHTML = `● ${filled}/${max} Terisi`;
+                    el.classList.add('filled');
+                } else {
+                    el.innerHTML = `○ ${filled}/${max} Terisi`;
+                    el.classList.remove('filled');
+                }
+            }
+        }
+
+        // ========== SINGLE UPLOAD (Hero, Story, WhyLearn) ==========
+        function setupSingleUpload(inputId, section, previewId, removeBtnId, statusId) {
+            const input = document.getElementById(inputId);
+            const previewDiv = document.getElementById(previewId);
+            const removeBtn = document.getElementById(removeBtnId);
+
+            if (!input || !previewDiv || !removeBtn) return;
+
+            input.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    if (file.size > 10 * 1024 * 1024) {
+                        showAlert('Ukuran file maksimal 10MB!', 'danger');
+                        input.value = '';
+                        return;
+                    }
+                    const type = getMediaType(file);
+                    createPreview(file, (previewUrl) => {
+                        if (type === 'image') {
+                            previewDiv.innerHTML = `<img src="${previewUrl}" style="width:100%; height:100%; object-fit:cover">`;
+                        } else {
+                            previewDiv.innerHTML = `<video src="${previewUrl}" style="width:100%; height:100%; object-fit:cover" controls></video>`;
+                        }
+                        mediaData[section] = { file: file, preview: previewUrl };
+                        removeBtn.style.display = 'inline-block';
+                        updateStatus(statusId, 1, 1);
+                    });
+                }
+            });
+
+            removeBtn.addEventListener('click', function() {
+                previewDiv.innerHTML = '<div class="empty-text">Belum ada media</div>';
+                mediaData[section] = { file: null, preview: null };
+                removeBtn.style.display = 'none';
+                updateStatus(statusId, 0, 1);
+                input.value = '';
+            });
+        }
+
+        // ========== FEATURES GRID (seperti Code 2) ==========
+        function renderFeaturesGrid() {
+            const grid = document.getElementById('featuresGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            for (let i = 0; i < MAX_FEATURES; i++) {
+                const item = mediaData.features[i];
+                const div = document.createElement('div');
+                div.className = 'grid-item';
+
+                if (item && item.preview) {
+                    const mediaType = item.type || 'image';
+                    div.innerHTML = `
+                        <button class="btn-remove" onclick="removeGridItem('features', ${i})">✕</button>
+                        ${mediaType === 'image' ?
+                            `<img src="${item.preview}" class="preview-img">` :
+                            `<video src="${item.preview}" class="preview-video"></video>`
+                        }
+                        <div class="item-order">${mediaType === 'image' ? '🖼️ Gambar' : '🎥 Video'} ${i + 1}</div>
+                        <div class="media-badge">${mediaType === 'image' ? 'Gambar' : 'Video'}</div>
+                    `;
+                } else {
+                    div.innerHTML = `
+                        <div class="empty-placeholder" onclick="addToGrid('features', ${i})">📷 + Tambah</div>
+                        <div class="item-order">Kosong</div>
+                    `;
+                }
+                grid.appendChild(div);
             }
 
-            const config = sectionConfig[section];
-            const hasDescription = config.hasDescription;
-            const isTitleDisabled = config.titleDisabled;
+            const filled = mediaData.features.filter(f => f !== null).length;
+            updateStatus('featuresStatus', filled, MAX_FEATURES);
+        }
 
-            // Tampilkan info section
-            sectionInfo.classList.add('active');
-            sectionInfoContent.innerHTML = `
-                <p><strong>${config.name}</strong> membutuhkan <strong>${config.count} gambar</strong>.</p>
-                <p>Harap upload semua gambar berikut:</p>
-                <ul>
-                    ${Array.from({length: config.count}, (_, i) =>
-                        `<li>Gambar ${i + 1}: ${getImageDescription(section, i)}</li>`
-                    ).join('')}
-                </ul>
-                ${!hasDescription ? '<p><strong>⚠️ Catatan:</strong> Section ini TIDAK memiliki field deskripsi. Hanya file gambar/video dan judul yang akan disimpan.</p>' : ''}
-                ${isTitleDisabled ? '<p><strong>ℹ️ Catatan:</strong> Field judul pada section ini akan diisi otomatis berdasarkan nama file dan tidak dapat diedit.</p>' : ''}
-            `;
+        // ========== AKTIVITAS GRID ==========
+        function renderAktivitasGrid() {
+            const grid = document.getElementById('aktivitasGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
 
-            // Generate upload items
-            container.classList.add('active');
+            for (let i = 0; i < MAX_AKTIVITAS; i++) {
+                const item = mediaData.aktivitas[i];
+                const div = document.createElement('div');
+                div.className = 'grid-item';
 
-            for (let i = 0; i < config.count; i++) {
-                const itemNumber = i + 1;
-                const itemId = `uploadItem${itemNumber}`;
-                const fileInputId = `fileInput${itemNumber}`;
-                const previewId = `preview${itemNumber}`;
-                const fileInfoId = `fileInfo${itemNumber}`;
-
-                // Tentukan apakah section ini memiliki deskripsi
-                const showDescription = hasDescription;
-                const showPrice = (section === 'products');
-                // Tentukan apakah judul dinonaktifkan
-                const titleDisabled = isTitleDisabled;
-
-                let descriptionHTML = '';
-                if (showDescription) {
-                    descriptionHTML = `
-                        <!-- Description (HANYA untuk products) -->
-                        <div class="form-group">
-                            <label for="description${itemNumber}">Deskripsi Produk / Fitur *</label>
-                            <textarea name="items[${i}][description]"
-                                      id="description${itemNumber}"
-                                      class="item-description"
-                                      placeholder="Masukkan deskripsi produk (pisahkan fitur dengan baris baru)&#10;Contoh:&#10;Board game edukatif&#10;Includes 4 player pieces&#10;Dice & cards included"
-                                      rows="4"></textarea>
-                            <small class="form-help">Deskripsi akan ditampilkan sebagai list fitur di halaman produk</small>
-                        </div>
+                if (item && item.preview) {
+                    const mediaType = item.type || 'image';
+                    div.innerHTML = `
+                        <button class="btn-remove" onclick="removeGridItem('aktivitas', ${i})">✕</button>
+                        ${mediaType === 'image' ?
+                            `<img src="${item.preview}" class="preview-img">` :
+                            `<video src="${item.preview}" class="preview-video"></video>`
+                        }
+                        <div class="item-order">${mediaType === 'image' ? '🖼️ Gambar' : '🎥 Video'} ${i + 1}</div>
+                        <div class="media-badge">${mediaType === 'image' ? 'Gambar' : 'Video'}</div>
+                    `;
+                } else {
+                    div.innerHTML = `
+                        <div class="empty-placeholder" onclick="addToGrid('aktivitas', ${i})">📷 + Tambah</div>
+                        <div class="item-order">Kosong</div>
                     `;
                 }
+                grid.appendChild(div);
+            }
 
-                let priceHTML = '';
-                if (showPrice) {
-                    priceHTML = `
-                        <!-- Price Field (hanya untuk products) -->
-                        <div class="form-group">
-                            <label for="price${itemNumber}">Harga Produk (Rp) *</label>
-                            <input type="number"
-                                   name="items[${i}][price]"
-                                   id="price${itemNumber}"
-                                   class="item-price"
-                                   required
-                                   min="0"
-                                   max="9999999999.99"
-                                   step="0.01"
-                                   placeholder="Contoh: 300000">
-                            <small class="form-help">Harga maksimal: Rp 9.999.999.999,99</small>
-                        </div>
-                    `;
+            const filled = mediaData.aktivitas.filter(f => f !== null).length;
+            updateStatus('aktivitasStatus', filled, MAX_AKTIVITAS);
+        }
+
+        // ========== ADD TO GRID ==========
+        window.addToGrid = function(section, index) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*,video/*';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    if (file.size > 10 * 1024 * 1024) {
+                        showAlert('Ukuran file maksimal 10MB!', 'danger');
+                        return;
+                    }
+                    const type = getMediaType(file);
+                    createPreview(file, (previewUrl) => {
+                        if (section === 'features') {
+                            mediaData.features[index] = { file: file, preview: previewUrl, type: type };
+                            renderFeaturesGrid();
+                        } else if (section === 'aktivitas') {
+                            mediaData.aktivitas[index] = { file: file, preview: previewUrl, type: type };
+                            renderAktivitasGrid();
+                        }
+                    });
+                }
+            };
+            input.click();
+        };
+
+        // ========== REMOVE FROM GRID ==========
+        window.removeGridItem = function(section, index) {
+            if (section === 'features') {
+                mediaData.features[index] = null;
+                renderFeaturesGrid();
+            } else if (section === 'aktivitas') {
+                mediaData.aktivitas[index] = null;
+                renderAktivitasGrid();
+            }
+        };
+
+        // ========== MULTIPLE UPLOAD ==========
+        function handleMultipleUpload(inputId, section, maxCount, renderFunc) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+
+            input.addEventListener('change', function(e) {
+                const files = Array.from(e.target.files);
+                const currentData = section === 'features' ? mediaData.features : mediaData.aktivitas;
+                let currentCount = currentData.filter(f => f !== null).length;
+                let availableSlots = maxCount - currentCount;
+
+                if (availableSlots <= 0) {
+                    showAlert(`Slot sudah penuh! Maksimal ${maxCount} media.`, 'warning');
+                    input.value = '';
+                    return;
                 }
 
-                const itemHTML = `
-                    <div class="upload-item" id="${itemId}">
-                        <div class="upload-item-header">
-                            <div class="upload-item-title">${getItemTitle(section, i)}</div>
-                            <div class="upload-item-index">${itemNumber}</div>
+                const filesToAdd = files.slice(0, availableSlots);
+                filesToAdd.forEach((file) => {
+                    if (file.size > 10 * 1024 * 1024) {
+                        showAlert(`File ${file.name} terlalu besar! Maksimal 10MB.`, 'warning');
+                        return;
+                    }
+                    const type = getMediaType(file);
+                    createPreview(file, (previewUrl) => {
+                        const emptyIndex = currentData.findIndex(f => f === null);
+                        if (emptyIndex !== -1) {
+                            if (section === 'features') {
+                                mediaData.features[emptyIndex] = { file: file, preview: previewUrl, type: type };
+                                renderFunc();
+                            } else {
+                                mediaData.aktivitas[emptyIndex] = { file: file, preview: previewUrl, type: type };
+                                renderFunc();
+                            }
+                        }
+                    });
+                });
+
+                if (filesToAdd.length < files.length) {
+                    showAlert(`Hanya ${availableSlots} slot tersisa. ${files.length - filesToAdd.length} file tidak ditambahkan.`, 'warning');
+                }
+                input.value = '';
+            });
+        }
+
+        // ========== PRODUCTS ==========
+        function renderProducts() {
+            const container = document.getElementById('productsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            for (let i = 0; i < MAX_PRODUCTS; i++) {
+                const prod = mediaData.products[i];
+                const hasMedia = prod && prod.preview;
+                const mediaType = prod?.type || 'image';
+
+                container.innerHTML += `
+                    <div class="product-card">
+                        <div class="product-header">
+                            <strong>Produk ${i + 1}</strong>
+                            <button class="btn-danger" onclick="removeProduct(${i})">Hapus</button>
                         </div>
-
-                        <div class="upload-item-content">
-                            <!-- Type Selection -->
-                            <div class="form-group">
-                                <label for="type${itemNumber}">Tipe Media *</label>
-                                <select name="items[${i}][type]" id="type${itemNumber}" class="item-type" required onchange="updateFileAccept(this, '${fileInputId}')">
-                                    <option value="">-- Pilih Tipe --</option>
-                                    <option value="image">Image</option>
-                                    <option value="video" ${section === 'products' ? 'disabled' : ''}>Video</option>
-                                </select>
-                                <small class="form-help">Format: JPEG, PNG, JPG, WEBP </small>
+                        <div class="product-form">
+                            <div class="product-preview" onclick="document.getElementById('prodFile${i}').click()">
+                                ${hasMedia ? (mediaType === 'image' ? `<img src="${prod.preview}">` : `<video src="${prod.preview}"></video>`) : '📷 + Media'}
                             </div>
-
-                            <!-- File Upload -->
-                            <div class="form-group">
-                                <label>File *</label>
-                                <div class="file-upload-area-small" id="uploadArea${itemNumber}" onclick="document.getElementById('${fileInputId}').click()">
-                                    <div class="file-upload-icon-small">📁</div>
-                                    <div class="file-upload-text-small">Klik atau drag & drop</div>
-                                    <small class="form-help">Max 10MB</small>
-                                </div>
-                                <input type="file" name="items[${i}][file]" id="${fileInputId}" class="item-file" accept="image/*" style="display: none;" onchange="handleFileSelect(event, '${previewId}', '${fileInfoId}', 'type${itemNumber}', 'uploadArea${itemNumber}', ${titleDisabled}, ${itemNumber})">
-
-                                <!-- File Preview -->
-                                <div class="file-preview-small" id="${previewId}">
-                                    <div class="preview-container-small" id="previewContainer${itemNumber}"></div>
-                                    <div class="file-info-small" id="${fileInfoId}"></div>
-                                </div>
+                            <div class="product-fields">
+                                <input type="text" id="prodTitle${i}" placeholder="Judul Produk" value="${prod ? escapeHtml(prod.title || '') : ''}" onchange="updateProduct(${i}, 'title', this.value)">
+                                <input type="number" id="prodPrice${i}" placeholder="Harga (Rp)" value="${prod ? prod.price || '' : ''}" onchange="updateProduct(${i}, 'price', this.value)">
+                                <textarea id="prodDesc${i}" placeholder="Deskripsi Produk (pisahkan fitur dengan baris baru)" rows="3" onchange="updateProduct(${i}, 'description', this.value)">${prod ? escapeHtml(prod.description || '') : ''}</textarea>
                             </div>
-
-                            <!-- Title -->
-                            <div class="form-group">
-                                <label for="title${itemNumber}">Judul ${titleDisabled ? '(Otomatis dari nama file)' : '*'}</label>
-                                <input type="text" name="items[${i}][title]" id="title${itemNumber}" class="item-title" ${titleDisabled ? 'disabled' : 'required'} placeholder="${titleDisabled ? 'Judul akan diisi otomatis' : 'Masukkan judul'}">
-                                ${!titleDisabled ? '<small class="form-help">Judul akan ditampilkan di website</small>' : '<small class="form-help">Judul otomatis dari nama file (tidak dapat diedit)</small>'}
-                            </div>
-
-                            ${descriptionHTML}
-                            ${priceHTML}
-
-                            <!-- Hidden section field -->
-                            <input type="hidden" name="items[${i}][section]" value="${section}">
-                            <input type="hidden" name="items[${i}][order]" value="${i}">
+                            <input type="file" id="prodFile${i}" accept="image/*,video/*" style="display:none" onchange="handleProductFile(${i}, this)">
                         </div>
                     </div>
                 `;
-
-                container.innerHTML += itemHTML;
-
-                // Setup drag and drop untuk area kecil
-                setupDragAndDrop(fileInputId, `uploadArea${itemNumber}`);
-
-                // Setup price validation untuk products
-                if (section === 'products') {
-                    setupPriceValidation(`price${itemNumber}`, itemNumber);
-                }
             }
 
-            // Update submit button
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = `📤 Upload ${config.count} Media`;
+            const filled = mediaData.products.filter(p => p !== null && (p.file !== null || (p.title && p.title.trim()))).length;
+            updateStatus('productsStatus', filled, MAX_PRODUCTS);
+
+            const addBtn = document.getElementById('addProductBtn');
+            if (addBtn) addBtn.style.display = mediaData.products.length >= MAX_PRODUCTS ? 'none' : 'inline-block';
         }
 
-        // Setup price validation
-        function setupPriceValidation(priceInputId, itemNumber) {
-            const priceInput = document.getElementById(priceInputId);
-            if (!priceInput) return;
-
-            priceInput.addEventListener('input', function(e) {
-                let value = e.target.value;
-
-                // Remove non-numeric characters except decimal point
-                value = value.replace(/[^\d.]/g, '');
-
-                // Ensure only one decimal point
-                const parts = value.split('.');
-                if (parts.length > 2) {
-                    value = parts[0] + '.' + parts.slice(1).join('');
-                }
-
-                // Limit to 2 decimal places
-                if (parts.length === 2 && parts[1].length > 2) {
-                    value = parts[0] + '.' + parts[1].substring(0, 2);
-                }
-
-                // Check max value
-                const numericValue = parseFloat(value);
-                if (!isNaN(numericValue) && numericValue > 9999999999.99) {
-                    alert(`Harga Produk ${itemNumber} terlalu besar! Maksimal Rp 9.999.999.999,99`);
-                    value = '9999999999.99';
-                }
-
-                e.target.value = value;
-            });
-
-            priceInput.addEventListener('blur', function(e) {
-                let value = parseFloat(e.target.value);
-                if (!isNaN(value)) {
-                    // Format to 2 decimal places
-                    e.target.value = value.toFixed(2);
-                }
-            });
-        }
-
-        // Fungsi helper untuk deskripsi gambar
-        function getImageDescription(section, index) {
-            const descriptions = {
-                'hero': ['Gambar utama board game'],
-                'story': ['Gambar box di samping cerita'],
-                'whylearn': ['Gambar Fitur 3'],
-                'features': ['Fitur 1', 'Fitur 2', 'Fitur 3', 'Fitur 4'],
-                'aktivitas': ['Aktivitas 1', 'Aktivitas 2', 'Aktivitas 3', 'Aktivitas 4', 'Aktivitas 5', 'Aktivitas 6'],
-                'products': ['Produk 1', 'Produk 2']
-            };
-            return descriptions[section] ? descriptions[section][index] : `Gambar ${index + 1}`;
-        }
-
-        // Fungsi helper untuk judul item
-        function getItemTitle(section, index) {
-            const titles = {
-                'hero': 'Gambar Hero',
-                'story': 'Gambar Story',
-                'whylearn': 'Gambar Fitur 3',
-                'features': ['Fitur 1', 'Fitur 2', 'Fitur 3', 'Fitur 4'],
-                'aktivitas': ['Aktivitas 1', 'Aktivitas 2', 'Aktivitas 3', 'Aktivitas 4', 'Aktivitas 5', 'Aktivitas 6'],
-                'products': ['Produk 1', 'Produk 2']
-            };
-
-            if (section === 'hero' || section === 'story' || section === 'whylearn') {
-                return titles[section];
-            } else {
-                return titles[section][index];
+        window.updateProduct = function(idx, field, value) {
+            if (!mediaData.products[idx]) {
+                mediaData.products[idx] = { file: null, preview: null, title: '', price: '', description: '' };
             }
-        }
+            mediaData.products[idx][field] = value;
+        };
 
-        // Update file accept berdasarkan tipe
-        function updateFileAccept(selectElement, fileInputId) {
-            const type = selectElement.value;
-            const fileInput = document.getElementById(fileInputId);
+        window.handleProductFile = function(idx, input) {
+            const file = input.files[0];
+            if (file) {
+                if (file.size > 10 * 1024 * 1024) {
+                    showAlert('Ukuran file maksimal 10MB!', 'danger');
+                    input.value = '';
+                    return;
+                }
+                const type = getMediaType(file);
+                createPreview(file, (previewUrl) => {
+                    if (!mediaData.products[idx]) {
+                        mediaData.products[idx] = { file: null, preview: null, title: '', price: '', description: '' };
+                    }
+                    mediaData.products[idx].file = file;
+                    mediaData.products[idx].preview = previewUrl;
+                    mediaData.products[idx].type = type;
+                    renderProducts();
+                });
+            }
+        };
 
-            if (type === 'image') {
-                fileInput.accept = 'image/jpeg,image/png,image/jpg,image/webp';
-            } else if (type === 'video') {
-                fileInput.accept = 'video/mp4,video/webm,video/ogg';
-            } else {
-                fileInput.accept = '';
+        window.removeProduct = function(idx) {
+            mediaData.products[idx] = null;
+            renderProducts();
+        };
+
+        // ========== SAVE ALL ==========
+        async function saveAllMedia() {
+            const saveBtn = document.getElementById('saveAllBtn');
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '<span class="loading"></span> Menyimpan...';
+            saveBtn.disabled = true;
+
+            try {
+                const formData = new FormData();
+
+                // Single sections
+                if (mediaData.hero && mediaData.hero.file) formData.append('hero', mediaData.hero.file);
+                if (mediaData.story && mediaData.story.file) formData.append('story', mediaData.story.file);
+                if (mediaData.whylearn && mediaData.whylearn.file) formData.append('whylearn', mediaData.whylearn.file);
+
+                // Features (multiple)
+                mediaData.features.forEach((f) => {
+                    if (f && f.file) formData.append(`features[]`, f.file);
+                });
+
+                // Aktivitas (multiple)
+                mediaData.aktivitas.forEach((a) => {
+                    if (a && a.file) formData.append(`aktivitas[]`, a.file);
+                });
+
+                // Products
+                const productsData = mediaData.products.map(p => ({
+                    title: p?.title || '',
+                    price: p?.price || '',
+                    description: p?.description || ''
+                }));
+                formData.append('products_data', JSON.stringify(productsData));
+
+                mediaData.products.forEach((p) => {
+                    if (p && p.file) formData.append(`product_images[]`, p.file);
+                });
+
+                const response = await fetch('{{ route("admin.media.storeAll") }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    showAlert(result.message || 'Semua media berhasil disimpan!', 'success', true);
+                } else {
+                    showAlert('Gagal menyimpan: ' + (result.message || 'Terjadi kesalahan'), 'danger');
+                    saveBtn.innerHTML = originalText;
+                    saveBtn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Terjadi kesalahan saat menyimpan data.', 'danger');
+                saveBtn.innerHTML = originalText;
+                saveBtn.disabled = false;
             }
         }
 
-        // Handle file selection untuk item kecil
-        function handleFileSelect(event, previewId, fileInfoId, typeId, uploadAreaId, isTitleDisabled, itemNumber) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const previewDiv = document.getElementById(previewId);
-            const previewContainer = document.getElementById(previewId.replace('preview', 'previewContainer'));
-            const fileInfo = document.getElementById(fileInfoId);
-            const typeSelect = document.getElementById(typeId);
-            const uploadArea = document.getElementById(uploadAreaId);
-
-            // Validasi tipe file
-            const type = typeSelect.value;
-            if (!type) {
-                alert('Pilih tipe media terlebih dahulu!');
-                event.target.value = '';
-                return;
-            }
-
-            // Validasi ukuran file
-            const maxSize = type === 'image' ? 10 * 1024 * 1024 : 50 * 1024 * 1024; // 10MB untuk image, 50MB untuk video
-            if (file.size > maxSize) {
-                alert(`Ukuran file terlalu besar! Maksimal ${formatFileSize(maxSize)}`);
-                event.target.value = '';
-                return;
-            }
-
-            previewDiv.classList.add('active');
-
-            // Display file info
-            fileInfo.innerHTML = `
-                <p><strong>Nama:</strong> ${file.name}</p>
-                <p><strong>Ukuran:</strong> ${formatFileSize(file.size)}</p>
-                <p><strong>Tipe:</strong> ${file.type}</p>
-            `;
-
-            // Display preview
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                if (type === 'image') {
-                    previewContainer.innerHTML = `<img src="${e.target.result}" alt="Preview" style="max-height: 200px;">`;
-                } else if (type === 'video') {
-                    previewContainer.innerHTML = `
-                        <video controls style="max-height: 200px; width: 100%;">
-                            <source src="${e.target.result}" type="${file.type}">
-                        </video>
-                    `;
-                }
-            };
-            reader.readAsDataURL(file);
-
-            // Handle title field
-            const titleInput = document.getElementById(`title${itemNumber}`);
-            if (titleInput) {
-                if (isTitleDisabled) {
-                    // Jika judul dinonaktifkan, set value dari nama file (tanpa ekstensi)
-                    const filename = file.name.replace(/\.[^/.]+$/, "");
-                    titleInput.value = filename;
-                } else if (!titleInput.value) {
-                    // Jika judul aktif dan belum diisi, isi otomatis
-                    const filename = file.name.replace(/\.[^/.]+$/, "");
-                    titleInput.value = filename;
-                }
-            }
-
-            // Update upload area text
-            if (uploadArea) {
-                uploadArea.querySelector('.file-upload-text-small').textContent = 'File terpilih ✓';
-                uploadArea.style.borderColor = '#5FB574';
-                uploadArea.style.backgroundColor = '#E8F5EC';
+        // ========== MOBILE MENU ==========
+        function initMobileMenu() {
+            const toggle = document.getElementById('mobileMenuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            if (toggle && sidebar && overlay) {
+                toggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('mobile-open');
+                    overlay.classList.toggle('active');
+                });
+                overlay.addEventListener('click', () => {
+                    sidebar.classList.remove('mobile-open');
+                    overlay.classList.remove('active');
+                });
             }
         }
 
-        // Setup drag and drop untuk area kecil
-        function setupDragAndDrop(fileInputId, uploadAreaId) {
-            const uploadArea = document.getElementById(uploadAreaId);
-            if (!uploadArea) return;
-
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.classList.add('dragover');
-            });
-
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.classList.remove('dragover');
-            });
-
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.classList.remove('dragover');
-
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    const fileInput = document.getElementById(fileInputId);
-
-                    // Create new DataTransfer to set file
-                    const dataTransfer = new DataTransfer();
-                    dataTransfer.items.add(files[0]);
-                    fileInput.files = dataTransfer.files;
-
-                    // Trigger change event
-                    const event = new Event('change', { bubbles: true });
-                    fileInput.dispatchEvent(event);
-                }
-            });
-        }
-
-        // Format file size
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
-        }
-
-        // Auto-call saat halaman load
+        // ========== INIT ==========
         document.addEventListener('DOMContentLoaded', function() {
-            // Jika ada old section, update form
-            const oldSection = document.getElementById('section').value;
-            if (oldSection && sectionConfig[oldSection]) {
-                updateSectionForm();
-            }
+            // Inisialisasi array
+            for (let i = 0; i < MAX_FEATURES; i++) mediaData.features.push(null);
+            for (let i = 0; i < MAX_AKTIVITAS; i++) mediaData.aktivitas.push(null);
+            for (let i = 0; i < MAX_PRODUCTS; i++) mediaData.products.push(null);
 
-            // Setup form validation
-            const form = document.getElementById('uploadForm');
-            form.addEventListener('submit', function(e) {
-                const section = document.getElementById('section').value;
-                if (!section || !sectionConfig[section]) {
-                    e.preventDefault();
-                    alert('Pilih section terlebih dahulu!');
+            renderFeaturesGrid();
+            renderAktivitasGrid();
+            renderProducts();
+
+            setupSingleUpload('heroInput', 'hero', 'heroPreview', 'heroRemoveBtn', 'heroStatus');
+            setupSingleUpload('storyInput', 'story', 'storyPreview', 'storyRemoveBtn', 'storyStatus');
+            setupSingleUpload('whylearnInput', 'whylearn', 'whylearnPreview', 'whylearnRemoveBtn', 'whylearnStatus');
+
+            handleMultipleUpload('featuresInput', 'features', MAX_FEATURES, renderFeaturesGrid);
+            handleMultipleUpload('aktivitasInput', 'aktivitas', MAX_AKTIVITAS, renderAktivitasGrid);
+
+            document.getElementById('addProductBtn')?.addEventListener('click', () => {
+                const currentFilled = mediaData.products.filter(p => p !== null && (p.file !== null || (p.title && p.title.trim()))).length;
+                if (currentFilled >= MAX_PRODUCTS) {
+                    showAlert(`Maksimal ${MAX_PRODUCTS} produk!`, 'warning');
                     return;
                 }
-
-                const config = sectionConfig[section];
-                const hasDescription = config.hasDescription;
-                const isTitleDisabled = config.titleDisabled;
-
-                // Validasi semua file sudah diupload
-                const fileInputs = form.querySelectorAll('.item-file');
-                let allFilesUploaded = true;
-                let missingFiles = [];
-
-                fileInputs.forEach((input, index) => {
-                    if (!input.files || input.files.length === 0) {
-                        allFilesUploaded = false;
-                        missingFiles.push(index + 1);
-                    }
-                });
-
-                if (!allFilesUploaded) {
-                    e.preventDefault();
-                    alert(`Harap upload semua file yang dibutuhkan untuk section ini!\n\nFile yang belum diupload: ${missingFiles.join(', ')}`);
-                    return;
-                }
-
-                // Validasi semua tipe sudah dipilih
-                const typeSelects = form.querySelectorAll('.item-type');
-                let allTypesSelected = true;
-
-                typeSelects.forEach((select, index) => {
-                    if (!select.value) {
-                        allTypesSelected = false;
-                    }
-                });
-
-                if (!allTypesSelected) {
-                    e.preventDefault();
-                    alert('Harap pilih tipe media untuk semua file!');
-                    return;
-                }
-
-                // Validasi title: hanya untuk section yang judulnya tidak dinonaktifkan (products)
-                if (!isTitleDisabled) {
-                    const titleInputs = form.querySelectorAll('.item-title');
-                    let allTitlesFilled = true;
-
-                    titleInputs.forEach((input, index) => {
-                        if (!input.value.trim()) {
-                            allTitlesFilled = false;
-                        }
-                    });
-
-                    if (!allTitlesFilled) {
-                        e.preventDefault();
-                        alert('Harap isi judul untuk semua media!');
-                        return;
-                    }
-                }
-
-                // Validasi deskripsi untuk products (jika diperlukan)
-                if (hasDescription) {
-                    const descriptionInputs = form.querySelectorAll('.item-description');
-                    let allDescriptionsFilled = true;
-
-                    descriptionInputs.forEach((input, index) => {
-                        if (!input.value.trim()) {
-                            allDescriptionsFilled = false;
-                        }
-                    });
-
-                    if (!allDescriptionsFilled) {
-                        e.preventDefault();
-                        alert('Harap isi deskripsi untuk semua produk!');
-                        return;
-                    }
-                }
-
-                // Validasi price untuk products
-                if (section === 'products') {
-                    const priceInputs = form.querySelectorAll('.item-price');
-                    let allPricesValid = true;
-                    let priceError = '';
-
-                    priceInputs.forEach((input, index) => {
-                        const price = parseFloat(input.value);
-                        if (!input.value || isNaN(price) || price < 0) {
-                            allPricesValid = false;
-                            priceError = 'Harap isi harga yang valid untuk semua produk!';
-                        } else if (price > 9999999999.99) {
-                            allPricesValid = false;
-                            priceError = `Harga Produk ${index + 1} terlalu besar! Maksimal Rp 9.999.999.999,99`;
-                        }
-                    });
-
-                    if (!allPricesValid) {
-                        e.preventDefault();
-                        alert(priceError);
-                        return;
-                    }
+                const emptyIndex = mediaData.products.findIndex(p => p === null);
+                if (emptyIndex !== -1) {
+                    mediaData.products[emptyIndex] = { file: null, preview: null, title: '', price: '', description: '' };
+                    renderProducts();
                 }
             });
+
+            document.getElementById('saveAllBtn')?.addEventListener('click', saveAllMedia);
+            initMobileMenu();
         });
     </script>
 </body>
