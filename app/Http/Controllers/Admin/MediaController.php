@@ -89,8 +89,6 @@ class MediaController extends Controller
     {
         try {
             Log::info('=== START STORE ALL SECTIONS ===');
-            Log::info('Request files keys: ' . json_encode(array_keys($request->allFiles())));
-            Log::info('Request all data keys: ' . json_encode(array_keys($request->all())));
 
             $uploadedCount = 0;
             $errors = [];
@@ -98,130 +96,108 @@ class MediaController extends Controller
             // ==================== HERO ====================
             if ($request->hasFile('hero')) {
                 $file = $request->file('hero');
-                Log::info('Hero file found: ' . $file->getClientOriginalName());
-                $result = $this->saveMediaFile($file, 'hero', null, null, []);
+                $mediaType = $request->input('hero_type', 'image');
+                $result = $this->saveMediaFile($file, 'hero', $mediaType, null, ['type' => $mediaType]);
                 if ($result['success']) {
                     $uploadedCount++;
                     Log::info('Hero uploaded successfully');
                 } else {
                     $errors[] = 'Hero: ' . $result['error'];
                 }
-            } else {
-                Log::info('Hero file NOT found');
             }
 
             // ==================== STORY ====================
             if ($request->hasFile('story')) {
                 $file = $request->file('story');
-                Log::info('Story file found: ' . $file->getClientOriginalName());
-                $result = $this->saveMediaFile($file, 'story', null, null, []);
+                $mediaType = $request->input('story_type', 'image');
+                $result = $this->saveMediaFile($file, 'story', $mediaType, null, ['type' => $mediaType]);
                 if ($result['success']) {
                     $uploadedCount++;
                     Log::info('Story uploaded successfully');
                 } else {
                     $errors[] = 'Story: ' . $result['error'];
                 }
-            } else {
-                Log::info('Story file NOT found');
             }
 
             // ==================== WHY LEARN ====================
             if ($request->hasFile('whylearn')) {
                 $file = $request->file('whylearn');
-                Log::info('WhyLearn file found: ' . $file->getClientOriginalName());
-                $result = $this->saveMediaFile($file, 'whylearn', null, null, []);
+                $mediaType = $request->input('whylearn_type', 'image');
+                $result = $this->saveMediaFile($file, 'whylearn', $mediaType, null, ['type' => $mediaType]);
                 if ($result['success']) {
                     $uploadedCount++;
                     Log::info('WhyLearn uploaded successfully');
                 } else {
                     $errors[] = 'WhyLearn: ' . $result['error'];
                 }
-            } else {
-                Log::info('WhyLearn file NOT found');
             }
 
             // ==================== FEATURES (multiple) ====================
-            // Backend menerima 'features[]' (array of files)
-            if ($request->hasFile('features')) {
-                $files = $request->file('features');
-                // Pastikan $files adalah array
-                if (!is_array($files)) {
-                    $files = [$files];
-                }
+            if ($request->hasFile('feature_images')) {
+                $files = $request->file('feature_images');
+                $featuresData = json_decode($request->input('features_data', '[]'), true);
 
-                Log::info('Features files count: ' . count($files));
-
-                foreach ($files as $index => $file) {
-                    if ($file && $file->isValid()) {
-                        Log::info('Processing feature ' . ($index + 1) . ': ' . $file->getClientOriginalName());
-                        $result = $this->saveMediaFile($file, 'features', null, $index, []);
-                        if ($result['success']) {
-                            $uploadedCount++;
-                            Log::info('Feature ' . ($index + 1) . ' uploaded successfully');
-                        } else {
-                            $errors[] = 'Fitur ' . ($index + 1) . ': ' . $result['error'];
+                if (is_array($files)) {
+                    foreach ($files as $index => $file) {
+                        if ($file) {
+                            $featureInfo = $featuresData[$index] ?? [];
+                            $mediaType = $featureInfo['type'] ?? 'image';
+                            $result = $this->saveMediaFile($file, 'features', $mediaType, $index, [
+                                'type' => $mediaType,
+                                'title' => $featureInfo['title'] ?? '',
+                                'description' => $featureInfo['description'] ?? ''
+                            ]);
+                            if ($result['success']) {
+                                $uploadedCount++;
+                            } else {
+                                $errors[] = 'Fitur ' . ($index + 1) . ': ' . $result['error'];
+                            }
                         }
                     }
                 }
-            } else {
-                Log::info('Features files NOT found');
             }
 
             // ==================== AKTIVITAS (multiple) ====================
-            // Backend menerima 'aktivitas[]' (array of files)
             if ($request->hasFile('aktivitas')) {
                 $files = $request->file('aktivitas');
-                // Pastikan $files adalah array
-                if (!is_array($files)) {
-                    $files = [$files];
-                }
+                $aktivitasTypes = $request->input('aktivitas_type', []);
 
-                Log::info('Aktivitas files count: ' . count($files));
-
-                foreach ($files as $index => $file) {
-                    if ($file && $file->isValid()) {
-                        Log::info('Processing aktivitas ' . ($index + 1) . ': ' . $file->getClientOriginalName());
-                        $result = $this->saveMediaFile($file, 'aktivitas', null, $index, []);
-                        if ($result['success']) {
-                            $uploadedCount++;
-                            Log::info('Aktivitas ' . ($index + 1) . ' uploaded successfully');
-                        } else {
-                            $errors[] = 'Aktivitas ' . ($index + 1) . ': ' . $result['error'];
+                if (is_array($files)) {
+                    foreach ($files as $index => $file) {
+                        if ($file) {
+                            $mediaType = $aktivitasTypes[$index] ?? 'image';
+                            $result = $this->saveMediaFile($file, 'aktivitas', $mediaType, $index, ['type' => $mediaType]);
+                            if ($result['success']) {
+                                $uploadedCount++;
+                            } else {
+                                $errors[] = 'Aktivitas ' . ($index + 1) . ': ' . $result['error'];
+                            }
                         }
                     }
                 }
-            } else {
-                Log::info('Aktivitas files NOT found');
             }
 
             // ==================== PRODUCTS ====================
-            // Backend menerima 'product_images[]' (array of files)
-            // dan 'products_data' (JSON string)
+            $productsData = [];
+            if ($request->has('products_data')) {
+                $productsData = json_decode($request->input('products_data'), true);
+                if (!is_array($productsData)) {
+                    $productsData = [];
+                }
+            }
+
             if ($request->hasFile('product_images')) {
                 $productImages = $request->file('product_images');
-                if (!is_array($productImages)) {
-                    $productImages = [$productImages];
-                }
-
-                // Parse products data
-                $productsData = [];
-                if ($request->has('products_data')) {
-                    $productsData = json_decode($request->input('products_data'), true);
-                    if (!is_array($productsData)) {
-                        $productsData = [];
-                    }
-                }
-
-                Log::info('Product images count: ' . count($productImages));
-                Log::info('Products data: ' . json_encode($productsData));
+                $productImages = is_array($productImages) ? $productImages : [$productImages];
 
                 foreach ($productImages as $index => $file) {
-                    if (!$file || !$file->isValid()) continue;
+                    if (!$file) continue;
 
                     $productInfo = $productsData[$index] ?? [];
                     $title = $productInfo['title'] ?? '';
                     $price = $productInfo['price'] ?? 0;
                     $description = $productInfo['description'] ?? '';
+                    $mediaType = $productInfo['type'] ?? 'image';
 
                     if (empty($title)) {
                         $errors[] = 'Produk ' . ($index + 1) . ': Judul wajib diisi';
@@ -233,9 +209,8 @@ class MediaController extends Controller
                         continue;
                     }
 
-                    Log::info('Processing product ' . ($index + 1) . ': ' . $file->getClientOriginalName());
-
-                    $result = $this->saveMediaFile($file, 'products', null, $index, [
+                    $result = $this->saveMediaFile($file, 'products', $mediaType, $index, [
+                        'type' => $mediaType,
                         'title' => $title,
                         'price' => $price,
                         'description' => $description
@@ -248,8 +223,6 @@ class MediaController extends Controller
                         $errors[] = 'Produk ' . ($index + 1) . ': ' . $result['error'];
                     }
                 }
-            } else {
-                Log::info('Product images NOT found');
             }
 
             Log::info("Store All completed: {$uploadedCount} successful, " . count($errors) . " errors");
@@ -261,8 +234,8 @@ class MediaController extends Controller
                 }
                 return response()->json(['success' => true, 'message' => $message]);
             } else {
-                $errorMsg = !empty($errors) ? implode('; ', $errors) : 'Tidak ada file yang diupload. Pastikan Anda sudah memilih file sebelum menyimpan.';
-                return response()->json(['success' => false, 'message' => 'Gagal menyimpan: ' . $errorMsg], 422);
+                $errorMsg = !empty($errors) ? implode('; ', $errors) : 'Tidak ada file yang diupload';
+                return response()->json(['success' => false, 'message' => 'Gagal menyimpan: ' . $errorMsg], 500);
             }
 
         } catch (\Exception $e) {
@@ -275,14 +248,12 @@ class MediaController extends Controller
     /**
      * Helper function to save media file (SUPPORTS IMAGE & VIDEO)
      */
-    private function saveMediaFile($file, $section, $type = null, $order = null, $extra = [])
+    private function saveMediaFile($file, $section, $type, $order = null, $extra = [])
     {
         try {
             if (!$file || !$file->isValid()) {
                 return ['success' => false, 'error' => 'File tidak valid'];
             }
-
-            Log::info("Saving file to section: {$section}, original name: " . $file->getClientOriginalName());
 
             // Validasi ukuran (10MB)
             $fileSize = $file->getSize();
@@ -313,8 +284,8 @@ class MediaController extends Controller
                     '. (Tipe Anda: ' . $mimeType . ')'];
             }
 
-            // Gunakan type dari parameter atau deteksi otomatis
-            $finalType = $type ?? $mediaType;
+            // Gunakan type dari request jika ada, atau deteksi otomatis
+            $finalType = $extra['type'] ?? $mediaType;
 
             // Generate title
             $title = $extra['title'] ?? pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
@@ -359,17 +330,6 @@ class MediaController extends Controller
                     $existing->delete();
                     Log::info("Deleted existing media for section: {$section}, order: " . ($order ?? 0));
                 }
-            } elseif ($section === 'products' && $order !== null) {
-                // Untuk products, hapus yang lama berdasarkan order
-                $existing = Media::where('section', 'products')
-                    ->where('order', $order)
-                    ->first();
-
-                if ($existing) {
-                    $existing->deleteFile();
-                    $existing->delete();
-                    Log::info("Deleted existing product for order: {$order}");
-                }
             }
 
             // Create media record
@@ -404,6 +364,7 @@ class MediaController extends Controller
      */
     private function handleSingleUpload(Request $request)
     {
+        // VALIDASI: title TIDAK required (bisa auto-generate dari nama file)
         $validated = $request->validate([
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string|max:1000',
@@ -416,23 +377,28 @@ class MediaController extends Controller
 
         $file = $request->file('file');
 
+        // Jika title kosong, generate dari nama file
         if (empty($validated['title'])) {
             $validated['title'] = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         }
 
+        // Generate safe filename
         $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $extension = $file->getClientOriginalExtension();
         $safeName = preg_replace('/[^a-zA-Z0-9]/', '_', $originalName);
         $filename = time() . '_' . $safeName . '.' . $extension;
         $filePath = 'media/' . $filename;
 
+        // Ensure media directory exists
         $uploadPath = public_path('media');
         if (!is_dir($uploadPath)) {
             mkdir($uploadPath, 0777, true);
         }
 
+        // Move file
         $file->move($uploadPath, $filename);
 
+        // Create media record
         Media::create([
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
@@ -614,6 +580,7 @@ class MediaController extends Controller
             $validated['mime_type'] = $file->getClientMimeType();
             $validated['file_size'] = filesize(public_path('media') . '/' . $filename);
 
+            // Update type berdasarkan file yang diupload
             if (strpos($file->getClientMimeType(), 'video/') === 0) {
                 $validated['type'] = 'video';
             } else {

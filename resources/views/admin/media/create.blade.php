@@ -392,7 +392,7 @@
             background: #4FA564;
         }
 
-        /* Upload Grid untuk Features & Aktivitas */
+        /* Upload Grid untuk Aktivitas */
         .upload-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -486,14 +486,14 @@
             transform: scale(1.1);
         }
 
-        /* Product Card */
-        .products-container {
+        /* Feature & Product Card */
+        .features-container, .products-container {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
         }
 
-        .product-card {
+        .feature-card, .product-card {
             background: #F7FCF9;
             border: 2px solid #E8F4F8;
             border-radius: 12px;
@@ -501,7 +501,7 @@
             position: relative;
         }
 
-        .product-card .product-header {
+        .feature-card .feature-header, .product-card .product-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -510,18 +510,18 @@
             border-bottom: 1px solid #E8F4F8;
         }
 
-        .product-card .product-header strong {
+        .feature-card .feature-header strong, .product-card .product-header strong {
             color: #5FB574;
             font-size: 1.1rem;
         }
 
-        .product-form {
+        .feature-form, .product-form {
             display: grid;
             grid-template-columns: 120px 1fr;
             gap: 1rem;
         }
 
-        .product-preview {
+        .feature-preview, .product-preview {
             width: 120px;
             height: 120px;
             background: #fff;
@@ -535,23 +535,25 @@
             transition: all 0.3s;
         }
 
-        .product-preview:hover {
+        .feature-preview:hover, .product-preview:hover {
             border-color: #5FB574;
             background: #F7FCF9;
         }
 
+        .feature-preview img, .feature-preview video,
         .product-preview img, .product-preview video {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .product-fields {
+        .feature-fields, .product-fields {
             display: flex;
             flex-direction: column;
             gap: 0.8rem;
         }
 
+        .feature-fields input, .feature-fields textarea,
         .product-fields input, .product-fields textarea {
             padding: 0.7rem;
             border: 2px solid #E8F4F8;
@@ -561,12 +563,13 @@
             transition: all 0.3s;
         }
 
+        .feature-fields input:focus, .feature-fields textarea:focus,
         .product-fields input:focus, .product-fields textarea:focus {
             outline: none;
             border-color: #5FB574;
         }
 
-        .product-fields textarea {
+        .feature-fields textarea, .product-fields textarea {
             min-height: 80px;
             resize: vertical;
         }
@@ -641,7 +644,7 @@
         }
 
         @media (max-width: 768px) {
-            .product-form {
+            .feature-form, .product-form {
                 grid-template-columns: 1fr;
             }
             .single-upload {
@@ -715,7 +718,7 @@
                 <div class="section-card">
                     <div class="section-header">
                         <div class="section-title">
-                            <h3>📸 Hero Banner</h3>
+                            <h3>Hero Banner</h3>
                             <span class="section-status" id="heroStatus">○ Kosong</span>
                         </div>
                     </div>
@@ -723,9 +726,9 @@
                         <div class="single-upload">
                             <div class="preview-box" id="heroPreview"><div class="empty-text">Belum ada media</div></div>
                             <div class="upload-controls">
-                                <label class="file-input-label">📁 Pilih File (Gambar/Video)<input type="file" id="heroInput" accept="image/*,video/*" style="display:none"></label>
+                                <label class="file-input-label">📁 Upload<input type="file" id="heroInput" accept="image/*,video/*" style="display:none"></label>
                                 <button class="btn-secondary" id="heroRemoveBtn" style="display:none">Hapus</button>
-                                <p><small>Format: JPG, PNG, WEBP, GIF (gambar) / MP4, WebM (video). Max 10MB</small></p>
+                                <!-- <p><small>Format: JPG, PNG, WEBP, GIF (gambar) / MP4, WebM (video). Max 10MB</small></p> -->
                             </div>
                         </div>
                     </div>
@@ -735,7 +738,7 @@
                 <div class="section-card">
                     <div class="section-header">
                         <div class="section-title">
-                            <h3>📖 Story / Background</h3>
+                            <h3>Story / Background</h3>
                             <span class="section-status" id="storyStatus">○ Kosong</span>
                         </div>
                     </div>
@@ -743,7 +746,7 @@
                         <div class="single-upload">
                             <div class="preview-box" id="storyPreview"><div class="empty-text">Belum ada media</div></div>
                             <div class="upload-controls">
-                                <label class="file-input-label">📁 Pilih File (Gambar/Video)<input type="file" id="storyInput" accept="image/*,video/*" style="display:none"></label>
+                                <label class="file-input-label">📁 Upload<input type="file" id="storyInput" accept="image/*,video/*" style="display:none"></label>
                                 <button class="btn-secondary" id="storyRemoveBtn" style="display:none">Hapus</button>
                             </div>
                         </div>
@@ -754,7 +757,7 @@
                 <div class="section-card">
                     <div class="section-header">
                         <div class="section-title">
-                            <h3>✨ Why Learn</h3>
+                            <h3>Latar Belakang</h3>
                             <span class="section-status" id="whylearnStatus">○ Kosong</span>
                         </div>
                     </div>
@@ -762,29 +765,24 @@
                         <div class="single-upload">
                             <div class="preview-box" id="whylearnPreview"><div class="empty-text">Belum ada media</div></div>
                             <div class="upload-controls">
-                                <label class="file-input-label">📁 Pilih File (Gambar/Video)<input type="file" id="whylearnInput" accept="image/*,video/*" style="display:none"></label>
+                                <label class="file-input-label">📁 Upload<input type="file" id="whylearnInput" accept="image/*,video/*" style="display:none"></label>
                                 <button class="btn-secondary" id="whylearnRemoveBtn" style="display:none">Hapus</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- FEATURES SECTION - SEKARANG PAKAI GRID SEPERTI CODE 2 -->
+                <!-- FEATURES SECTION -->
                 <div class="section-card">
                     <div class="section-header">
                         <div class="section-title">
-                            <h3>⭐ Fitur Unggulan</h3>
+                            <h3>Fitur Unggulan</h3>
                             <span class="section-status" id="featuresStatus">○ 0/4 Terisi</span>
                         </div>
-                        <small>Maksimal 4 gambar - Tidak wajib semua</small>
                     </div>
                     <div class="section-body">
-                        <div class="upload-grid" id="featuresGrid"></div>
-                        <label class="file-input-label" style="display:inline-block; margin-top:0.5rem">
-                            📁 Upload Multiple Gambar/Video
-                            <input type="file" id="featuresInput" accept="image/*,video/*" multiple style="display:none">
-                        </label>
-                        <p><small>💡 Tips: Pilih beberapa file sekaligus (Ctrl+Click atau Shift+Click)</small></p>
+                        <div class="features-container" id="featuresContainer"></div>
+                        <button class="btn-secondary" id="addFeatureBtn" style="margin-top:1rem">+ Tambah Fitur Baru</button>
                     </div>
                 </div>
 
@@ -792,18 +790,19 @@
                 <div class="section-card">
                     <div class="section-header">
                         <div class="section-title">
-                            <h3>🎯 Aktivitas & Tutorial</h3>
+                            <h3>Aktivitas & Tutorial</h3>
                             <span class="section-status" id="aktivitasStatus">○ 0/6 Terisi</span>
                         </div>
-                        <small>Maksimal 6 gambar - Tidak wajib semua</small>
                     </div>
                     <div class="section-body">
                         <div class="upload-grid" id="aktivitasGrid"></div>
                         <label class="file-input-label" style="display:inline-block; margin-top:0.5rem">
-                            📁 Upload Multiple File (Gambar/Video)
+                            📁 Upload
                             <input type="file" id="aktivitasInput" accept="image/*,video/*" multiple style="display:none">
                         </label>
-                        <p><small>💡 Tips: Pilih beberapa file sekaligus (Ctrl+Click atau Shift+Click)</small></p>
+                        <!-- <p style="margin-top: 0.8rem; color: #666; font-size: 0.8rem;">
+                            💡 Tips: Pilih beberapa file sekaligus (Ctrl+Click atau Shift+Click)
+                        </p>-->
                     </div>
                 </div>
 
@@ -811,7 +810,7 @@
                 <div class="section-card">
                     <div class="section-header">
                         <div class="section-title">
-                            <h3>🛒 Produk</h3>
+                            <h3>Produk</h3>
                             <span class="section-status" id="productsStatus">○ 0/2 Terisi</span>
                         </div>
                     </div>
@@ -827,9 +826,9 @@
     <script>
         // DATA STATE
         let mediaData = {
-            hero: { file: null, preview: null },
-            story: { file: null, preview: null },
-            whylearn: { file: null, preview: null },
+            hero: { file: null, preview: null, id: null },
+            story: { file: null, preview: null, id: null },
+            whylearn: { file: null, preview: null, id: null },
             features: [],
             aktivitas: [],
             products: []
@@ -923,42 +922,75 @@
             });
         }
 
-        // ========== FEATURES GRID (seperti Code 2) ==========
-        function renderFeaturesGrid() {
-            const grid = document.getElementById('featuresGrid');
-            if (!grid) return;
-            grid.innerHTML = '';
+        // ========== FEATURES ==========
+        function renderFeatures() {
+            const container = document.getElementById('featuresContainer');
+            if (!container) return;
+            container.innerHTML = '';
 
             for (let i = 0; i < MAX_FEATURES; i++) {
-                const item = mediaData.features[i];
-                const div = document.createElement('div');
-                div.className = 'grid-item';
+                const feat = mediaData.features[i];
+                const hasMedia = feat && feat.preview;
+                const mediaType = feat?.type || 'image';
 
-                if (item && item.preview) {
-                    const mediaType = item.type || 'image';
-                    div.innerHTML = `
-                        <button class="btn-remove" onclick="removeGridItem('features', ${i})">✕</button>
-                        ${mediaType === 'image' ?
-                            `<img src="${item.preview}" class="preview-img">` :
-                            `<video src="${item.preview}" class="preview-video"></video>`
-                        }
-                        <div class="item-order">${mediaType === 'image' ? '🖼️ Gambar' : '🎥 Video'} ${i + 1}</div>
-                        <div class="media-badge">${mediaType === 'image' ? 'Gambar' : 'Video'}</div>
-                    `;
-                } else {
-                    div.innerHTML = `
-                        <div class="empty-placeholder" onclick="addToGrid('features', ${i})">📷 + Tambah</div>
-                        <div class="item-order">Kosong</div>
-                    `;
-                }
-                grid.appendChild(div);
+                container.innerHTML += `
+                    <div class="feature-card">
+                        <div class="feature-header">
+                            <strong>Fitur ${i + 1}</strong>
+                            <button class="btn-danger" onclick="removeFeature(${i})">Hapus</button>
+                        </div>
+                        <div class="feature-form">
+                            <div class="feature-preview" onclick="document.getElementById('featureFile${i}').click()">
+                                ${hasMedia ? (mediaType === 'image' ? `<img src="${feat.preview}">` : `<video src="${feat.preview}"></video>`) : '📷 + Media'}
+                            </div>
+                            <div class="feature-fields">
+                                <input type="text" id="featureTitle${i}" placeholder="Judul" value="${feat ? escapeHtml(feat.title || '') : ''}" onchange="updateFeature(${i}, 'title', this.value)">
+                                <textarea id="featureDesc${i}" placeholder="Deskripsi " rows="3" onchange="updateFeature(${i}, 'description', this.value)">${feat ? escapeHtml(feat.description || '') : ''}</textarea>
+                            </div>
+                            <input type="file" id="featureFile${i}" accept="image/*,video/*" style="display:none" onchange="handleFeatureFile(${i}, this)">
+                        </div>
+                    </div>
+                `;
             }
 
-            const filled = mediaData.features.filter(f => f !== null).length;
+            const filled = mediaData.features.filter(f => f !== null && (f.file !== null || (f.title && f.title.trim()))).length;
             updateStatus('featuresStatus', filled, MAX_FEATURES);
         }
 
-        // ========== AKTIVITAS GRID ==========
+        window.updateFeature = function(idx, field, value) {
+            if (!mediaData.features[idx]) {
+                mediaData.features[idx] = { file: null, preview: null, title: '', description: '' };
+            }
+            mediaData.features[idx][field] = value;
+        };
+
+        window.handleFeatureFile = function(idx, input) {
+            const file = input.files[0];
+            if (file) {
+                if (file.size > 10 * 1024 * 1024) {
+                    showAlert('Ukuran file maksimal 10MB!', 'danger');
+                    input.value = '';
+                    return;
+                }
+                const type = getMediaType(file);
+                createPreview(file, (previewUrl) => {
+                    if (!mediaData.features[idx]) {
+                        mediaData.features[idx] = { file: null, preview: null, title: '', description: '' };
+                    }
+                    mediaData.features[idx].file = file;
+                    mediaData.features[idx].preview = previewUrl;
+                    mediaData.features[idx].type = type;
+                    renderFeatures();
+                });
+            }
+        };
+
+        window.removeFeature = function(idx) {
+            mediaData.features[idx] = null;
+            renderFeatures();
+        };
+
+        // ========== AKTIVITAS ==========
         function renderAktivitasGrid() {
             const grid = document.getElementById('aktivitasGrid');
             if (!grid) return;
@@ -966,35 +998,33 @@
 
             for (let i = 0; i < MAX_AKTIVITAS; i++) {
                 const item = mediaData.aktivitas[i];
-                const div = document.createElement('div');
-                div.className = 'grid-item';
-
                 if (item && item.preview) {
-                    const mediaType = item.type || 'image';
-                    div.innerHTML = `
-                        <button class="btn-remove" onclick="removeGridItem('aktivitas', ${i})">✕</button>
-                        ${mediaType === 'image' ?
-                            `<img src="${item.preview}" class="preview-img">` :
-                            `<video src="${item.preview}" class="preview-video"></video>`
-                        }
-                        <div class="item-order">${mediaType === 'image' ? '🖼️ Gambar' : '🎥 Video'} ${i + 1}</div>
-                        <div class="media-badge">${mediaType === 'image' ? 'Gambar' : 'Video'}</div>
+                    grid.innerHTML += `
+                        <div class="grid-item">
+                            <button class="btn-remove" onclick="removeAktivitasItem(${i})">✕</button>
+                            ${item.type === 'image' ?
+                                `<img src="${item.preview}" class="preview-img">` :
+                                `<video src="${item.preview}" class="preview-video"></video>`
+                            }
+                            <div class="item-order">${item.type === 'image' ? '🖼️ Gambar' : '🎥 Video'} ${i + 1}</div>
+                            <div class="media-badge">${item.type === 'image' ? 'Gambar' : 'Video'}</div>
+                        </div>
                     `;
                 } else {
-                    div.innerHTML = `
-                        <div class="empty-placeholder" onclick="addToGrid('aktivitas', ${i})">📷 + Tambah</div>
-                        <div class="item-order">Kosong</div>
+                    grid.innerHTML += `
+                        <div class="grid-item">
+                            <div class="empty-placeholder" onclick="addToAktivitas(${i})">📷</div>
+                            <div class="item-order">Kosong</div>
+                        </div>
                     `;
                 }
-                grid.appendChild(div);
             }
 
             const filled = mediaData.aktivitas.filter(f => f !== null).length;
             updateStatus('aktivitasStatus', filled, MAX_AKTIVITAS);
         }
 
-        // ========== ADD TO GRID ==========
-        window.addToGrid = function(section, index) {
+        window.addToAktivitas = function(index) {
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = 'image/*,video/*';
@@ -1007,39 +1037,26 @@
                     }
                     const type = getMediaType(file);
                     createPreview(file, (previewUrl) => {
-                        if (section === 'features') {
-                            mediaData.features[index] = { file: file, preview: previewUrl, type: type };
-                            renderFeaturesGrid();
-                        } else if (section === 'aktivitas') {
-                            mediaData.aktivitas[index] = { file: file, preview: previewUrl, type: type };
-                            renderAktivitasGrid();
-                        }
+                        mediaData.aktivitas[index] = { file: file, preview: previewUrl, type: type };
+                        renderAktivitasGrid();
                     });
                 }
             };
             input.click();
         };
 
-        // ========== REMOVE FROM GRID ==========
-        window.removeGridItem = function(section, index) {
-            if (section === 'features') {
-                mediaData.features[index] = null;
-                renderFeaturesGrid();
-            } else if (section === 'aktivitas') {
-                mediaData.aktivitas[index] = null;
-                renderAktivitasGrid();
-            }
+        window.removeAktivitasItem = function(index) {
+            mediaData.aktivitas[index] = null;
+            renderAktivitasGrid();
         };
 
-        // ========== MULTIPLE UPLOAD ==========
-        function handleMultipleUpload(inputId, section, maxCount, renderFunc) {
+        function handleMultipleUpload(inputId, maxCount) {
             const input = document.getElementById(inputId);
             if (!input) return;
 
             input.addEventListener('change', function(e) {
                 const files = Array.from(e.target.files);
-                const currentData = section === 'features' ? mediaData.features : mediaData.aktivitas;
-                let currentCount = currentData.filter(f => f !== null).length;
+                let currentCount = mediaData.aktivitas.filter(f => f !== null).length;
                 let availableSlots = maxCount - currentCount;
 
                 if (availableSlots <= 0) {
@@ -1056,15 +1073,10 @@
                     }
                     const type = getMediaType(file);
                     createPreview(file, (previewUrl) => {
-                        const emptyIndex = currentData.findIndex(f => f === null);
+                        const emptyIndex = mediaData.aktivitas.findIndex(f => f === null);
                         if (emptyIndex !== -1) {
-                            if (section === 'features') {
-                                mediaData.features[emptyIndex] = { file: file, preview: previewUrl, type: type };
-                                renderFunc();
-                            } else {
-                                mediaData.aktivitas[emptyIndex] = { file: file, preview: previewUrl, type: type };
-                                renderFunc();
-                            }
+                            mediaData.aktivitas[emptyIndex] = { file: file, preview: previewUrl, type: type };
+                            renderAktivitasGrid();
                         }
                     });
                 });
@@ -1159,18 +1171,37 @@
                 const formData = new FormData();
 
                 // Single sections
-                if (mediaData.hero && mediaData.hero.file) formData.append('hero', mediaData.hero.file);
-                if (mediaData.story && mediaData.story.file) formData.append('story', mediaData.story.file);
-                if (mediaData.whylearn && mediaData.whylearn.file) formData.append('whylearn', mediaData.whylearn.file);
+                if (mediaData.hero && mediaData.hero.file) {
+                    formData.append('hero', mediaData.hero.file);
+                }
+                if (mediaData.story && mediaData.story.file) {
+                    formData.append('story', mediaData.story.file);
+                }
+                if (mediaData.whylearn && mediaData.whylearn.file) {
+                    formData.append('whylearn', mediaData.whylearn.file);
+                }
 
-                // Features (multiple)
-                mediaData.features.forEach((f) => {
-                    if (f && f.file) formData.append(`features[]`, f.file);
+                // Features
+                const featuresData = [];
+                mediaData.features.forEach((feat, idx) => {
+                    if (feat && (feat.file || (feat.title && feat.title.trim()))) {
+                        featuresData.push({
+                            title: feat.title || '',
+                            description: feat.description || '',
+                            order: idx
+                        });
+                        if (feat.file) {
+                            formData.append(`feature_images[]`, feat.file);
+                        }
+                    }
                 });
+                formData.append('features_data', JSON.stringify(featuresData));
 
-                // Aktivitas (multiple)
-                mediaData.aktivitas.forEach((a) => {
-                    if (a && a.file) formData.append(`aktivitas[]`, a.file);
+                // Aktivitas
+                mediaData.aktivitas.forEach((act) => {
+                    if (act && act.file) {
+                        formData.append(`aktivitas[]`, act.file);
+                    }
                 });
 
                 // Products
@@ -1182,7 +1213,9 @@
                 formData.append('products_data', JSON.stringify(productsData));
 
                 mediaData.products.forEach((p) => {
-                    if (p && p.file) formData.append(`product_images[]`, p.file);
+                    if (p && p.file) {
+                        formData.append(`product_images[]`, p.file);
+                    }
                 });
 
                 const response = await fetch('{{ route("admin.media.storeAll") }}', {
@@ -1231,7 +1264,7 @@
             for (let i = 0; i < MAX_AKTIVITAS; i++) mediaData.aktivitas.push(null);
             for (let i = 0; i < MAX_PRODUCTS; i++) mediaData.products.push(null);
 
-            renderFeaturesGrid();
+            renderFeatures();
             renderAktivitasGrid();
             renderProducts();
 
@@ -1239,8 +1272,20 @@
             setupSingleUpload('storyInput', 'story', 'storyPreview', 'storyRemoveBtn', 'storyStatus');
             setupSingleUpload('whylearnInput', 'whylearn', 'whylearnPreview', 'whylearnRemoveBtn', 'whylearnStatus');
 
-            handleMultipleUpload('featuresInput', 'features', MAX_FEATURES, renderFeaturesGrid);
-            handleMultipleUpload('aktivitasInput', 'aktivitas', MAX_AKTIVITAS, renderAktivitasGrid);
+            handleMultipleUpload('aktivitasInput', MAX_AKTIVITAS);
+
+            document.getElementById('addFeatureBtn')?.addEventListener('click', () => {
+                const currentFilled = mediaData.features.filter(f => f !== null && (f.file !== null || (f.title && f.title.trim()))).length;
+                if (currentFilled >= MAX_FEATURES) {
+                    showAlert(`Maksimal ${MAX_FEATURES} fitur!`, 'warning');
+                    return;
+                }
+                const emptyIndex = mediaData.features.findIndex(f => f === null);
+                if (emptyIndex !== -1) {
+                    mediaData.features[emptyIndex] = { file: null, preview: null, title: '', description: '' };
+                    renderFeatures();
+                }
+            });
 
             document.getElementById('addProductBtn')?.addEventListener('click', () => {
                 const currentFilled = mediaData.products.filter(p => p !== null && (p.file !== null || (p.title && p.title.trim()))).length;

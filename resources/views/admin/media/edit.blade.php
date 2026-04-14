@@ -352,35 +352,8 @@
             border: 2px solid #E8F4F8;
         }
 
-        .media-type-selector {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            justify-content: center;
-        }
-
-        .media-type-btn {
-            padding: 0.8rem 1.5rem;
-            border: 2px solid #E8F4F8;
-            border-radius: 10px;
-            background: #fff;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-
-        .media-type-btn.active {
-            background: #5FB574;
-            color: #fff;
-            border-color: #5FB574;
-        }
-
-        .media-type-btn:hover:not(.active) {
-            border-color: #5FB574;
-            background: #F7FCF9;
-        }
-
         .file-input-wrapper {
+            text-align: center;
             margin-bottom: 1rem;
         }
 
@@ -417,7 +390,7 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
             transition: all 0.3s;
         }
 
@@ -585,15 +558,6 @@
             .btn {
                 width: 100%;
             }
-
-            .media-type-selector {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .media-type-btn {
-                text-align: center;
-            }
         }
 
         @media (max-width: 480px) {
@@ -698,16 +662,6 @@
                 <div class="media-upload-section">
                     <h3 style="margin-bottom: 1rem; color: #5FB574;">🖼️ Ganti Media</h3>
 
-                    <!-- Media Type Selector -->
-                    <div class="media-type-selector">
-                        <button type="button" class="media-type-btn {{ $media->type == 'image' ? 'active' : '' }}" data-type="image" onclick="setMediaType('image')">
-                            🖼️ Gambar
-                        </button>
-                        <button type="button" class="media-type-btn {{ $media->type == 'video' ? 'active' : '' }}" data-type="video" onclick="setMediaType('video')">
-                            🎥 Video
-                        </button>
-                    </div>
-
                     <!-- Media Preview -->
                     <div class="media-preview" id="mediaPreviewContainer">
                         @if($media->isImage())
@@ -722,15 +676,20 @@
                         </div>
                     </div>
 
-                    <!-- File Upload -->
+                    <!-- File Upload - Menerima semua jenis file (image & video) -->
                     <div class="file-input-wrapper">
-                        <label class="file-input-label" id="fileInputLabel">
-                            📁 Pilih File Baru
+                        <label class="file-input-label">
+                            📁 Pilih File Baru (Gambar atau Video)
                             <input type="file" id="mediaFile" accept="image/*,video/*" style="display:none" onchange="previewNewMedia(this)">
                         </label>
-                        <button type="button" class="replace-btn" onclick="document.getElementById('mediaFile').click()">
-                            🔄 Ganti Media
-                        </button>
+                        <div>
+                            <button type="button" class="replace-btn" onclick="document.getElementById('mediaFile').click()">
+                                🔄 Ganti Media
+                            </button>
+                        </div>
+                        <p style="font-size: 0.8rem; color: #666; margin-top: 0.5rem;">
+                            📌 Format didukung: Gambar (JPG, PNG, WEBP, GIF) | Video (MP4, WebM, OGG)
+                        </p>
                     </div>
 
                     <!-- New Media Preview -->
@@ -754,9 +713,6 @@
                 <form action="{{ route('admin.media.update', $media->id) }}" method="POST" class="edit-form" id="editForm" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
-
-                    <!-- Hidden input untuk tipe media yang dipilih -->
-                    <input type="hidden" name="media_type" id="selectedMediaType" value="{{ $media->type }}">
 
                     <!-- File input (tersembunyi, akan dikirim jika ada file baru) -->
                     <input type="file" name="file" id="hiddenFileInput" style="display:none">
@@ -847,7 +803,6 @@
     <script>
         // Variabel untuk menyimpan file baru
         let newMediaFile = null;
-        let selectedType = '{{ $media->type }}';
 
         // Mobile menu functionality
         const mobileMenuToggle = document.getElementById('mobileMenuToggle');
@@ -869,39 +824,17 @@
             }
         });
 
-        // Fungsi untuk mengatur tipe media
-        function setMediaType(type) {
-            selectedType = type;
-            document.getElementById('selectedMediaType').value = type;
-
-            // Update active class pada tombol
-            document.querySelectorAll('.media-type-btn').forEach(btn => {
-                if (btn.dataset.type === type) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-
-            // Update accept attribute pada file input
-            const fileInput = document.getElementById('mediaFile');
-            if (type === 'image') {
-                fileInput.accept = 'image/jpeg,image/png,image/jpg,image/webp,image/gif';
-            } else {
-                fileInput.accept = 'video/mp4,video/webm,video/ogg';
+        // Deteksi tipe file berdasarkan MIME type
+        function detectFileType(file) {
+            if (file.type.startsWith('image/')) {
+                return 'image';
+            } else if (file.type.startsWith('video/')) {
+                return 'video';
             }
-
-            // Reset preview jika ada
-            if (newMediaFile) {
-                newMediaFile = null;
-                document.getElementById('newMediaPreview').style.display = 'none';
-                document.getElementById('newPreviewContainer').innerHTML = '';
-                document.getElementById('newFileInfo').innerHTML = '';
-                document.getElementById('mediaFile').value = '';
-            }
+            return null;
         }
 
-        // Preview media baru
+        // Preview media baru (bisa image atau video)
         function previewNewMedia(input) {
             const file = input.files[0];
             if (!file) return;
@@ -913,15 +846,10 @@
                 return;
             }
 
-            // Validasi tipe file berdasarkan pilihan
-            if (selectedType === 'image' && !file.type.startsWith('image/')) {
-                alert('File harus berupa gambar!');
-                input.value = '';
-                return;
-            }
-
-            if (selectedType === 'video' && !file.type.startsWith('video/')) {
-                alert('File harus berupa video!');
+            // Deteksi tipe file
+            const fileType = detectFileType(file);
+            if (!fileType) {
+                alert('Tipe file tidak didukung! Gunakan gambar (JPG, PNG, WEBP) atau video (MP4, WebM).');
                 input.value = '';
                 return;
             }
@@ -940,16 +868,16 @@
                 const previewContainer = document.getElementById('newPreviewContainer');
                 const fileInfo = document.getElementById('newFileInfo');
 
-                if (selectedType === 'image') {
-                    previewContainer.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; max-height: 200px; border-radius: 8px;">`;
+                if (fileType === 'image') {
+                    previewContainer.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; max-height: 200px; border-radius: 8px; border: 2px solid #E8F4F8;">`;
                 } else {
-                    previewContainer.innerHTML = `<video controls style="max-width: 100%; max-height: 200px;"><source src="${e.target.result}" type="${file.type}"></video>`;
+                    previewContainer.innerHTML = `<video controls style="max-width: 100%; max-height: 200px; border-radius: 8px;"><source src="${e.target.result}" type="${file.type}"></video>`;
                 }
 
                 fileInfo.innerHTML = `
                     <strong>File baru:</strong> ${file.name}<br>
                     <strong>Ukuran:</strong> ${formatFileSize(file.size)}<br>
-                    <strong>Tipe:</strong> ${selectedType === 'image' ? 'Gambar' : 'Video'}
+                    <strong>Tipe:</strong> ${fileType === 'image' ? 'Gambar' : 'Video'} (${file.type})
                 `;
 
                 document.getElementById('newMediaPreview').style.display = 'block';
@@ -1095,7 +1023,7 @@
             });
         }
 
-        // Check if image loads successfully
+        // Check if media loads successfully
         function checkMediaLoad() {
             const mediaElement = document.getElementById('currentMediaPreview');
             const errorDiv = document.getElementById('mediaError');
@@ -1107,6 +1035,10 @@
                     };
                     mediaElement.onload = function() {
                         errorDiv.style.display = 'none';
+                    };
+                } else if (mediaElement.tagName === 'VIDEO') {
+                    mediaElement.onerror = function() {
+                        errorDiv.style.display = 'block';
                     };
                 }
             }
